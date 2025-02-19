@@ -1,0 +1,46 @@
+{
+  "name": "plugin/owc-gravityforms-zgw",
+  "description": "Make a connection between ZGW and GravityForms",
+  "version": "1.0.0",
+  "type": "wordpress-plugin",
+  "scripts": {
+    "phpcs": "./vendor/squizlabs/php_codesniffer/bin/phpcs",
+    "phpcbf": "phpcbf",
+    "post-install-cmd": [
+      "composer dump-autoload"
+    ],
+    "post-update-cmd": [
+      "composer dump-autoload"
+    ]
+  },
+  "autoload": {
+    "psr-4": {
+      "OWCGravityFormsZGW\\": "src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "composer/installers": true
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    },
+    {
+      "type": "vcs",
+      "url": "git@github.com:OpenWebconcept/owc-zgw-api.git"
+    }
+  ],
+  "require": {
+    "php": "^8.0",
+    "php-di/php-di": "^6.0",
+    "owc/zgw-api": "dev-main"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.7",
+    "wp-coding-standards/wpcs": "^3.0"
+  }
+}

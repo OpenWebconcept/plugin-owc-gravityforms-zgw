@@ -1,0 +1,48 @@
+publiccodeYmlVersion: '0.2'
+
+name: 'plugin-owc-gravityforms-zgw'
+applicationSuite: 'OpenWebconcept'
+url: 'https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw'
+releaseDate: '2025-02-19'
+
+platforms:
+  - 'web'
+
+categories:
+  - 'application-development'
+
+developmentStatus: 'development'
+
+softwareType: 'softwareAddon'
+
+description:
+  en:
+    genericName: 'OWC GravityForms ZGW'
+    shortDescription: 'Make a connection between ZGW and GravityForms'
+    longDescription: 'Make a connection between ZGW and GravityForms'
+  nl:
+    genericName: 'OWC GravityForms ZGW'
+    shortDescription: 'Maak een verbinding tussen ZGW en GravityForms'
+    longDescription: 'Maak een verbinding tussen ZGW en GravityForms'
+
+legal:
+  license: 'EUPL-1.2'
+  repoOwner: 'Yard | Digital Agency'
+
+dependsOn:
+  open:
+    - name: 'WordPress'
+    - versionMin: 6.7.0
+
+intendedAudience:
+  countries:
+    - nl
+  scope:
+    - government
+
+maintenance:
+  contractors:
+    - name: 'Yard | Digital Agency'
+      website: 'https://www.yard.nl'
+      email: 'owc@yard.nl'
+  type: 'contract'
