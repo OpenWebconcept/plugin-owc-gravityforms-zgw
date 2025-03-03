@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Register service provider.
  *
@@ -13,7 +14,7 @@ namespace OWCGravityFormsZGW\Providers;
  * Exit when accessed directly.
  */
 if ( ! defined( 'ABSPATH' )) {
-    exit;
+	exit;
 }
 
 /**
@@ -23,28 +24,28 @@ if ( ! defined( 'ABSPATH' )) {
  */
 class ServiceProvider
 {
-    protected array $services = array();
+	protected array $services = array();
 
-    /**
-     * Registers the services.
-     */
-    public function register(): void
-    {
-        foreach ( $this->services as $service ) {
-            $service->register();
-        }
-    }
+	/**
+	 * Registers the services.
+	 */
+	public function register(): void
+	{
+		foreach ($this->services as $service) {
+			$service->register();
+		}
+	}
 
-    /**
-     * Boots the services.
-     */
-    public function boot(): void
-    {
-        foreach ( $this->services as $service ) {
-            if ( false === $service ) {
-                continue;
-            }
-            $service->boot();
-        }
-    }
+	/**
+	 * Boots the services.
+	 */
+	public function boot(): void
+	{
+		foreach ($this->services as $service) {
+			if (false === $service) {
+				continue;
+			}
+			$service->boot();
+		}
+	}
 }

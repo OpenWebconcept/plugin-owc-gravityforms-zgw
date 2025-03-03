@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Autoloader for classes.
  *
@@ -11,30 +12,30 @@
  * Exit when accessed directly.
  */
 if ( ! defined( 'ABSPATH' )) {
-    exit;
+	exit;
 }
 
 spl_autoload_register(
-    function (string $classname ) {
-        $classmap = array(
-            'OWCGravityFormsZGW' => __DIR__ . '/',
-        );
-        $parts = explode( '\\', $classname );
+	function (string $classname ) {
+		$classmap = array(
+			'OWCGravityFormsZGW' => __DIR__ . '/',
+		);
+		$parts    = explode( '\\', $classname );
 
-        $namespace    = array_shift( $parts );
-        $classifiable = array_pop( $parts ) . '.php';
+		$namespace    = array_shift( $parts );
+		$classifiable = array_pop( $parts ) . '.php';
 
-        if ( ! array_key_exists( $namespace, $classmap )) {
-            return;
-        }
+		if ( ! array_key_exists( $namespace, $classmap )) {
+			return;
+		}
 
-        $path = implode( DIRECTORY_SEPARATOR, $parts );
-        $file = $classmap[ $namespace ] . $path . DIRECTORY_SEPARATOR . $classifiable;
+		$path = implode( DIRECTORY_SEPARATOR, $parts );
+		$file = $classmap[ $namespace ] . $path . DIRECTORY_SEPARATOR . $classifiable;
 
-        if ( ! file_exists( $file ) && ! class_exists( $classname )) {
-            return;
-        }
+		if ( ! file_exists( $file ) && ! class_exists( $classname )) {
+			return;
+		}
 
-        require_once $file;
-    }
+		require_once $file;
+	}
 );

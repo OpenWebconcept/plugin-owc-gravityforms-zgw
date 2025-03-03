@@ -17,24 +17,22 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use OWC\ZGW\ApiClientManager;
-use OWC\ZGW\WordPress\ClientProvider;
-use OWC\ZGW\WordPress\SettingsProvider;
+use OWCGravityFormsZGW\GravityForms\FormSettings;
 
 /**
  * Register settings service provider.
  *
  * @since 1.0.0
  */
-class SettingsServiceProvider extends ServiceProvider
+class GravityFormsServiceProvider extends ServiceProvider
 {
-	/**
-	 * @inheritDoc
-	 */
 	public function register(): void
 	{
-		$manager = new ApiClientManager();
-		$manager->container()->get( SettingsProvider::class )->register();
-		$manager->container()->get( ClientProvider::class )->register();
+		$this->registerHooks();
+	}
+
+	private function registerHooks(): void
+	{
+		add_filter( 'gform_form_settings_fields', ( new FormSettings() )->addFormSettings( ... ), 10, 2 );
 	}
 }

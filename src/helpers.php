@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin helpers.
  *
@@ -11,7 +12,7 @@
  * Exit when accessed directly.
  */
 if ( ! defined( 'ABSPATH' )) {
-    exit;
+	exit;
 }
 
 /**
@@ -22,10 +23,10 @@ if ( ! defined( 'ABSPATH' )) {
  * @since   1.0.0
  */
 if ( ! function_exists( 'owc_gravityforms_zgw_prefix' )) {
-    function owc_gravityforms_zgw_prefix( $name ): string
-    {
-        return 'owc-gravityforms-zgw-' . $name;
-    }
+	function owc_gravityforms_zgw_prefix($name ): string
+	{
+		return 'owc-gravityforms-zgw-' . $name;
+	}
 }
 
 /**
@@ -36,10 +37,10 @@ if ( ! function_exists( 'owc_gravityforms_zgw_prefix' )) {
  * @since   1.0.0
  */
 if ( ! function_exists( 'owc_gravityforms_zgw_url' )) {
-    function owc_gravityforms_zgw_url( string $path ): string
-    {
-        return OWC_GRAVITYFORMS_ZGW_PLUGIN_URL . $path;
-    }
+	function owc_gravityforms_zgw_url(string $path ): string
+	{
+		return OWC_GRAVITYFORMS_ZGW_PLUGIN_URL . $path;
+	}
 }
 
 /**
@@ -50,8 +51,8 @@ if ( ! function_exists( 'owc_gravityforms_zgw_url' )) {
  * @since   1.0.0
  */
 if ( ! function_exists( 'owc_gravityforms_zgw_asset_url' )) {
-    function owc_gravityforms_zgw_asset_url( string $path ): string
-    {
-        return owc_gravityforms_zgw_url( 'dist/' . $path );
-    }
+	function owc_gravityforms_zgw_asset_url(string $path ): string
+	{
+		return owc_gravityforms_zgw_url( 'dist/' . $path );
+	}
 }
