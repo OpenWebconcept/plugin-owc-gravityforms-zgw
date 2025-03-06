@@ -4,6 +4,17 @@ use DI\Container;
 
 return array(
 	/**
+	 * Suppliers
+	 */
+	'suppliers'                   => array(
+		'openzaak'   => 'OpenZaak',
+		'decos-join' => 'DecosJoin',
+		'rx-mission' => 'RxMission',
+		'xxllnc'     => 'Xxllnc',
+		'procura'    => 'Procura',
+	),
+
+	/**
 	 * Specific client settings.
 	 */
 	'oz.enabled'                  => function (Container $container ) {

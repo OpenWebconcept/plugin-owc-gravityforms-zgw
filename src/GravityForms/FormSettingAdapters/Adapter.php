@@ -19,6 +19,8 @@ use OWC\ZGW\Support\Collection;
 
 abstract class Adapter
 {
+	protected const TRANSIENT_LIFETIME_IN_SECONDS = 64800; // 18 hours.
+
 	protected Client $client;
 
 	public function __construct(Client $client )
@@ -29,7 +31,7 @@ abstract class Adapter
 	/**
 	 * @since 1.0.0
 	 */
-	protected function transientKeyPrefix(): string
+	protected function transient_key_prefix(): string
 	{
 		return strtolower( str_replace( '\\', '-', $this->client::class ) );
 	}
@@ -39,22 +41,22 @@ abstract class Adapter
 	/**
 	 * @since 1.0.0
 	 */
-	protected function getTypes(string $transientKey, string $endpoint, Closure $prepareCallback, string $emptyMessage ): array
+	protected function get_types(string $transient_key, string $endpoint, Closure $prepare_callback, string $empty_message ): array
 	{
-		$types = get_transient( $transientKey );
+		$types = get_transient( $transient_key );
 
 		if (is_array( $types ) && $types) {
 			return $types;
 		}
 
-		$types = $this->fetchTypes( $emptyMessage, $endpoint );
-		$types = $this->prepareTypes( $types, $prepareCallback );
+		$types = $this->fetch_types( $empty_message, $endpoint );
+		$types = $this->prepare_types( $types, $prepare_callback );
 
 		if (empty( $types )) {
 			return array();
 		}
 
-		set_transient( $transientKey, $types, 64800 ); // 18 hours.
+		set_transient( $transient_key, $types, self::TRANSIENT_LIFETIME_IN_SECONDS ); // 18 hours.
 
 		return $types;
 	}
@@ -62,7 +64,7 @@ abstract class Adapter
 	/**
 	 * @since 1.0.0
 	 */
-	protected function fetchTypes(string $emptyMessage, string $endpoint ): array
+	protected function fetch_types(string $empty_message, string $endpoint ): array
 	{
 		$page             = 1;
 		$types            = array();
@@ -81,7 +83,7 @@ abstract class Adapter
 			$page  = $result->pageMeta()->getNextPageNumber();
 		}
 
-		$this->handleEmptyResult( $types, $emptyMessage, $requestException );
+		$this->handle_empty_result( $types, $empty_message, $requestException );
 
 		return $types;
 	}
@@ -89,18 +91,18 @@ abstract class Adapter
 	/**
 	 * @since 1.0.0
 	 */
-	protected function prepareTypes(array $types, Closure $prepareCallback ): array
+	protected function prepare_types(array $types, Closure $prepare_callback ): array
 	{
-		return (array) Collection::collect( $types )->map( $prepareCallback )->all();
+		return (array) Collection::collect( $types )->map( $prepare_callback )->all();
 	}
 
 	/**
 	 * @since 1.0.0
 	 */
-	protected function handleEmptyResult(array $types, string $emptyMessage, string $requestException ): void
+	protected function handle_empty_result(array $types, string $empty_message, string $requestException ): void
 	{
 		if (empty( $types )) {
-			$exceptionMessage = $emptyMessage;
+			$exceptionMessage = $empty_message;
 
 			if ( ! empty( $requestException )) {
 				$exceptionMessage = sprintf( '%s %s', $exceptionMessage, $requestException );
@@ -113,7 +115,7 @@ abstract class Adapter
 	/**
 	 * @since 1.0.0
 	 */
-	protected function handleNoChoices(string $endpoint ): array
+	protected function handle_no_choices(string $endpoint ): array
 	{
 		return array(
 			array(

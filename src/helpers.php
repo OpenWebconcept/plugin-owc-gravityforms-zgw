@@ -30,7 +30,7 @@ if ( ! function_exists( 'owc_gravityforms_zgw_prefix' )) {
 }
 
 /**
- * Add prefix for the given string.
+ * Generates a full plugin URL by appending the given path to the base plugin URL.
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
@@ -44,7 +44,7 @@ if ( ! function_exists( 'owc_gravityforms_zgw_url' )) {
 }
 
 /**
- * Add prefix for the given string.
+ * Generates a full asset URL by appending the given path to the plugin's asset directory.
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
@@ -55,4 +55,24 @@ if ( ! function_exists( 'owc_gravityforms_zgw_asset_url' )) {
 	{
 		return owc_gravityforms_zgw_url( 'dist/' . $path );
 	}
+}
+
+/**
+ * Render a view file.
+ *
+ * @package Yard_Deepl
+ * @author  Yard | Digital Agency
+ * @since   1.0.0
+ */
+function owc_gravityforms_zgw_render_view(string $file_path, $data = array() )
+{
+	$full_path = OWC_GRAVITYFORMS_ZGW_DIR_PATH . 'src/Views/' . $file_path . '.php';
+
+	if ( ! file_exists( $full_path )) {
+		return '';
+	}
+
+	extract( $data, EXTR_SKIP );
+
+	return require $full_path;
 }

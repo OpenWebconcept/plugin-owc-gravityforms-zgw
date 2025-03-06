@@ -22,8 +22,8 @@ class ZaaktypenAdapter extends Adapter
 	public function handle(): array
 	{
 		try {
-			return $this->getTypes(
-				sprintf( '%s-form-settings-zaaktypen', $this->transientKeyPrefix() ), // Unique transient key.
+			return $this->get_types(
+				sprintf( '%s-form-settings-zaaktypen', $this->transient_key_prefix() ), // Unique transient key.
 				'zaaktypen',
 				function (Zaaktype $zaaktype ) {
 					return array(
@@ -35,7 +35,7 @@ class ZaaktypenAdapter extends Adapter
 				'No zaaktypen found.'
 			);
 		} catch (Exception $e) {
-			return $this->handleNoChoices( 'zaaktypen' );
+			return $this->handle_no_choices( 'zaaktypen' );
 		}
 	}
 }

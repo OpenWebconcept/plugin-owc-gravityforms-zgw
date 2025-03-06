@@ -22,8 +22,8 @@ class InformatieobjecttypeAdapter extends Adapter
 	public function handle(): array
 	{
 		try {
-			return $this->getTypes(
-				sprintf( '%s-form-settings-information-object-type', $this->transientKeyPrefix() ), // Unique transient key.
+			return $this->get_types(
+				sprintf( '%s-form-settings-information-object-type', $this->transient_key_prefix() ), // Unique transient key.
 				'informatieobjecttypen',
 				function (Informatieobjecttype $objecttype ) {
 					return array(
@@ -35,7 +35,7 @@ class InformatieobjecttypeAdapter extends Adapter
 				'No information object typen found.'
 			);
 		} catch (Exception $e) {
-			return $this->handleNoChoices( 'informatieobjecttypen' );
+			return $this->handle_no_choices( 'informatieobjecttypen' );
 		}
 	}
 }

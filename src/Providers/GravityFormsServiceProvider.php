@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
 
 /**
@@ -33,6 +34,8 @@ class GravityFormsServiceProvider extends ServiceProvider
 
 	private function registerHooks(): void
 	{
-		add_filter( 'gform_form_settings_fields', ( new FormSettings() )->addFormSettings( ... ), 10, 2 );
+		add_filter( 'gform_form_settings_fields', ( new FormSettings() )->add_form_settings( ... ), 10, 2 );
+		add_action( 'gform_field_standard_settings', ( new FieldSettings() )->add_select( ... ), 10, 2 );
+		add_action( 'gform_editor_js', ( new FieldSettings() )->add_select_script( ... ), 10, 0 );
 	}
 }

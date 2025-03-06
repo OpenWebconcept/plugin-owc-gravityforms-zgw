@@ -7,8 +7,8 @@ namespace OWCGravityFormsZGW\GravityForms;
 /**
  * Exit when accessed directly.
  */
-if (! defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' )) {
+	exit;
 }
 
 use function OWC\ZGW\apiClient;
@@ -18,185 +18,185 @@ use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\ZaaktypenAdapter;
 
 class FormSettings
 {
-    protected string $prefix = OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX;
+	protected string $prefix = OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX;
 
-    /**
-     * @since 1.0.0
-     */
-    public function addFormSettings(array $fields, array $form): array
-    {
-        $fields['owc-gravityforms-zaaksysteem'] = [
-            'title' => esc_html__('Zaaksysteem', 'owc-gravityforms-zgw'),
-            'description' => esc_html__('Om de snelheid te verhogen worden de instellingen van leveranciers pas opgehaald na het kiezen van een leverancier. Dit betekent dat de pagina herladen moet worden na het selecteren van een leverancier.', 'owc-gravityforms-zgw'),
-            'fields' => [
-                [
-                    'name' => "{$this->prefix}-form-setting-supplier",
-                    'default_value' => "{$this->prefix}-form-setting-supplier-none",
-                    'tooltip' => '<h6>' . __('Selecteer een leverancier', 'owc-gravityforms-zgw') . '</h6>' . __('Kies een Zaaksysteem leverancier. Let op dat je ook de instellingen van de leverancier moet configureren in de hoofdinstellingen van Gravity Forms.', 'owc-gravityforms-zgw'),
-                    'type' => 'select',
-                    'label' => esc_html__('Selecteer een leverancier', 'owc-gravityforms-zgw'),
-                    'choices' => $this->handleSupplierChoices(),
-                ],
-                [
-                    'name' => "{$this->prefix}-form-setting-supplier-manually",
-                    'default_value' => "1",
-                    'tooltip' => '<h6>' . __('Leverancier instellingen', 'owc-gravityforms-zgw') . '</h6>' . __('Kies hoe de leverancier instellingen geconfigureerd moeten worden.', 'owc-gravityforms-zgw'),
-                    'type' => 'radio',
-                    'label' => esc_html__('Leverancier instellingen', 'owc-gravityforms-zgw'),
-                    'choices' => [
-                        [
-                            'name' => "{$this->prefix}-form-setting-supplier-manually-disabled",
-                            'label' => __('Selecteer instellingen (opgehaald vanuit zaaksysteem)', 'owc-gravityforms-zgw'),
-                            'value' => '0',
-                        ],
-                        [
-                            'name' => "{$this->prefix}-form-setting-supplier-manually-enabled",
-                            'label' => __('Configureer instellingen handmatig (invoeren van URL\'s)', 'owc-gravityforms-zgw'),
-                            'value' => '1',
-                        ],
-                    ],
-                ],
-            ],
-        ];
+	/**
+	 * @since 1.0.0
+	 */
+	public function add_form_settings(array $fields, array $form ): array
+	{
+		$fields['owc-gravityforms-zaaksysteem'] = array(
+			'title'       => esc_html__( 'Zaaksysteem', 'owc-gravityforms-zgw' ),
+			'description' => esc_html__( 'Om de snelheid te verhogen worden de instellingen van leveranciers pas opgehaald na het kiezen van een leverancier. Dit betekent dat de pagina herladen moet worden na het selecteren van een leverancier.', 'owc-gravityforms-zgw' ),
+			'fields'      => array(
+				array(
+					'name'          => "{$this->prefix}-form-setting-supplier",
+					'default_value' => "{$this->prefix}-form-setting-supplier-none",
+					'tooltip'       => '<h6>' . __( 'Selecteer een leverancier', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Kies een Zaaksysteem leverancier. Let op dat je ook de instellingen van de leverancier moet configureren in de hoofdinstellingen van Gravity Forms.', 'owc-gravityforms-zgw' ),
+					'type'          => 'select',
+					'label'         => esc_html__( 'Selecteer een leverancier', 'owc-gravityforms-zgw' ),
+					'choices'       => $this->handle_supplier_choices(),
+				),
+				array(
+					'name'          => "{$this->prefix}-form-setting-supplier-manually",
+					'default_value' => "1",
+					'tooltip'       => '<h6>' . __( 'Leverancier instellingen', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Kies hoe de leverancier instellingen geconfigureerd moeten worden.', 'owc-gravityforms-zgw' ),
+					'type'          => 'radio',
+					'label'         => esc_html__( 'Leverancier instellingen', 'owc-gravityforms-zgw' ),
+					'choices'       => array(
+						array(
+							'name'  => "{$this->prefix}-form-setting-supplier-manually-disabled",
+							'label' => __( 'Selecteer instellingen (opgehaald vanuit zaaksysteem)', 'owc-gravityforms-zgw' ),
+							'value' => '0',
+						),
+						array(
+							'name'  => "{$this->prefix}-form-setting-supplier-manually-enabled",
+							'label' => __( 'Configureer instellingen handmatig (invoeren van URL\'s)', 'owc-gravityforms-zgw' ),
+							'value' => '1',
+						),
+					),
+				),
+			),
+		);
 
-        $fields['owc-gravityforms-zaaksysteem']['fields'] = $this->getSuppliersFormSettingsFields($form, $fields['owc-gravityforms-zaaksysteem']['fields']);
+		$fields['owc-gravityforms-zaaksysteem']['fields'] = $this->get_suppliers_form_settings_fields( $form, $fields['owc-gravityforms-zaaksysteem']['fields'] );
 
-        return $fields;
-    }
+		return $fields;
+	}
 
-    protected function handleSupplierChoices(): array
-    {
-        $supplierChoices = [];
-        $supplierChoices[] = $this->prepareSupplierChoice('Selecteer leverancier', 'none');
+	protected function handle_supplier_choices(): array
+	{
+		$supplier_choices   = array();
+		$supplier_choices[] = $this->prepare_supplier_choice( 'Selecteer leverancier', 'none' );
 
-        if (ContainerResolver::make()->get('oz.enabled')) {
-            $supplierChoices[] = $this->prepareSupplierChoice('OpenZaak', 'openzaak');
-        }
+		if (ContainerResolver::make()->get( 'oz.enabled' )) {
+			$supplier_choices[] = $this->prepare_supplier_choice( 'OpenZaak', 'openzaak' );
+		}
 
-        if (ContainerResolver::make()->get('dj.enabled')) {
-            $supplierChoices[] = $this->prepareSupplierChoice('Decos Join', 'decos-join');
-        }
+		if (ContainerResolver::make()->get( 'dj.enabled' )) {
+			$supplier_choices[] = $this->prepare_supplier_choice( 'Decos Join', 'decos-join' );
+		}
 
-        if (ContainerResolver::make()->get('rx.enabled')) {
-            $supplierChoices[] = $this->prepareSupplierChoice('Rx.Mission', 'rx-mission');
-        }
+		if (ContainerResolver::make()->get( 'rx.enabled' )) {
+			$supplier_choices[] = $this->prepare_supplier_choice( 'Rx.Mission', 'rx-mission' );
+		}
 
-        if (ContainerResolver::make()->get('xxllnc.enabled')) {
-            $supplierChoices[] = $this->prepareSupplierChoice('Xxllnc', 'xxllnc');
-        }
+		if (ContainerResolver::make()->get( 'xxllnc.enabled' )) {
+			$supplier_choices[] = $this->prepare_supplier_choice( 'Xxllnc', 'xxllnc' );
+		}
 
-        if (ContainerResolver::make()->get('procura.enabled')) {
-            $supplierChoices[] = $this->prepareSupplierChoice('Procura', 'procura');
-        }
+		if (ContainerResolver::make()->get( 'procura.enabled' )) {
+			$supplier_choices[] = $this->prepare_supplier_choice( 'Procura', 'procura' );
+		}
 
-        return $supplierChoices;
-    }
+		return $supplier_choices;
+	}
 
-    protected function prepareSupplierChoice(string $label, string $value): array
-    {
-        return [
-            'name' => "{$this->prefix}-form-setting-supplier-{$value}",
-            'label' => $label,
-            'value' => $value,
-        ];
-    }
+	protected function prepare_supplier_choice(string $label, string $value ): array
+	{
+		return array(
+			'name'  => "{$this->prefix}-form-setting-supplier-{$value}",
+			'label' => $label,
+			'value' => $value,
+		);
+	}
 
-    /**
-     * Retrieves the fields associated with a specific supplier based on the form settings and merge with existing fields.
-     *
-     * @since 1.0.0
-     */
-    protected function getSuppliersFormSettingsFields(array $form, array $fields): array
-    {
-        $supplierSetting = $form[ "{$this->prefix}-form-setting-supplier" ] ?? '';
-        $manual = $form[ "{$this->prefix}-form-setting-supplier-manually" ] ?? '0';
-        $suppliersFields = $this->handleSuppliersFormSettingsFields();
+	/**
+	 * Retrieves the fields associated with a specific supplier based on the form settings and merge with existing fields.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function get_suppliers_form_settings_fields(array $form, array $fields ): array
+	{
+		$supplier_setting = $form[ "{$this->prefix}-form-setting-supplier" ] ?? '';
+		$manual           = $form[ "{$this->prefix}-form-setting-supplier-manually" ] ?? '0';
+		$suppliers_fields = $this->handle_suppliers_form_settings_fields();
 
-        if (empty($supplierSetting) || empty($suppliersFields[ $supplierSetting ][ $manual ? 'manual_setting' : 'select_setting' ])) {
-            return $fields;
-        }
+		if (empty( $supplier_setting ) || empty( $suppliers_fields[ $supplier_setting ][ $manual ? 'manual_setting' : 'select_setting' ] )) {
+			return $fields;
+		}
 
-        return array_merge($fields, $suppliersFields[ $supplierSetting ][ $manual ? 'manual_setting' : 'select_setting' ]);
-    }
+		return array_merge( $fields, $suppliers_fields[ $supplier_setting ][ $manual ? 'manual_setting' : 'select_setting' ] );
+	}
 
-    /**
-     * Fields associated with suppliers, used for matching the fields of the selected supplier in form settings.
-     * This approach minimizes unnecessary requests to multiple sources that are not needed. Because only one supplier can be selected.
-     *
-     * @since 1.0.0
-     */
-    protected function handleSuppliersFormSettingsFields(): array
-    {
-        $fields = [];
+	/**
+	 * Fields associated with suppliers, used for matching the fields of the selected supplier in form settings.
+	 * This approach minimizes unnecessary requests to multiple sources that are not needed. Because only one supplier can be selected.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function handle_suppliers_form_settings_fields(): array
+	{
+		$fields = array();
 
-        if (ContainerResolver::make()->get('oz.enabled')) {
-            $fields = $this->prepareSupplierConfigurationFields($fields, 'OpenZaak', 'openzaak');
-        }
+		if (ContainerResolver::make()->get( 'oz.enabled' )) {
+			$fields = $this->prepare_supplier_configuration_fields( $fields, 'OpenZaak', 'openzaak' );
+		}
 
-        if (ContainerResolver::make()->get('rx.enabled')) {
-            $fields = $this->prepareSupplierConfigurationFields($fields, 'RxMission', 'rx-mission');
-        }
+		if (ContainerResolver::make()->get( 'rx.enabled' )) {
+			$fields = $this->prepare_supplier_configuration_fields( $fields, 'RxMission', 'rx-mission' );
+		}
 
-        if (ContainerResolver::make()->get('xxllnc.enabled')) {
-            $fields = $this->prepareSupplierConfigurationFields($fields, 'XXLNC', 'xxllnc');
-        }
+		if (ContainerResolver::make()->get( 'xxllnc.enabled' )) {
+			$fields = $this->prepare_supplier_configuration_fields( $fields, 'XXLNC', 'xxllnc' );
+		}
 
-        if (ContainerResolver::make()->get('procura.enabled')) {
-            $fields = $this->prepareSupplierConfigurationFields($fields, 'Procura', 'procura');
-        }
+		if (ContainerResolver::make()->get( 'procura.enabled' )) {
+			$fields = $this->prepare_supplier_configuration_fields( $fields, 'Procura', 'procura' );
+		}
 
-        if (ContainerResolver::make()->get('dj.enabled')) {
-            $fields = $this->prepareSupplierConfigurationFields($fields, 'DecosJoin', 'decos-join');
-        }
+		if (ContainerResolver::make()->get( 'dj.enabled' )) {
+			$fields = $this->prepare_supplier_configuration_fields( $fields, 'DecosJoin', 'decos-join' );
+		}
 
-        return $fields;
-    }
+		return $fields;
+	}
 
-    protected function prepareSupplierConfigurationFields(array $fields, string $supplierName, string $supplierKey): array
-    {
-        $fields[$supplierKey] = [
-            'select_setting' => [
-                [
-                    'name' => "{$this->prefix}-form-setting-{$supplierKey}-identifier",
-                    'type' => 'select',
-                    'label' => esc_html__('Zaaktype', 'owc-gravityforms-zgw'),
-                    'dependency' => [
-                        'live' => true,
-                        'fields' => [
-                            [
-                                'field' => "{$this->prefix}-form-setting-supplier",
-                                'values' => [ $supplierKey ],
-                            ],
-                            [
-                                'field' => "{$this->prefix}-form-setting-supplier-manually",
-                                'values' => [ '0' ],
-                            ],
-                        ],
-                    ],
-                    'choices' => (new ZaaktypenAdapter(apiClient($supplierName)))->handle(),
-                ],
-                [
-                    'name' => "{$this->prefix}-form-setting-{$supplierKey}-information-object-type",
-                    'type' => 'select',
-                    'label' => esc_html__('Informatie object type', 'owc-gravityforms-zgw'),
-                    'dependency' => [
-                        'live' => true,
-                        'fields' => [
-                            [
-                                'field' => "{$this->prefix}-form-setting-supplier",
-                                'values' => [ 'openzaak' ],
-                            ],
-                            [
-                                'field' => "{$this->prefix}-form-setting-supplier-manually",
-                                'values' => [ '0' ],
-                            ],
-                        ],
-                    ],
-                    'choices' => (new InformatieobjecttypeAdapter(apiClient($supplierName)))->handle(),
-                ],
-            ],
-        ];
+	protected function prepare_supplier_configuration_fields(array $fields, string $supplier_name, string $supplier_key ): array
+	{
+		$fields[ $supplier_key ] = array(
+			'select_setting' => array(
+				array(
+					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-identifier",
+					'type'       => 'select',
+					'label'      => esc_html__( 'Zaaktype', 'owc-gravityforms-zgw' ),
+					'dependency' => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => "{$this->prefix}-form-setting-supplier",
+								'values' => array( $supplier_key ),
+							),
+							array(
+								'field'  => "{$this->prefix}-form-setting-supplier-manually",
+								'values' => array( '0' ),
+							),
+						),
+					),
+					'choices'    => ( new ZaaktypenAdapter( apiClient( $supplier_name ) ) )->handle(),
+				),
+				array(
+					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-information-object-type",
+					'type'       => 'select',
+					'label'      => esc_html__( 'Informatie object type', 'owc-gravityforms-zgw' ),
+					'dependency' => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => "{$this->prefix}-form-setting-supplier",
+								'values' => array( 'openzaak' ),
+							),
+							array(
+								'field'  => "{$this->prefix}-form-setting-supplier-manually",
+								'values' => array( '0' ),
+							),
+						),
+					),
+					'choices'    => ( new InformatieobjecttypeAdapter( apiClient( $supplier_name ) ) )->handle(),
+				),
+			),
+		);
 
-        return $fields;
-    }
+		return $fields;
+	}
 }

@@ -11,12 +11,12 @@ if ( ! defined( 'ABSPATH' )) {
 
 class Settings
 {
-	protected string $optionName = 'zgw_api_settings';
-	protected array $options     = array();
+	protected string $option_name = 'zgw_api_settings';
+	protected array $options      = array();
 
 	final private function __construct()
 	{
-		$this->options = get_option( $this->optionName, array() );
+		$this->options = get_option( $this->option_name, array() );
 	}
 
 	/**
