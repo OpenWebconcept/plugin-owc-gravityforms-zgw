@@ -52,7 +52,7 @@ return array(
 	 * Generic client settings.
 	 */
 	'zgw.get-configured-client'   => function (Container $container, string $type, string $name ) {
-		$clients = $container->make( 'zgw.settings', array( 'zgw-api-configured-clients' ) );
+		$clients = $container->make( 'zgw.settings', array( 'zgw-api-configured-clients' ) ) ?: array();
 		$clients = array_filter(
 			$clients,
 			function ($client ) use ($name ) {

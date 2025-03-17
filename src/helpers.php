@@ -59,7 +59,7 @@ if ( ! function_exists( 'owc_gravityforms_zgw_asset_url' )) {
 /**
  * Render a view file.
  *
- * @package Yard_Deepl
+ * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */

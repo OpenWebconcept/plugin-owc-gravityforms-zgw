@@ -20,6 +20,8 @@ use DI\Container;
 
 /**
  * Class ContainerResolver
+ *
+ * @since 1.0.0
  */
 class ContainerResolver
 {
