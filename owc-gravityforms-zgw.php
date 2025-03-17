@@ -1,5 +1,4 @@
 <?php
-
 /**
  * OWC GravityForms ZGW.
  *
@@ -34,8 +33,8 @@ const OWC_GRAVITYFORMS_ZGW_FILE                = __FILE__;
 
 define( 'OWC_GRAVITYFORMS_ZGW_DIR_PATH', plugin_dir_path( OWC_GRAVITYFORMS_ZGW_FILE ) );
 define( 'OWC_GRAVITYFORMS_ZGW_PLUGIN_URL', plugins_url( '/', OWC_GRAVITYFORMS_ZGW_FILE ) );
-define( 'OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX', 'owc-gf-zgw' );
-define( 'OWC_GRAVITYFORMS_ZGW_PLUGIN_SLUG', 'owc-gravityforms-zgw' );
+const OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX = 'owc-gf-zgw';
+const OWC_GRAVITYFORMS_ZGW_PLUGIN_SLUG     = 'owc-gravityforms-zgw';
 
 $autoload = __DIR__ . '/vendor/autoload.php';
 

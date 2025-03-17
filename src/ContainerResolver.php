@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Resolve entries from the DI-container.
  *
@@ -19,6 +18,9 @@ if ( ! defined( 'ABSPATH' )) {
 
 use DI\Container;
 
+/**
+ * Class ContainerResolver
+ */
 class ContainerResolver
 {
 	protected Container $container;

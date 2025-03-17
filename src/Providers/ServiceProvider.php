@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Register service provider.
  *

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin helpers.
  *
@@ -72,7 +71,10 @@ function owc_gravityforms_zgw_render_view(string $file_path, $data = array() )
 		return '';
 	}
 
-	extract( $data, EXTR_SKIP );
+	// Manually extract variables from the $data array
+	foreach ($data as $key => $value) {
+		${$key} = $value;
+	}
 
 	return require $full_path;
 }

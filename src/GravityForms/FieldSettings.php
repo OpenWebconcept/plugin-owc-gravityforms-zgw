@@ -1,6 +1,11 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Field settings.
+ *
+ * @package OWC_GravityForms_ZGW
+ * @author  Yard | Digital Agency
+ * @since   1.0.0
+ */
 
 namespace OWCGravityFormsZGW\GravityForms;
 
@@ -12,14 +17,19 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use Exception;
-use GFAPI;
 use function OWC\ZGW\apiClient;
+use GFAPI;
 use OWC\ZGW\Endpoints\Filter\EigenschappenFilter;
 use OWC\ZGW\Entities\Informatieobjecttype;
 use OWC\ZGW\Entities\Zaaktype;
 use OWC\ZGW\Support\Collection;
 use OWCGravityFormsZGW\Traits\FormSetting;
 
+/**
+ * Field settings.
+ *
+ * @since   1.0.0
+ */
 class FieldSettings
 {
 	use FormSetting;
@@ -123,7 +133,7 @@ class FieldSettings
 		 * This check takes the last part of the URL, the identifier, and is here to support backwards compatibility.
 		 */
 		if (filter_var( $zaak_type_identifier, FILTER_VALIDATE_URL )) {
-			$explode              = explode( '/', $zaak_type_identifier ) ?: array();
+			$explode              = explode( '/', $zaak_type_identifier ) ? explode( '/', $zaak_type_identifier ) : array();
 			$zaak_type_identifier = end( $explode );
 		}
 
@@ -200,7 +210,7 @@ class FieldSettings
 		return $types;
 	}
 
-	protected function prepare_object_types_options(array $types, $zaak_type_identification ): array
+	protected function prepare_object_types_options(): array
 	{
 		if (empty( $types )) {
 			return array();

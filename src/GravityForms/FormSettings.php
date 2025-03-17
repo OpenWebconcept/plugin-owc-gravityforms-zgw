@@ -1,6 +1,11 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Form settings.
+ *
+ * @package OWC_GravityForms_ZGW
+ * @author  Yard | Digital Agency
+ * @since   1.0.0
+ */
 
 namespace OWCGravityFormsZGW\GravityForms;
 
@@ -16,6 +21,13 @@ use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\InformatieobjecttypeAdapter;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\ZaaktypenAdapter;
 
+/**
+ * Form settings.
+ *
+ * @package OWC_GravityForms_ZGW
+ * @author  Yard | Digital Agency
+ * @since   1.0.0
+ */
 class FormSettings
 {
 	protected string $prefix = OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX;

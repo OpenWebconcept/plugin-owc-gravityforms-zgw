@@ -1,6 +1,11 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Adapter for informatieobjecttypen.
+ *
+ * @package OWC_GravityForms_ZGW
+ * @author  Yard | Digital Agency
+ * @since   1.0.0
+ */
 
 namespace OWCGravityFormsZGW\GravityForms\FormSettingAdapters;
 
@@ -14,6 +19,11 @@ if ( ! defined( 'ABSPATH' )) {
 use Exception;
 use OWC\ZGW\Entities\Informatieobjecttype;
 
+/**
+ * Adapter for informatieobjecttypen.
+ *
+ * @since   1.0.0
+ */
 class InformatieobjecttypeAdapter extends Adapter
 {
 	/**

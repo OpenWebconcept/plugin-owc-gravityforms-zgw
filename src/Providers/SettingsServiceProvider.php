@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Register settings service provider.
  *

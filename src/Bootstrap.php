@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Bootstrap providers and containers.
  *
@@ -26,6 +25,8 @@ require_once __DIR__ . '/helpers.php';
 
 /**
  * Bootstrap providers and containers.
+ *
+ * @since 1.0.0
  */
 final class Bootstrap
 {

@@ -1,12 +1,13 @@
 <?php
-
 /**
  * Exit when accessed directly.
+ *
+ * @package owc-gravityforms-zgw
  */
-if ( ! defined( 'ABSPATH' )) {
+
+if ( ! defined( 'ABSPATH' ) ) {
 	exit();
 }
-
 ?>
 <script type='text/javascript'>
 	jQuery.each(fieldSettings, function(index, value) {

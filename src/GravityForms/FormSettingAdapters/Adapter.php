@@ -1,6 +1,11 @@
 <?php
-
-declare(strict_types=1);
+/**
+ * Adapter.
+ *
+ * @package OWC_GravityForms_ZGW
+ * @author  Yard | Digital Agency
+ * @since   1.0.0
+ */
 
 namespace OWCGravityFormsZGW\GravityForms\FormSettingAdapters;
 
@@ -17,10 +22,18 @@ use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ResultaattypenFilter;
 use OWC\ZGW\Support\Collection;
 
+/**
+ * Adapter.
+ *
+ * @since 1.0.0
+ */
 abstract class Adapter
 {
 	protected const TRANSIENT_LIFETIME_IN_SECONDS = 64800; // 18 hours.
 
+	/**
+	 * @var Client
+	 */
 	protected Client $client;
 
 	public function __construct(Client $client )
@@ -66,15 +79,15 @@ abstract class Adapter
 	 */
 	protected function fetch_types(string $empty_message, string $endpoint ): array
 	{
-		$page             = 1;
-		$types            = array();
-		$requestException = '';
+		$page              = 1;
+		$types             = array();
+		$request_exception = '';
 
 		while ($page) {
 			try {
 				$result = $this->client->$endpoint()->all( ( new ResultaattypenFilter() )->page( $page ) );
 			} catch (Exception $e) {
-				$requestException = $e->getMessage();
+				$request_exception = $e->getMessage();
 
 				break;
 			}
@@ -83,7 +96,7 @@ abstract class Adapter
 			$page  = $result->pageMeta()->getNextPageNumber();
 		}
 
-		$this->handle_empty_result( $types, $empty_message, $requestException );
+		$this->handle_empty_result( $types, $empty_message, $request_exception );
 
 		return $types;
 	}
@@ -98,17 +111,18 @@ abstract class Adapter
 
 	/**
 	 * @since 1.0.0
+	 * @throws Exception Message
 	 */
-	protected function handle_empty_result(array $types, string $empty_message, string $requestException ): void
+	protected function handle_empty_result(array $types, string $empty_message, string $request_exception ): void
 	{
 		if (empty( $types )) {
-			$exceptionMessage = $empty_message;
+			$exception_message = esc_html( $empty_message );
 
-			if ( ! empty( $requestException )) {
-				$exceptionMessage = sprintf( '%s %s', $exceptionMessage, $requestException );
+			if ( ! empty( $request_exception )) {
+				$exception_message = sprintf( '%s %s', $exception_message, esc_html( $request_exception ) );
 			}
 
-			throw new Exception( $exceptionMessage );
+			throw new Exception( esc_html( $exception_message ) );
 		}
 	}
 
@@ -117,9 +131,12 @@ abstract class Adapter
 	 */
 	protected function handle_no_choices(string $endpoint ): array
 	{
+		// translators: %s: The endpoint that could not be retrieved.
+		$message = sprintf( __( 'Kan de "%s" die horen bij de geselecteerde leverancier niet ophalen.', 'owc-gravityforms-zaaksysteem' ), $endpoint );
+
 		return array(
 			array(
-				'label' => __( sprintf( 'Kan de "%s" die horen bij de geselecteerde leverancier niet ophalen.', $endpoint ), 'owc-gravityforms-zaaksysteem' ),
+				'label' => $message,
 			),
 		);
 	}

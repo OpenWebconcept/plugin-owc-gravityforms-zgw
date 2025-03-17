@@ -1,4 +1,11 @@
 <?php
+/**
+ * Settings.
+ *
+ * @package OWC_GravityForms_ZGW
+ * @author  Yard | Digital Agency
+ * @since   1.0.0
+ */
 
 namespace OWCGravityFormsZGW\Settings;
 
@@ -9,6 +16,11 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+/**
+ * Settings.
+ *
+ * @since   1.0.0
+ */
 class Settings
 {
 	protected string $option_name = 'zgw_api_settings';
