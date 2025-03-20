@@ -1,6 +1,7 @@
 <?php
 
 use DI\Container;
+use OWCGravityFormsZGW\Auth\DigiD;
 
 return array(
 	/**
@@ -69,4 +70,6 @@ return array(
 	'zgw.settings'                => function (Container $container, string $type, string $name ) {
 		return OWCGravityFormsZGW\Settings\Settings::make()->get( $name );
 	},
+	'zgw.rsin'                    => '807287684', // @todo add rsin setting and use it here.
+	'digid.current_user_bsn'      => DigiD::make()->bsn(),
 );

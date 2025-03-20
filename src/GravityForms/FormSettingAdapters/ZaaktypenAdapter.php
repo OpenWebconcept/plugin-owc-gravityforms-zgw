@@ -22,7 +22,7 @@ use OWC\ZGW\Entities\Zaaktype;
 /**
  * Adapter for zaaktypen.
  *
- * @since   1.0.0
+ * @since 1.0.0
  */
 class ZaaktypenAdapter extends Adapter
 {
@@ -39,7 +39,7 @@ class ZaaktypenAdapter extends Adapter
 					return array(
 						'name'  => $zaaktype->identificatie,
 						'label' => "{$zaaktype->omschrijving} ({$zaaktype->identificatie})",
-						'value' => $zaaktype->url, // -> when the api supports filtering on zaaktype identification this line should be updated to $zaaktype->identificatie.
+						'value' => $zaaktype->url, // @todo: when the api supports filtering on zaaktype identification this line should be updated to $zaaktype->identificatie.
 					);
 				},
 				'No zaaktypen found.'

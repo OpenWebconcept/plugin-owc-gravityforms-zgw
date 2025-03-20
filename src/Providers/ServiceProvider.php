@@ -27,6 +27,8 @@ class ServiceProvider
 
 	/**
 	 * Registers the services.
+	 *
+	 * @since 1.0.0
 	 */
 	public function register(): void
 	{
@@ -37,6 +39,8 @@ class ServiceProvider
 
 	/**
 	 * Boots the services.
+	 *
+	 * @since 1.0.0
 	 */
 	public function boot(): void
 	{

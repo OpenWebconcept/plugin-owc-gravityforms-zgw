@@ -31,9 +31,6 @@ abstract class Adapter
 {
 	protected const TRANSIENT_LIFETIME_IN_SECONDS = 64800; // 18 hours.
 
-	/**
-	 * @var Client
-	 */
 	protected Client $client;
 
 	public function __construct(Client $client )

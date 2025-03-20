@@ -17,18 +17,19 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use Exception;
-use function OWC\ZGW\apiClient;
 use GFAPI;
+use OWCGravityFormsZGW\Traits\FormSetting;
 use OWC\ZGW\Endpoints\Filter\EigenschappenFilter;
 use OWC\ZGW\Entities\Informatieobjecttype;
 use OWC\ZGW\Entities\Zaaktype;
 use OWC\ZGW\Support\Collection;
-use OWCGravityFormsZGW\Traits\FormSetting;
+
+use function OWC\ZGW\apiClient;
 
 /**
  * Field settings.
  *
- * @since   1.0.0
+ * @since 1.0.0
  */
 class FieldSettings
 {
@@ -39,6 +40,8 @@ class FieldSettings
 	/**
 	 * Add select element to form fields inside the editor used for field mapping between
 	 * form field and ZGW properties.
+	 *
+	 * @since 1.0.0
 	 */
 	public function add_select($position, $form_id ): void
 	{
@@ -83,6 +86,8 @@ class FieldSettings
 	 *
 	 * This script ensures that the chosen value in the field mapping dropdown
 	 * is properly assigned to the corresponding field property.
+	 *
+	 * @since 1.0.0
 	 */
 	public function add_select_script(): void
 	{
@@ -90,11 +95,13 @@ class FieldSettings
 	}
 
 	/**
-	 * Use the selected `zaaktype identifier` to retrieve the `zaaktype`.
+	 * Use the selected "zaaktype identifier" to retrieve the "zaaktype".
 	 *
 	 * @todo we cannot use the zaaktype URI to retrieve a zaaktype because it is bound to change when the zaaktype is updated. There doesn't seem to be a way to retrieve the zaaktype by identifier, so we have to get all the zaaktypen first and then filter them by identifier. We should change this when the API supports this.
 	 *
 	 * @see https://github.com/OpenWebconcept/plugin-owc-gravityforms-zaaksysteem/issues/13#issue-1697256063
+	 *
+	 * @since 1.0.0
 	 */
 	public function get_zaak_type(string $supplier_key, string $supplier_name, string $zaak_type_identifier ): ?Zaaktype
 	{
@@ -124,12 +131,14 @@ class FieldSettings
 
 	/**
 	 * Decos API is very slow.
-	 * For demostration purposes we match on 'Zaaktype' identifier to ensure some speed.
+	 * For demostration purposes we match on "zaaktype" identifier to ensure some speed.
+	 *
+	 * @since 1.0.0
 	 */
 	protected function get_zaak_type_by_client($client, string $zaak_type_identifier ): ?Zaaktype
 	{
 		/**
-		 * In previous versions the UUID of a 'Zaaktype' was saved instead of its URL.
+		 * In previous versions the UUID of a "zaaktype" was saved instead of its URL.
 		 * This check takes the last part of the URL, the identifier, and is here to support backwards compatibility.
 		 */
 		if (filter_var( $zaak_type_identifier, FILTER_VALIDATE_URL )) {
@@ -141,7 +150,7 @@ class FieldSettings
 
 		/**
 		 * When the API supports filtering on zaak type identification this line should be used.
-		 * Fow now the 'byIdentifier' method is quite memory-intensive.
+		 * Fow now the "byIdentifier" method is quite memory-intensive.
 		 */
 		// $zaak_type = $client->zaaktypen()->byIdentifier($zaak_type_identifier);
 
@@ -149,7 +158,9 @@ class FieldSettings
 	}
 
 	/**
-	 * Get the `zaakeigenschappen` belonging to the chosen `zaak type`.
+	 * Get the "zaakeigenschappen" belonging to the chosen "zaaktype".
+	 *
+	 * @since 1.0.0
 	 */
 	public function get_zaak_type_properties(string $supplier_name, string $zaak_type_url ): Collection
 	{
@@ -173,6 +184,9 @@ class FieldSettings
 		return count( $types ) ? Collection::collect( $types ) : $client->eigenschappen()->filter( $filter );
 	}
 
+	/**
+	 * @since 1.0.0
+	 */
 	protected function prepare_properties_options(Collection $properties ): array
 	{
 		$options = $properties->map(
@@ -190,6 +204,10 @@ class FieldSettings
 
 		return array_filter( (array) $options );
 	}
+
+	/**
+	 * @since 1.0.0
+	 */
 	public function get_information_object_types(Zaaktype $zaak_type, string $zaak_type_identification ): array
 	{
 		$transient_key = sprintf( 'zaaktype-%s-mapping-information-object-types', sanitize_title( $zaak_type_identification ) );
@@ -210,7 +228,10 @@ class FieldSettings
 		return $types;
 	}
 
-	protected function prepare_object_types_options(): array
+	/**
+	 * @since 1.0.0
+	 */
+	protected function prepare_object_types_options(array $types ): array
 	{
 		if (empty( $types )) {
 			return array();

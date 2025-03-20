@@ -22,7 +22,7 @@ use OWC\ZGW\Entities\Informatieobjecttype;
 /**
  * Adapter for informatieobjecttypen.
  *
- * @since   1.0.0
+ * @since 1.0.0
  */
 class InformatieobjecttypeAdapter extends Adapter
 {
