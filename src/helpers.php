@@ -78,3 +78,25 @@ function owc_gravityforms_zgw_render_view(string $file_path, $data = array() )
 
 	return require $full_path;
 }
+
+/**
+ * Get the current environment type.
+ *
+ * @package OWC_GravityForms_ZGW
+ * @author  Yard | Digital Agency
+ * @since   1.0.0
+ */
+function owc_gravityforms_zgw_env_type(): string {
+	return defined( 'WP_ENVIRONMENT_TYPE' ) ? WP_ENVIRONMENT_TYPE : 'production';
+}
+
+/**
+ * Check if the current environment is a development environment.
+ *
+ * @package OWC_GravityForms_ZGW
+ * @author  Yard | Digital Agency
+ * @since   1.0.0
+ */
+function owc_gravityforms_zgw_env_is_dev(): bool {
+	return strpos( owc_gravityforms_zgw_env_type(), 'dev' ) !== false;
+}

@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use OWCGravityFormsZGW\GravityForms\Controllers\AfterSubmissionZaakController;
 use OWCGravityFormsZGW\GravityForms\Controllers\SubmissionZaakController;
 use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
@@ -41,5 +42,6 @@ class GravityFormsServiceProvider extends ServiceProvider
 		add_action( 'gform_field_standard_settings', ( new FieldSettings() )->add_select( ... ), 10, 2 );
 		add_action( 'gform_editor_js', ( new FieldSettings() )->add_select_script( ... ), 10, 0 );
 		add_action( 'gform_validation', ( new SubmissionZaakController() )->handle( ... ), 10, 1 );
+		add_action( 'gform_after_submission', ( new AfterSubmissionZaakController() )->handle( ... ), 10, 2 );
 	}
 }

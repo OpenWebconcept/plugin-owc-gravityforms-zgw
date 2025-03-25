@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract submission controller.
+ * Abstract create "zaak" action.
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
@@ -31,7 +31,7 @@ use OWC\ZGW\Support\PagedCollection;
 use function OWC\ZGW\apiClient;
 
 /**
- * Abstract create Zaak action.
+ * Abstract create "zaak" action.
  *
  * @since 1.0.0
  */
@@ -77,7 +77,8 @@ abstract class AbstractCreateZaakAction
 
 	/**
 	 * Add form field values to arguments required for creating a "zaak".
-	 * Mapping is done by the relation between arguments keys and form fields mappedFieldValueZGWs.
+	 * The mapping is based on the relationship between argument keys
+	 * and form fields via their mappedFieldValueZGW values.
 	 *
 	 * @since 1.0.0
 	 */
@@ -88,24 +89,24 @@ abstract class AbstractCreateZaakAction
 				continue;
 			}
 
-			$fieldValue = rgar( $this->entry, (string) $field->id );
+			$field_value = rgar( $this->entry, (string) $field->id );
 
-			if (empty( $fieldValue )) {
+			if (empty( $field_value )) {
 				continue;
 			}
 
 			if ('date' === $field->type) {
-				$fieldValue = ( new DateTime( $fieldValue ) )->format( 'Y-m-d' );
+				$field_value = ( new DateTime( $field_value ) )->format( 'Y-m-d' );
 			}
 
-			$args[ $field->mappedFieldValueZGW ] = $fieldValue;
+			$args[ $field->mappedFieldValueZGW ] = $field_value;
 		}
 
 		return $args;
 	}
 
 	/**
-	 * Assign a submitter to the "zaak".
+	 * Assign a submitter to the created "zaak".
 	 *
 	 * @since 1.0.0
 	 */
@@ -165,6 +166,9 @@ abstract class AbstractCreateZaakAction
 		return $this->client->roltypen()->filter( $filter );
 	}
 
+	/**
+	 * @since 1.0.0
+	 */
 	public function create_zaak_properties(Zaak $zaak ): void
 	{
 		$zaak_properties = $this->map_zaak_properties_args();
@@ -227,6 +231,9 @@ abstract class AbstractCreateZaakAction
 		return $mappedFields;
 	}
 
+	/**
+	 * @since 1.0.0
+	 */
 	private function handle_zaak_date_property(string $property_value ): string
 	{
 		try {
@@ -240,14 +247,17 @@ abstract class AbstractCreateZaakAction
 
 	/**
 	 * Store generated "zaak" information in the entry's metadata.
+	 * Could be used for further processing or debugging.
+	 *
+	 * @since 1.0.0
 	 */
 	protected function add_created_zaak_as_entry_meta(Zaak $zaak ): void
 	{
 		add_action(
 			'gform_after_submission',
-			function ($entry, $form ) use ($zaak ) {
-				// Store the generated zaak URL in the entry's metadata for future reference after form submission.
-				gform_update_meta( $entry['id'], 'owc_gz_created_zaak_url', $zaak->url );
+			function (array $entry, array $form ) use ($zaak ) {
+				gform_update_meta( $entry['id'], 'owc_gz_created_zaak_url', $zaak->url ?? null );
+				gform_update_meta( $entry['id'], 'owc_gz_created_zaak_uuid', $zaak->uuid ?? null );
 			},
 			10,
 			2
