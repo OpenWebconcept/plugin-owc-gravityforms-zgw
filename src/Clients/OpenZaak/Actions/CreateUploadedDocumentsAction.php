@@ -29,6 +29,9 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 {
 	use CheckURL;
 
+	/**
+	 * @since 1.0.0
+	 */
 	public function add_uploaded_documents(): ?bool
 	{
 		$mapped_args = $this->get_mapped_required_information_object_creation_args();
@@ -41,15 +44,16 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 		$succes = 0;
 
 		foreach ($mapped_args['informatieobject'] as $object) {
-			if (empty( $object['url'] ) || empty( $object['type'] )) {
+
+			if (empty( $object['url']->tmp_url ) || empty( $object['type'] )) {
 				continue;
 			}
 
-			if ( ! $this->check_url( $object['url'] )) {
+			if ( ! $this->check_url( $object['url']->tmp_url )) {
 				continue;
 			}
 
-			$args              = $this->prepare_information_object_args( $object['url'], $object['type'] );
+			$args              = $this->prepare_information_object_args( $object['url']->tmp_url, $object['type'] );
 			$connection_result = $this->connect_zaak_to_information_object( $this->create_information_object( $args ) );
 
 			if ($connection_result instanceof Zaakinformatieobject) {

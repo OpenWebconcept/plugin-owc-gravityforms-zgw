@@ -36,6 +36,9 @@ define( 'OWC_GRAVITYFORMS_ZGW_PLUGIN_URL', plugins_url( '/', OWC_GRAVITYFORMS_ZG
 const OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX = 'owc-gf-zgw';
 const OWC_GRAVITYFORMS_ZGW_PLUGIN_SLUG     = 'owc-gravityforms-zgw';
 
+const OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_FAILED_SUBMISSION = 'zgw_submission_zaak_failed_message';
+const OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_CREATED_ZAAK      = 'zgw_created_zaak';
+
 $autoload = __DIR__ . '/vendor/autoload.php';
 
 if (file_exists( $autoload )) {

@@ -1,8 +1,8 @@
 <?php
 /**
- * Submission controller.
+ * Zaak controller.
  *
- * This controller is responsible for handling form submissions before submitted
+ * This controller is responsible for handling form submissions after the form validation
  * and delegates the create action towards the ZGW API.
  *
  * @package OWC_GravityForms_ZGW
@@ -21,42 +21,32 @@ if ( ! defined( 'ABSPATH' )) {
 
 use Exception;
 use GFCommon;
-use GFFormsModel;
-use OWCGravityFormsZGW\Traits\FormSetting;
+use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
 use OWC\ZGW\Entities\Zaak;
 
 /**
- * Submission controller.
+ * Zaak controller.
  *
  * @since 1.0.0
  */
-class SubmissionZaakController
+class ZaakController extends AbstractZaakFormController
 {
-	use FormSetting;
-
-	protected array $entry;
-	protected array $form;
-	protected string $supplier_name;
-	protected string $supplier_key;
-	protected array $failed_messages = array();
-
 	/**
 	 * @since 1.0.0
 	 */
 	public function handle(array $validation_result ): array
 	{
-		// @todo validate if form is ZGW form.
-
 		$this->set_class_properties( $validation_result['form'] );
 
-		if ( ! count( $this->entry )) {
-			return $this->fail_form_validation(
-				validation_result: $validation_result,
-				failed_message: $this->failed_messages['zaak']
-			);
+		if ( ! $this->form_is_zgw()) {
+			return $validation_result;
 		}
 
 		try {
+			if ( ! count( $this->entry )) {
+				throw new Exception( $this->failed_messages['zaak'] );
+			}
+
 			$this->handle_zaak_creation();
 		} catch (Exception $e) {
 			return $this->fail_form_validation(
@@ -71,39 +61,9 @@ class SubmissionZaakController
 	/**
 	 * @since 1.0.0
 	 */
-	protected function set_class_properties(array $form ): void
+	protected function set_failed_messages_property(): array
 	{
-		$this->entry         = $this->create_entry_by_form( $form );
-		$this->form          = $form;
-		$this->supplier_name = $this->supplier_form_setting( form: $this->form, get_key: false );
-		$this->supplier_key  = $this->supplier_form_setting( form: $this->form, get_key: true );
-
-		$this->set_failed_messages_property();
-	}
-
-	/**
-	 * If there is no entry array available, create one based on the form array.
-	 * Useful in hooks where the entry has not been created yet, such as 'gform_validation'.
-	 *
-	 * @since 1.0.0
-	 */
-	public function create_entry_by_form(array $form ): array
-	{
-		try {
-			$entry = GFFormsModel::create_lead( $form );
-		} catch (Exception $e) {
-			$entry = null;
-		}
-
-		return is_array( $entry ) ? $entry : array();
-	}
-
-	/**
-	 * @since 1.0.0
-	 */
-	protected function set_failed_messages_property(): void
-	{
-		$this->failed_messages = array(
+		return array(
 			'zaak' => __(
 				'Er is een fout opgetreden bij het aanmaken van uw zaak. Probeer het later opnieuw.',
 				'owc-gravityforms-zgw'
@@ -143,10 +103,12 @@ class SubmissionZaakController
 	 * for example in the "gform_after_submission" hook.
 	 *
 	 * The "gform_after_submission" hook handles uploaded documents and the submission PDF.
+	 *
+	 * @since 1.0.0
 	 */
 	protected function store_serialized_zaak_in_transient(Zaak $zaak ): void
 	{
-		set_transient( sprintf( 'zgw_zaak_%s', md5( $this->entry['ip'] ) ), serialize( $zaak ), 60 );
+		set_transient( sprintf( '%s_%s', OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_CREATED_ZAAK, md5( $this->entry['ip'] ) ), serialize( $zaak ), 60 );
 	}
 
 	/**
