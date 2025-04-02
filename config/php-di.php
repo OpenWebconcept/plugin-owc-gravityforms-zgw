@@ -9,9 +9,9 @@ return array(
 	 */
 	'suppliers'                   => array(
 		'openzaak'   => 'OpenZaak',
-		'decos-join' => 'DecosJoin',
+		'decos-join' => 'DecosJOIN',
 		'rx-mission' => 'RxMission',
-		'xxllnc'     => 'Xxllnc',
+		'xxllnc'     => 'XXLNC',
 		'procura'    => 'Procura',
 	),
 
