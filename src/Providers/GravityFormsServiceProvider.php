@@ -16,12 +16,15 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use GFAddOn;
+use GFForms;
 use OWCGravityFormsZGW\GravityForms\Controllers\FormConfirmationController;
 use OWCGravityFormsZGW\GravityForms\Controllers\ZaakController;
 use OWCGravityFormsZGW\GravityForms\Controllers\ZaakControllerSubmissionPDF;
 use OWCGravityFormsZGW\GravityForms\Controllers\ZaakUploadsController;
 use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
+use OWCGravityFormsZGW\GravityForms\ZGWAddon;
 
 /**
  * Register settings service provider.
@@ -32,13 +35,14 @@ class GravityFormsServiceProvider extends ServiceProvider
 {
 	public function register(): void
 	{
-		$this->registerHooks();
+		$this->register_hooks();
+		$this->register_addon();
 	}
 
 	/**
 	 * @since 1.0.0
 	 */
-	private function registerHooks(): void
+	private function register_hooks(): void
 	{
 		add_filter( 'gform_form_settings_fields', ( new FormSettings() )->add_form_settings( ... ), 10, 2 );
 		add_action( 'gform_field_standard_settings', ( new FieldSettings() )->add_select( ... ), 10, 2 );
@@ -47,5 +51,19 @@ class GravityFormsServiceProvider extends ServiceProvider
 		add_action( 'gform_pre_submission_filter', ( new ZaakUploadsController() )->handle( ... ), 10, 1 );
 		add_action( 'gform_after_submission', ( new ZaakControllerSubmissionPDF() )->handle( ... ), 999, 2 );
 		add_filter( 'gform_confirmation', ( new FormConfirmationController() )->handle( ... ), 10, 3 );
+	}
+
+	/**
+	 * @since 1.0.0
+	 */
+	public function register_addon(): void
+	{
+		if ( ! method_exists( 'GFForms', 'include_addon_framework' )) {
+			return;
+		}
+
+		GFForms::include_addon_framework();
+		GFAddOn::register( ZGWAddon::class );
+		ZGWAddon::get_instance();
 	}
 }

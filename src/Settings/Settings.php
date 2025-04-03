@@ -23,20 +23,19 @@ if ( ! defined( 'ABSPATH' )) {
  */
 class Settings
 {
-	protected string $option_name = 'zgw_api_settings';
-	protected array $options      = array();
+	protected array $options = array();
 
-	final private function __construct()
+	final private function __construct(string $settings_key )
 	{
-		$this->options = get_option( $this->option_name, array() );
+		$this->options = get_option( $settings_key, array() );
 	}
 
 	/**
 	 * @since 1.0.0
 	 */
-	public static function make(): self
+	public static function make(string $settings_key ): self
 	{
-		return new static();
+		return new static( $settings_key );
 	}
 
 	/**
