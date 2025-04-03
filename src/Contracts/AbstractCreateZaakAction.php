@@ -18,8 +18,9 @@ if ( ! defined( 'ABSPATH' )) {
 
 use DateTime;
 use Exception;
-use GFCommon;
+use Monolog\Logger;
 use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\LoggerZGW;
 use OWCGravityFormsZGW\Traits\FormSetting;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\RoltypenFilter;
@@ -44,6 +45,7 @@ abstract class AbstractCreateZaakAction
 	protected string $supplier_name;
 	protected string $supplier_key;
 	protected Client $client;
+	protected LoggerZGW $logger;
 
 	public function __construct(array $entry, array $form, string $supplier_name, string $supplier_key )
 	{
@@ -52,6 +54,7 @@ abstract class AbstractCreateZaakAction
 		$this->supplier_name = $supplier_name;
 		$this->supplier_key  = $supplier_key;
 		$this->client        = apiClient( $this->supplier_name );
+		$this->logger        = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
 	abstract public function create(): Zaak;
@@ -115,13 +118,13 @@ abstract class AbstractCreateZaakAction
 		$rol_types = $this->get_rol_types();
 
 		if ($rol_types->isEmpty()) {
-			throw new Exception( 'No role types found for this "zaaktype"' );
+			throw new Exception( 'No role types found for this "zaaktype"', 400 );
 		}
 
 		$current_bsn = ContainerResolver::make()->get( 'digid.current_user_bsn' );
 
 		if (empty( $current_bsn )) {
-			throw new Exception( 'This session appears to have no BSN' );
+			throw new Exception( 'This session appears to have no BSN', 400 );
 		}
 
 		foreach ($rol_types as $rol_type) {
@@ -142,9 +145,9 @@ abstract class AbstractCreateZaakAction
 			try {
 				$rol = $this->client->rollen()->create( new Rol( $args, $this->client ) );
 			} catch (BadRequestError $e) {
-				GFCommon::log_error( sprintf( 'OWC_GravityForms_ZGW: failed to add rol to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
+				$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: failed to add rol to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
 			} catch (Exception $e) {
-				GFCommon::log_error( sprintf( 'OWC_GravityForms_ZGW: failed to add rol to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
+				$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: failed to add rol to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
 			}
 
 			break;
@@ -190,9 +193,10 @@ abstract class AbstractCreateZaakAction
 					new Zaakeigenschap( $property, $this->client )
 				);
 			} catch (BadRequestError $e) {
-				GFCommon::log_error( sprintf( 'OWC_GravityForms_ZGW: failed to create zaak property for zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
+				$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: failed to create zaak property for zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
+
 			} catch (Exception $e) {
-				GFCommon::log_error( sprintf( 'OWC_GravityForms_ZGW: failed to create zaak property for zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
+				$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: failed to create zaak property for zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
 			}
 		}
 	}

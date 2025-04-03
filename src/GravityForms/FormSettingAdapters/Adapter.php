@@ -18,6 +18,8 @@ if ( ! defined( 'ABSPATH' )) {
 
 use Closure;
 use Exception;
+use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\LoggerZGW;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ResultaattypenFilter;
 use OWC\ZGW\Support\Collection;
@@ -32,10 +34,12 @@ abstract class Adapter
 	protected const TRANSIENT_LIFETIME_IN_SECONDS = 64800; // 18 hours.
 
 	protected Client $client;
+	protected LoggerZGW $logger;
 
 	public function __construct(Client $client )
 	{
 		$this->client = $client;
+		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
 	/**
@@ -112,14 +116,14 @@ abstract class Adapter
 	 */
 	protected function handle_empty_result(array $types, string $empty_message, string $request_exception ): void
 	{
-		if (empty( $types )) {
+		if (0 === count( $types )) {
 			$exception_message = esc_html( $empty_message );
 
 			if ( ! empty( $request_exception )) {
 				$exception_message = sprintf( '%s %s', $exception_message, esc_html( $request_exception ) );
 			}
 
-			throw new Exception( esc_html( $exception_message ) );
+			throw new Exception( esc_html( $exception_message ), 400 );
 		}
 	}
 

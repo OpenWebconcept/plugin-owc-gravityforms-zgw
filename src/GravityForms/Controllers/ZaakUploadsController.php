@@ -44,7 +44,7 @@ class ZaakUploadsController extends AbstractZaakFormController
 
 		try {
 			if ( ! count( $this->entry )) {
-				throw new Exception( $this->failed_messages['transient'] );
+				throw new Exception( $this->failed_messages['transient'], 400 );
 			}
 
 			$this->handle_zaak_uploads( $this->restore_serialized_zaak_from_transient( failed_message_type: 'transient', delete_transient: false ) );
@@ -87,12 +87,12 @@ class ZaakUploadsController extends AbstractZaakFormController
 			$result = ( new $action( $this->entry, $this->form, $this->supplier_name, $this->supplier_key, $zaak ) )->add_uploaded_documents();
 
 			if ( ! $result) {
-				throw new Exception( sprintf( 'something went wrong with connecting the uploads to zaak "%s"', $zaak->getValue( 'identificatie', '' ) ) );
+				throw new Exception( sprintf( 'something went wrong with connecting the uploads to zaak "%s"', $zaak->getValue( 'identificatie', '' ) ), 400 );
 			}
 		} catch (Exception $e) {
-			GFCommon::log_error( sprintf( 'OWC_GravityForms_ZGW: %s', $e->getMessage() ) );
+			$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: %s', $e->getMessage() ) );
 
-			throw new Exception( $this->failed_messages['uploads'] );
+			throw new Exception( $this->failed_messages['uploads'], $e->getCode() );
 		}
 	}
 }

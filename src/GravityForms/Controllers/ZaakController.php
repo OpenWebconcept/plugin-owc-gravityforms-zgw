@@ -44,7 +44,7 @@ class ZaakController extends AbstractZaakFormController
 
 		try {
 			if ( ! count( $this->entry )) {
-				throw new Exception( $this->failed_messages['zaak'] );
+				throw new Exception( $this->failed_messages['zaak'], 500 );
 			}
 
 			$this->handle_zaak_creation();
@@ -80,17 +80,17 @@ class ZaakController extends AbstractZaakFormController
 		$action = sprintf( 'OWCGravityFormsZGW\Clients\%s\Actions\CreateZaakAction', $this->supplier_name );
 
 		if ( ! class_exists( $action )) {
-			GFCommon::log_error( sprintf( 'OWC_GravityForms_ZGW: class "%s" does not exists. Verify if the selected supplier has the required action class', $action ) );
+			$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: class "%s" does not exists. Verify if the selected supplier has the required action class', $action ) );
 
-			throw new Exception( $this->failed_messages['zaak'] );
+			throw new Exception( $this->failed_messages['zaak'], 500 );
 		}
 
 		try {
 			$zaak = ( new $action( $this->entry, $this->form, $this->supplier_name, $this->supplier_key ) )->create();
 		} catch (Exception $e) {
-			GFCommon::log_error( sprintf( 'OWC_GravityForms_ZGW: %s', $e->getMessage() ) );
+			$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: %s', $e->getMessage() ) );
 
-			throw new Exception( $this->failed_messages['zaak'] );
+			throw new Exception( $this->failed_messages['zaak'], 400 );
 		}
 
 		$this->store_serialized_zaak_in_transient( $zaak );

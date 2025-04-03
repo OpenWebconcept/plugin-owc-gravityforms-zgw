@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' )) {
 use DI\Container;
 
 /**
- * Class ContainerResolver
+ * Class ContainerResolver.
  *
  * @since 1.0.0
  */

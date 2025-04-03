@@ -34,10 +34,11 @@
       "url": "git@github.com:OpenWebconcept/owc-zgw-api.git"
     }
   ],
-  "require": {
-    "php": "^8.1",
-    "php-di/php-di": "^6.0",
-    "owc/zgw-api": "dev-main"
+"require": {
+	"monolog/monolog": "^2.0",
+	"owc/zgw-api": "dev-main",
+	"php": "^8.1",
+	"php-di/php-di": "^6.0"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.7",

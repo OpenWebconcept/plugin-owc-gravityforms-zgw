@@ -42,9 +42,11 @@ class InformatieobjecttypeAdapter extends Adapter
 						'value' => $objecttype->url,
 					);
 				},
-				'No information object typen found.'
+				'No information object types found.'
 			);
 		} catch (Exception $e) {
+			$this->logger->error( $e->getMessage() );
+
 			return $this->handle_no_choices( 'informatieobjecttypen' );
 		}
 	}

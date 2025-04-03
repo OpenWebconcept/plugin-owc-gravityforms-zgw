@@ -18,6 +18,8 @@ if ( ! defined( 'ABSPATH' )) {
 
 use Exception;
 use GFFormsModel;
+use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\LoggerZGW;
 use OWCGravityFormsZGW\Traits\FormSetting;
 use OWC\ZGW\Entities\Zaak;
 
@@ -35,10 +37,12 @@ abstract class AbstractZaakFormController
 	protected string $supplier_name;
 	protected string $supplier_key;
 	protected array $failed_messages = array();
+	protected LoggerZGW $logger;
 
 	public function __construct()
 	{
 		$this->failed_messages = $this->set_failed_messages_property();
+		$this->logger          = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
 	/**
@@ -91,21 +95,21 @@ abstract class AbstractZaakFormController
 		$zaak = get_transient( sprintf( '%s_%s', OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_CREATED_ZAAK, md5( $this->entry['ip'] ) ) );
 
 		if ( ! $zaak) {
-			GFCommon::log_error( 'OWC_GravityForms_ZGW: unable to retrieve a "zaak" object from the transient storage' );
+			$this->logger->error( 'OWC_GravityForms_ZGW: unable to retrieve a "zaak" object from the transient storage' );
 
-			throw new Exception( $this->failed_messages[ $failed_message_type ] );
+			throw new Exception( $this->failed_messages[ $failed_message_type ], 400 );
 
 		}
 
 		$zaak = @unserialize( $zaak );
 
 		if ( ! $zaak instanceof Zaak) {
-			GFCommon::log_error( 'OWC_GravityForms_ZGW: unable to unserialize the "zaak" object retrieved from the transient storage' );
+			$this->logger->error( 'OWC_GravityForms_ZGW: unable to unserialize the "zaak" object retrieved from the transient storage' );
 
 			// After unsuccessful retrieval, remove the transient.
 			delete_transient( sprintf( '%s_%s', OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_CREATED_ZAAK, md5( $this->entry['ip'] ) ) );
 
-			throw new Exception( $this->failed_messages[ $failed_message_type ] );
+			throw new Exception( $this->failed_messages[ $failed_message_type ], 400 );
 		}
 
 		// After successful retrieval, remove the transient if needed.
@@ -125,9 +129,9 @@ abstract class AbstractZaakFormController
 			return;
 		}
 
-		GFCommon::log_error( sprintf( 'OWC_GravityForms_ZGW: class "%s" does not exists. Verify if the selected supplier has the required action class', $action ) );
+		$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: class "%s" does not exists. Verify if the selected supplier has the required action class', $action ) );
 
-		throw new Exception( $this->failed_messages[ $failed_message_type ] );
+		throw new Exception( $this->failed_messages[ $failed_message_type ], 500 );
 	}
 
 	/**

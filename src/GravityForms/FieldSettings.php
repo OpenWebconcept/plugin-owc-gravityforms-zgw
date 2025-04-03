@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' )) {
 
 use Exception;
 use GFAPI;
+use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\Traits\FormSetting;
 use OWC\ZGW\Endpoints\Filter\EigenschappenFilter;
 use OWC\ZGW\Entities\Informatieobjecttype;
@@ -176,6 +177,8 @@ class FieldSettings
 				$types  = array_merge( $types, $result->all() );
 				$page   = $result->pageMeta()->getNextPageNumber();
 			} catch (Exception $e) {
+				ContainerResolver::make()->get( 'logger.zgw' )->error( $e->getMessage() );
+
 				break;
 			}
 		}

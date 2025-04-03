@@ -16,10 +16,10 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use function OWC\ZGW\apiClient;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\InformatieobjecttypeAdapter;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\ZaaktypenAdapter;
+use function OWC\ZGW\apiClient;
 
 /**
  * Form settings.

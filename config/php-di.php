@@ -2,6 +2,7 @@
 
 use DI\Container;
 use OWCGravityFormsZGW\Auth\DigiD;
+use OWCGravityFormsZGW\Settings\Settings;
 
 return array(
 	/**
@@ -68,8 +69,33 @@ return array(
 		return $container->make( 'zgw.settings', array( 'zgw-api-configured-clients' ) );
 	},
 	'zgw.settings'                => function (Container $container, string $type, string $name ) {
-		return OWCGravityFormsZGW\Settings\Settings::make()->get( $name );
+		return Settings::make()->get( $name );
 	},
 	'zgw.rsin'                    => '807287684', // @todo add rsin setting and use it here.
 	'digid.current_user_bsn'      => DigiD::make()->bsn(),
+
+	/**
+	 * ZGW error logging.
+	 */
+	'message.logger.active'       => true, // @todo configure by setting.
+	'message.logger.path'         => dirname( __DIR__ ) . '/owc-zgw-log.json',
+	'message.logger'              => function (Container $container ) {
+		$logger = new \Monolog\Logger( 'owc_zgw_log' );
+
+		$handler = new \Monolog\Handler\StreamHandler(
+			$container->get( 'message.logger.path' ),
+			\Monolog\Logger::DEBUG
+		);
+
+		$handler->setFormatter( new \Monolog\Formatter\JsonFormatter() );
+		$logger->pushHandler( $handler );
+
+		$logger->pushProcessor( new \Monolog\Processor\IntrospectionProcessor() );
+
+		return $logger;
+	},
+
+	'logger.zgw'                  => function (Container $container ) {
+		return new \OWCGravityFormsZGW\LoggerZGW( $container->get( 'message.logger' ) );
+	},
 );
