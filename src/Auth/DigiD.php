@@ -1,6 +1,6 @@
 <?php
 /**
- * Resolve entries from the DI-container.
+ * Retrieve the social security number (BSN) by integrating with multiple DigiD authentication methods.
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
@@ -16,13 +16,22 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+/**
+ * Retrieve the social security number (BSN) by integrating with multiple DigiD authentication methods.
+ */
 class DigiD
 {
+	/**
+	 * @since 1.0.0
+	 */
 	public static function make(): self
 	{
 		return new static();
 	}
 
+	/**
+	 * @since 1.0.0
+	 */
 	public function bsn(): string
 	{
 		if ($bsn = $this->handle_digid_idp()) {
@@ -36,6 +45,9 @@ class DigiD
 		return '';
 	}
 
+	/**
+	 * @since 1.0.0
+	 */
 	private function handle_digid_idp(): string
 	{
 		if ( ! class_exists( '\OWC\IdpUserData\DigiDSession' )) {
@@ -49,6 +61,9 @@ class DigiD
 		return \OWC\IdpUserData\DigiDSession::getUserData()->getBsn();
 	}
 
+	/**
+	 * @since 1.0.0
+	 */
 	private function handle_digid_saml(): string
 	{
 		if ( ! function_exists( '\\Yard\\DigiD\\Foundation\\Helpers\\resolve' ) ) {
