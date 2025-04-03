@@ -8,7 +8,7 @@
  *
  * Plugin Name:       OWC | GravityForms ZGW
  * Plugin URI:        https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw
- * Description:       Make a connection between ZGW and GravityForms
+ * Description:       Koppelt GravityForms met ZGW.
  * Version:           1.0.0
  * Author:            Yard | Digital Agency
  * Author URI:        https://www.yard.nl

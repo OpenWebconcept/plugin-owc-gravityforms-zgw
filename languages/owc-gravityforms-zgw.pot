@@ -1,0 +1,160 @@
+# Copyright (C) 2025 Yard | Digital Agency
+# This file is distributed under the EUPL.
+msgid ""
+msgstr ""
+"Project-Id-Version: OWC | GravityForms ZGW 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-gravityforms-zgw\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-04-03T12:49:22+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: owc-gravityforms-zgw\n"
+
+#. Plugin Name of the plugin
+#: owc-gravityforms-zgw.php
+msgid "OWC | GravityForms ZGW"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: owc-gravityforms-zgw.php
+msgid "https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw"
+msgstr ""
+
+#. Description of the plugin
+#: owc-gravityforms-zgw.php
+msgid Koppelt GravityForms met ZGW."
+msgstr ""
+
+#. Author of the plugin
+#: owc-gravityforms-zgw.php
+msgid "Yard | Digital Agency"
+msgstr ""
+
+#. Author URI of the plugin
+#: owc-gravityforms-zgw.php
+msgid "https://www.yard.nl"
+msgstr ""
+
+#: src/GravityForms/Controllers/ZaakController.php:67
+msgid "Er is een fout opgetreden bij het aanmaken van uw zaak. Probeer het later opnieuw."
+msgstr ""
+
+#: src/GravityForms/Controllers/ZaakControllerSubmissionPDF.php:71
+#: src/GravityForms/Controllers/ZaakUploadsController.php:65
+msgid "Het aanmaken van uw zaak is gelukt. Het toevoegen van de geüploade bestanden en de vereiste PDF van uw inzending konden helaas niet aan de zaak gekoppeld worden."
+msgstr ""
+
+#: src/GravityForms/Controllers/ZaakControllerSubmissionPDF.php:75
+msgid "Het aanmaken van uw zaak is gelukt. De vereiste PDF van uw inzending kon helaas niet aan de zaak gekoppeld worden."
+msgstr ""
+
+#: src/GravityForms/Controllers/ZaakUploadsController.php:69
+msgid "Het aanmaken van uw zaak is gelukt. Het toevoegen van de geüploade bestanden aan uw zaak helaas niet."
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:41
+msgid "Zaaksysteem"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:42
+msgid "Om de snelheid te verhogen worden de instellingen van leveranciers pas opgehaald na het kiezen van een leverancier. Dit betekent dat de pagina herladen moet worden na het selecteren van een leverancier."
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:47
+#: src/GravityForms/FormSettings.php:49
+msgid "Selecteer een leverancier"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:47
+msgid "Kies een Zaaksysteem leverancier. Let op dat je ook de instellingen van de leverancier moet configureren in de hoofdinstellingen van Gravity Forms."
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:55
+#: src/GravityForms/FormSettings.php:57
+msgid "Leverancier instellingen"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:55
+msgid "Kies hoe de leverancier instellingen geconfigureerd moeten worden."
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:61
+msgid "Selecteer instellingen (opgehaald vanuit zaaksysteem)"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:66
+msgid "Configureer instellingen handmatig (invoeren van URL's)"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:174
+#: src/Views/partials/gf-field-zgw-mapping-options.php:24
+msgid "Zaaktype"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:193
+msgid "Informatie object type"
+msgstr ""
+
+#: src/GravityForms/ZGWAddon.php:79
+msgid "Organisatie"
+msgstr ""
+
+#: src/GravityForms/ZGWAddon.php:83
+msgid "RSIN"
+msgstr ""
+
+#: src/GravityForms/ZGWAddon.php:93
+msgid "Logboekinstellingen"
+msgstr ""
+
+#: src/GravityForms/ZGWAddon.php:102
+msgid "Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in."
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:18
+msgid "Zaaksysteem mapping"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:22
+msgid "Kies veldnaam Zaaksysteem"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:23
+msgid "Bronorganisatie"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:25
+msgid "Omschrijving"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:26
+msgid "Toelichting"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:27
+msgid "Registratiedatum"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:28
+msgid "Verantwoordelijke organisatie"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:29
+msgid "Startdatum"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:30
+msgid "Informatieobject"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:41
+msgid "Document typen"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:44
+msgid "Kies een document type"
+msgstr ""
