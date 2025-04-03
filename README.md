@@ -5,7 +5,7 @@
 
 ## Disabling SSL verification in local environments
 
-To prevent this, the plugin disables SSL peer verification only when the environment value contains 'dev' (at the bare minimum).
+The plugin disables SSL peer verification only when the environment value contains 'dev' (at the bare minimum).
 To enable this behavior, you need to define the WP_ENVIRONMENT_TYPE constant in your wp-config.php.
 
 ```php
