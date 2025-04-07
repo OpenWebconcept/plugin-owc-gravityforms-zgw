@@ -18,12 +18,12 @@ softwareType: 'softwareAddon'
 description:
   en:
     genericName: 'OWC GravityForms ZGW'
-    shortDescription: 'Make a connection between ZGW and GravityForms'
-    longDescription: 'Make a connection between ZGW and GravityForms'
+    shortDescription: 'Connects GravityForms to ZGW'
+		longDescription: 'Connects GravityForms to ZGW'
   nl:
     genericName: 'OWC GravityForms ZGW'
-    shortDescription: 'Maak een verbinding tussen ZGW en GravityForms'
-    longDescription: 'Maak een verbinding tussen ZGW en GravityForms'
+    shortDescription: 'Koppelt GravityForms met ZGW'
+    longDescription: 'Koppelt GravityForms met ZGW'
 
 legal:
   license: 'EUPL-1.2'
