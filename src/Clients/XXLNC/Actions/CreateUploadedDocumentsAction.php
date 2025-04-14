@@ -53,7 +53,7 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 				continue;
 			}
 
-			$args              = $this->prepare_information_object_args( $object['url']->tmp_url, $object['type'] );
+			$args              = $this->prepare_information_object_args( $object['url']->tmp_url, $object['type'], $object['description'] );
 			$connection_result = $this->connect_zaak_to_information_object( $this->create_information_object( $args ) );
 
 			if ($connection_result instanceof Zaakinformatieobject) {

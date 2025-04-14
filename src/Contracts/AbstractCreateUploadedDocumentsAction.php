@@ -102,8 +102,9 @@ abstract class AbstractCreateUploadedDocumentsAction
 		if (is_string( $field_value )) {
 			$field_value = array(
 				array(
-					'type' => $field->mappedFieldDocumentTypeValueZGW,
-					'url'  => $field_value,
+					'type'        => $field->mappedFieldDocumentTypeValueZGW,
+					'url'         => $field_value,
+					'description' => $field->description ?? '',
 				),
 			);
 		}
@@ -138,8 +139,9 @@ abstract class AbstractCreateUploadedDocumentsAction
 		return array_map(
 			function ($field_value ) use ($field ) {
 				return array(
-					'type' => $field->mappedFieldDocumentTypeValueZGW,
-					'url'  => $field_value,
+					'type'        => $field->mappedFieldDocumentTypeValueZGW,
+					'url'         => $field_value,
+					'description' => $field->description ?? '',
 				);
 			},
 			$field_values
@@ -149,9 +151,9 @@ abstract class AbstractCreateUploadedDocumentsAction
 	/**
 	 * @since 1.0.0
 	 */
-	protected function prepare_information_object_args(string $object_url, string $information_object_type ): array
+	protected function prepare_information_object_args(string $object_url, string $information_object_type, string $object_description = '' ): array
 	{
-		if (empty( $information_object_type )) {
+		if (1 > strlen( $information_object_type )) {
 			return array();
 		}
 
@@ -164,6 +166,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		$args['formaat']                     = $this->get_content_type( $object_url );
 		$args['bestandsnaam']                = sprintf( '%s.%s', sanitize_title( $file_name ), $this->get_extension( $object_url ) );
 		$args['bestandsomvang']              = $file_size ? (int) $file_size : strlen( $file_content );
+		$args['beschrijving']                = 0 < strlen( $object_description ) ? $object_description : $file_name;
 		$args['inhoud']                      = $file_content;
 		$args['vertrouwelijkheidaanduiding'] = 'vertrouwelijk';
 		$args['auteur']                      = 'OWC';
