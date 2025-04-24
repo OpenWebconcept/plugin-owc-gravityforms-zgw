@@ -22,6 +22,7 @@ use Monolog\Logger;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\LoggerZGW;
 use OWCGravityFormsZGW\Traits\FormSetting;
+use OWCGravityFormsZGW\Traits\MergeTagTranslator;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\RoltypenFilter;
 use OWC\ZGW\Entities\Rol;
@@ -39,6 +40,7 @@ use function OWC\ZGW\apiClient;
 abstract class AbstractCreateZaakAction
 {
 	use FormSetting;
+	use MergeTagTranslator;
 
 	protected array $entry;
 	protected array $form;
@@ -102,7 +104,7 @@ abstract class AbstractCreateZaakAction
 				$field_value = ( new DateTime( $field_value ) )->format( 'Y-m-d' );
 			}
 
-			$args[ $field->mappedFieldValueZGW ] = $field_value;
+			$args[ $field->mappedFieldValueZGW ] = $this->translate_merge_tags( $this->entry, $field_value );
 		}
 
 		return $args;
