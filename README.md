@@ -80,6 +80,11 @@ Use the dropdown labeled **"Zaaksysteem mapping"** in the field settings to map 
 
 ![Uploads field mapping example](./data/uploads-field-mapping.png)
 
+To add a document description to the uploaded file in the configured **"Zaaksysteem"**, use the field as shown below.  
+You can also include form values in the description by using the format `[field_id]`.
+
+![Uploads field mapping example](./data/uploads-field-document-description.png)
+
 ### Submission PDF
 
 After a successful form submission, a **PDF** is generated using the **Gravity PDF** plugin.
