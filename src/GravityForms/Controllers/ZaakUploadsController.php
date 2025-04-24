@@ -86,7 +86,7 @@ class ZaakUploadsController extends AbstractZaakFormController
 		try {
 			$result = ( new $action( $this->entry, $this->form, $this->supplier_name, $this->supplier_key, $zaak ) )->add_uploaded_documents();
 
-			if ( ! $result) {
+			if ( false === $result) {
 				throw new Exception( sprintf( 'something went wrong with connecting the uploads to zaak "%s"', $zaak->getValue( 'identificatie', '' ) ), 400 );
 			}
 		} catch (Exception $e) {
