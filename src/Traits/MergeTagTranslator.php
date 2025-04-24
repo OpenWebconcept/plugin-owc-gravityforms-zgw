@@ -55,6 +55,11 @@ trait MergeTagTranslator
 		);
 	}
 
+	/**
+	 * Resolves the field value based on the field ID and entry.
+	 *
+	 * @since 1.0.0
+	 */
 	protected function resolve_field_value(string $field_id, array $entry ): mixed
 	{
 		if ($field = $this->field_by_type( $field_id, 'checkbox' )) {
@@ -70,6 +75,11 @@ trait MergeTagTranslator
 		return rgar( $entry, $field_id );
 	}
 
+	/**
+	 * Handles the checkbox field by extracting the values from the entry.
+	 *
+	 * @since 1.0.0
+	 */
 	protected function handle_checkbox_field(array $entry, GF_Field $field ): array
 	{
 		$field_value = array();
