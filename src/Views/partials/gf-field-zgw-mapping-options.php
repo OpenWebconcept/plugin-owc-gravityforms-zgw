@@ -14,11 +14,11 @@ $objecttypes = $objecttypes ?? array();
 ?>
 
 <li class="label_setting field_setting zgw_mapping_setting">
-	<label for="mappendFieldZGW" class="section_label">
+	<label for="mappedFieldZGW" class="section_label">
 		<?php esc_html_e( 'Zaaksysteem mapping', 'owc-gravityforms-zgw' ); ?>
 	</label>
 
-	<select id="mappendFieldZGW" onchange="SetFieldProperty('mappedFieldValueZGW', this.value);">
+	<select id="mappedFieldZGW" onchange="SetFieldProperty('mappedFieldValueZGW', this.value);">
 		<option value=""><?php esc_html_e( 'Kies veldnaam Zaaksysteem', 'owc-gravityforms-zgw' ); ?></option>
 		<option value="bronorganisatie"><?php esc_html_e( 'Bronorganisatie', 'owc-gravityforms-zgw' ); ?></option>
 		<option value="zaaktype"><?php esc_html_e( 'Zaaktype', 'owc-gravityforms-zgw' ); ?></option>
