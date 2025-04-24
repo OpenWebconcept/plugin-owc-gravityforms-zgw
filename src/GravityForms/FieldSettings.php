@@ -79,6 +79,7 @@ class FieldSettings
 				'objecttypes' => $this->prepare_object_types_options( $this->get_information_object_types( $zaak_type, $zaak_type->identificatie ), $zaak_type->identificatie ),
 			)
 		);
+		owc_gravityforms_zgw_render_view( 'partials/gf-field-zgw-upload-field-options' );
 	}
 
 	/**

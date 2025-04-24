@@ -20,6 +20,7 @@ use GF_Field;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\Traits\FormSetting;
 use OWCGravityFormsZGW\Traits\InformationObject;
+use OWCGravityFormsZGW\Traits\MergeTagTranslator;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
 use OWC\ZGW\Entities\Zaak;
@@ -35,6 +36,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 {
 	use FormSetting;
 	use InformationObject;
+	use MergeTagTranslator;
 
 	protected array $entry;
 	protected array $form;
@@ -104,7 +106,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 				array(
 					'type'        => $field->mappedFieldDocumentTypeValueZGW,
 					'url'         => $field_value,
-					'description' => $field->description ?? '',
+					'description' => $field->uploadFieldDescriptionValueZGW ?? '',
 				),
 			);
 		}
@@ -141,7 +143,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 				return array(
 					'type'        => $field->mappedFieldDocumentTypeValueZGW,
 					'url'         => $field_value,
-					'description' => $field->description ?? '',
+					'description' => $field->uploadFieldDescriptionValueZGW ?? '',
 				);
 			},
 			$field_values
@@ -166,7 +168,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		$args['formaat']                     = $this->get_content_type( $object_url );
 		$args['bestandsnaam']                = sprintf( '%s.%s', sanitize_title( $file_name ), $this->get_extension( $object_url ) );
 		$args['bestandsomvang']              = $file_size ? (int) $file_size : strlen( $file_content );
-		$args['beschrijving']                = 0 < strlen( $object_description ) ? $object_description : $file_name;
+		$args['beschrijving']                = 0 < strlen( $object_description ) ? $this->translate_merge_tags( $this->entry, $object_description ) : $file_name;
 		$args['inhoud']                      = $file_content;
 		$args['vertrouwelijkheidaanduiding'] = 'vertrouwelijk';
 		$args['auteur']                      = 'OWC';
