@@ -35,13 +35,13 @@ trait MergeTagTranslator
 	 *
 	 * @since 1.0.0
 	 */
-	public function translate_merge_tags(array $entry, string $value ): string
+	public function translate_merge_tags(array $entry, array $form, string $value ): string
 	{
 		return preg_replace_callback(
 			'/\[[^\]]+\]/',
-			function ($matches ) use ($entry ) {
+			function ($matches ) use ($entry, $form ) {
 				$field_id    = trim( $matches[0], '[]' );
-				$field_value = $this->resolve_field_value( $field_id, $entry );
+				$field_value = $this->resolve_field_value( $form, $field_id, $entry );
 
 				if ( ! is_string( $field_value ) || trim( $field_value ) === '') {
 					return '';
@@ -60,13 +60,13 @@ trait MergeTagTranslator
 	 *
 	 * @since 1.0.0
 	 */
-	protected function resolve_field_value(string $field_id, array $entry ): mixed
+	protected function resolve_field_value(array $form, string $field_id, array $entry ): mixed
 	{
-		if ($field = $this->field_by_type( $field_id, 'checkbox' )) {
+		if ($field = $this->field_by_type( $form, $field_id, 'checkbox' )) {
 			return $this->implode_with_conjunction( $this->handle_checkbox_field( $entry, $field ) );
 		}
 
-		if ($this->field_by_type( $field_id, 'multiselect' )) {
+		if ($this->field_by_type( $form, $field_id, 'multiselect' )) {
 			$value = json_decode( rgar( $entry, $field_id ), true ) ?: array();
 
 			return $this->implode_with_conjunction( $value );
@@ -96,10 +96,10 @@ trait MergeTagTranslator
 	 *
 	 * @since 1.0.0
 	 */
-	protected function field_by_type(string $field_id, string $field_type ): ?GF_Field
+	protected function field_by_type(array $form, string $field_id, string $field_type ): ?GF_Field
 	{
 		$fields = array_filter(
-			$this->form['fields'],
+			$form['fields'],
 			function ($field ) use ($field_id, $field_type ) {
 				return $field->id == $field_id && $field_type === $field->type;
 			}
@@ -141,7 +141,6 @@ trait MergeTagTranslator
 	{
 		/**
 		 * A valid date string has a length of 10.
-		 * Housenumber additions could be 'B' for example, 'B' also corrensponds with a timezone.
 		 */
 		if (strlen( $value ) !== 10) {
 			return '';

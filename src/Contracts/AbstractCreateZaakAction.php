@@ -104,7 +104,7 @@ abstract class AbstractCreateZaakAction
 				$field_value = ( new DateTime( $field_value ) )->format( 'Y-m-d' );
 			}
 
-			$args[ $field->mappedFieldValueZGW ] = $this->translate_merge_tags( $this->entry, $field_value );
+			$args[ $field->mappedFieldValueZGW ] = $this->translate_merge_tags( $this->entry, $this->form, $field_value );
 		}
 
 		return $args;

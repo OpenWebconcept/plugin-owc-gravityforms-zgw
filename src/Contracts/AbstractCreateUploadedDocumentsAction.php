@@ -168,7 +168,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		$args['formaat']                     = $this->get_content_type( $object_url );
 		$args['bestandsnaam']                = sprintf( '%s.%s', sanitize_title( $file_name ), $this->get_extension( $object_url ) );
 		$args['bestandsomvang']              = $file_size ? (int) $file_size : strlen( $file_content );
-		$args['beschrijving']                = 0 < strlen( $object_description ) ? $this->translate_merge_tags( $this->entry, $object_description ) : $file_name;
+		$args['beschrijving']                = 0 < strlen( $object_description ) ? $this->translate_merge_tags( $this->entry, $this->form, $object_description ) : $file_name;
 		$args['inhoud']                      = $file_content;
 		$args['vertrouwelijkheidaanduiding'] = 'vertrouwelijk';
 		$args['auteur']                      = 'OWC';
