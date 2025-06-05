@@ -32,6 +32,8 @@
 			"pestphp/pest-plugin": true
 		}
 	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"repositories": [
 		{
 			"type": "composer",
@@ -39,12 +41,12 @@
 		},
 		{
 			"type": "vcs",
-			"url": "git@github.com:OpenWebconcept/owc-zgw-api.git"
+			"url": "https://github.com/OpenWebconcept/owc-zgw-api.git"
 		}
 	],
 	"require": {
-		"monolog/monolog": "^2.0",
-		"owc/zgw-api": "^1.0",
+		"monolog/monolog": "^3.0",
+		"owc/zgw-api": "dev-chore/update-monolog@dev",
 		"php": ">=8.1",
 		"php-di/php-di": "^6.0"
 	},
