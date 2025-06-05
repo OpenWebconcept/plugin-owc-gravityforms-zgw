@@ -44,8 +44,8 @@
 	],
 	"require": {
 		"monolog/monolog": "^2.0",
-		"owc/zgw-api": "dev-main",
-		"php": ">8.1",
+		"owc/zgw-api": "^1.0",
+		"php": ">=8.1",
 		"php-di/php-di": "^6.0"
 	},
 	"require-dev": {
