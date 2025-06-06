@@ -54,6 +54,13 @@ class ZGWAddon extends GFAddon
 	private static $_instance = null;
 
 	/**
+	 * The full path to the Add-On file.
+	 *
+	 * @var string
+	 */
+	protected $_full_path = __FILE__;
+
+	/**
 	 * @var string|array A string or an array of capabilities or roles that have access to the form settings
 	 */
 	protected $_capabilities_form_settings = array( 'gravityforms_edit_forms' );
