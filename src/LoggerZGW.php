@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use Monolog\Logger;
+use Monolog\Level;
 use OWCGravityFormsZGW\ContainerResolver;
 
 /**
@@ -39,7 +40,7 @@ class LoggerZGW
 	 */
 	public function debug($message, array $context = array() ): void
 	{
-		$this->add_record( Logger::DEBUG, $message, $context );
+		$this->add_record( Level::fromName('debug')->value, $message, $context );
 	}
 
 	/**
@@ -47,7 +48,7 @@ class LoggerZGW
 	 */
 	public function info($message, array $context = array() ): void
 	{
-		$this->add_record( Logger::INFO, $message, $context );
+		$this->add_record( Level::fromName('info')->value, $message, $context );
 	}
 
 	/**
@@ -55,7 +56,7 @@ class LoggerZGW
 	 */
 	public function notice($message, array $context = array() ): void
 	{
-		$this->add_record( Logger::NOTICE, $message, $context );
+		$this->add_record( Level::fromName('notice')->value, $message, $context );
 	}
 
 	/**
@@ -63,7 +64,7 @@ class LoggerZGW
 	 */
 	public function warning($message, array $context = array() ): void
 	{
-		$this->add_record( Logger::WARNING, $message, $context );
+		$this->add_record( Level::fromName('warning')->value, $message, $context );
 	}
 
 	/**
@@ -71,7 +72,7 @@ class LoggerZGW
 	 */
 	public function error($message, array $context = array() ): void
 	{
-		$this->add_record( Logger::ERROR, $message, $context );
+		$this->add_record( Level::fromName('error')->value, $message, $context );
 	}
 
 	/**
