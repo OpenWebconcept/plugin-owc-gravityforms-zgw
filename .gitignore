@@ -1,6 +1,6 @@
 # Files
 .DS_Store
-owc-zgw-log.json
+owc-zgw-log-*.json
 
 # Folders
 vendor

@@ -40,6 +40,7 @@ const OWC_GRAVITYFORMS_ZGW_PLUGIN_SLUG            = 'owc-gravityforms-zgw';
 
 const OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_FAILED_SUBMISSION = 'zgw_submission_zaak_failed_message';
 const OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_CREATED_ZAAK      = 'zgw_created_zaak';
+const OWC_GRAVITYFORMS_ZGW_LOGGER_DEFAULT_MAX_FILES        = 7;
 
 $autoload = __DIR__ . '/vendor/autoload.php';
 

@@ -27,9 +27,24 @@ Make sure to fill this out correctly as it is used in all zaak creation requests
 #### Logging
 
 Enable logging to keep track of errors during communication with the ZGW supplier(s).
-Errors will be written to the file: `owc-zgw-log.json` — located in the root of the plugin folder.
+
+- Logs are written daily to `owc-zgw-log{-date}.json` in the plugin root directory.
+- A rotating file handler keeps up to 7 log files by default, deleting the oldest as needed.
+- You can change the maximum number of log files using the filter described below.
 
 ![General settings example](./data/general-addon-settings.png)
+
+---
+
+## Hooks
+
+#### Change the maximum number of log files
+
+Use the following filter to alter the rotating file handler's max files setting:
+
+```php
+apply_filters('owcgfzgw::logger/rotating_filer_handler_max_files', OWC_GRAVITYFORMS_ZGW_LOGGER_DEFAULT_MAX_FILES)
+```
 
 ---
 

@@ -40,7 +40,7 @@ class LoggerZGW
 	 */
 	public function debug($message, array $context = array() ): void
 	{
-		$this->add_record( Level::fromName('debug')->value, $message, $context );
+		$this->add_record( Level::fromName( 'debug' )->value, $message, $context );
 	}
 
 	/**
@@ -48,7 +48,7 @@ class LoggerZGW
 	 */
 	public function info($message, array $context = array() ): void
 	{
-		$this->add_record( Level::fromName('info')->value, $message, $context );
+		$this->add_record( Level::fromName( 'info' )->value, $message, $context );
 	}
 
 	/**
@@ -56,7 +56,7 @@ class LoggerZGW
 	 */
 	public function notice($message, array $context = array() ): void
 	{
-		$this->add_record( Level::fromName('notice')->value, $message, $context );
+		$this->add_record( Level::fromName( 'notice' )->value, $message, $context );
 	}
 
 	/**
@@ -64,7 +64,7 @@ class LoggerZGW
 	 */
 	public function warning($message, array $context = array() ): void
 	{
-		$this->add_record( Level::fromName('warning')->value, $message, $context );
+		$this->add_record( Level::fromName( 'warning' )->value, $message, $context );
 	}
 
 	/**
@@ -72,7 +72,7 @@ class LoggerZGW
 	 */
 	public function error($message, array $context = array() ): void
 	{
-		$this->add_record( Level::fromName('error')->value, $message, $context );
+		$this->add_record( Level::fromName( 'error' )->value, $message, $context );
 	}
 
 	/**
