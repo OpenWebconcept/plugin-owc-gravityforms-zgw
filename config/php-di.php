@@ -14,7 +14,7 @@ return array(
 		'openzaak'   => 'OpenZaak',
 		'decos-join' => 'DecosJOIN',
 		'rx-mission' => 'RxMission',
-		'xxllnc'     => 'XXLNC',
+		'xxllnc'     => 'XXLLNC',
 		'procura'    => 'Procura',
 	),
 

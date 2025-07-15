@@ -150,7 +150,7 @@ class FormSettings
 		}
 
 		if (ContainerResolver::make()->get( 'xxllnc.enabled' )) {
-			$fields = $this->prepare_supplier_configuration_fields( $fields, 'XXLNC', 'xxllnc' );
+			$fields = $this->prepare_supplier_configuration_fields( $fields, 'XXLLNC', 'xxllnc' );
 		}
 
 		if (ContainerResolver::make()->get( 'procura.enabled' )) {
