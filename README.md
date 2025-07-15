@@ -1,8 +1,5 @@
 # OWC GravityForms ZGW
 
-> [!WARNING]
-> This plugin is under development, do not use in production environments.
-
 This plugin connects GravityForms with ZGW by using the owc/zgw-api package.
 In order for the connection(s) to work the ZGW registers must be configured on the settings page (/wp-admin/options-general.php?page=zgw_api_settings).
 

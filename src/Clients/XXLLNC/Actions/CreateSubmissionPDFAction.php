@@ -7,7 +7,7 @@
  * @since   1.0.0
  */
 
-namespace OWCGravityFormsZGW\Clients\XXLNC\Actions;
+namespace OWCGravityFormsZGW\Clients\XXLLNC\Actions;
 
 /**
  * Exit when accessed directly.
