@@ -16,12 +16,11 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use Exception;
 use GFFormsModel;
+use OWC\ZGW\Entities\Zaak;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\LoggerZGW;
 use OWCGravityFormsZGW\Traits\FormSetting;
-use OWC\ZGW\Entities\Zaak;
 
 /**
  * Abstract zaak form controller.
@@ -33,95 +32,100 @@ abstract class AbstractZaakFormController
 	use FormSetting;
 
 	protected array $entry;
+
 	protected array $form;
-	protected string $supplier_name;
-	protected string $supplier_key;
-	protected array $failed_messages = array();
+
 	protected LoggerZGW $logger;
 
 	public function __construct()
 	{
-		$this->failed_messages = $this->set_failed_messages_property();
-		$this->logger          = ContainerResolver::make()->get( 'logger.zgw' );
+		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
 	/**
-	 * @since 1.0.0
+	 * Set the form and entry data for the controller.
 	 */
-	protected function set_class_properties(array $form, array $entry = array() ): void
+	public function set_form_data(array $entry, array $form ): void
 	{
-		$this->entry         = $entry ? $entry : $this->create_entry_by_form( $form );
-		$this->form          = $form;
-		$this->supplier_name = $this->supplier_form_setting( form: $this->form, get_key: false );
-		$this->supplier_key  = $this->supplier_form_setting( form: $this->form, get_key: true );
+		$this->entry = $entry;
+		$this->form  = $form;
 	}
 
 	/**
-	 * @since 1.0.0
+	 * Add the Zaak id/reference to the transaction post.
 	 */
-	protected function create_entry_by_form(array $form ): array
+	public function add_zaak_reference_to_post( Zaak $zaak ): void
 	{
-		try {
-			$entry = GFFormsModel::create_lead( $form );
-		} catch (Exception $e) {
-			$entry = null;
+		// Get the transaction post id created earlier in TransactionController.
+		$transaction_post_id = gform_get_meta( $this->entry['id'], 'transaction_post_id' );
+
+		$value = $zaak->getValue( 'identificatie' );
+		if ( isset( $value ) ) {
+			update_post_meta( $transaction_post_id, 'transaction_zaak_id', $value );
+		}
+	}
+
+	/**
+	 * Mark the transaction as successful.
+	 */
+	public function mark_transaction_success( Zaak $zaak ): void
+	{
+		// Get the transaction post id created earlier in TransactionController.
+		$transaction_post_id = gform_get_meta( $this->entry['id'], 'transaction_post_id' );
+
+		if ( ! $transaction_post_id ) {
+			$this->logger->error( 'OWC_GravityForms_ZGW: No transaction post linked to this entry.' );
+			return;
 		}
 
-		return is_array( $entry ) ? $entry : array();
+		// Mark transaction as success.
+		wp_update_post(
+			array(
+				'ID'          => (int) $transaction_post_id,
+				'post_status' => 'transaction_success',
+			)
+		);
 	}
 
 	/**
-	 * Validate if the current form is connected to ZGW.
-	 *
-	 * @since 1.0.0
+	 * Mark the transaction as failed.
+	 * Add a message to the Transaction post and add a note to the GravityForms entry.
 	 */
-	protected function form_is_zgw(): bool
+	public function mark_transaction_failed( string $message ): void
 	{
-		return 0 < strlen( $this->supplier_name ) || 0 < strlen( $this->supplier_key );
+		// Get the transaction post id created earlier in TransactionController.
+		$transaction_post_id = gform_get_meta( $this->entry['id'], 'transaction_post_id' );
+
+		if ( ! $transaction_post_id ) {
+			$this->logger->error( 'OWC_GravityForms_ZGW: No transaction post linked to this entry.' );
+			return;
+		}
+
+		// Update the transaction post status to failed.
+		wp_update_post(
+			array(
+				'ID'          => $transaction_post_id,
+				'post_status' => 'transaction_failed',
+			)
+		);
+
+		// Update transaction message.
+		update_post_meta( $transaction_post_id, 'transaction_message', $message );
+
+		// Add a note to the entry with the failure message.
+		GFFormsModel::add_note(
+			$this->entry['id'],
+			0,
+			__( 'System', 'owc-gravityforms-zgw' ),
+			__( 'OWC_GravityForms_ZGW: Zaak creation failed', 'owc-gravityforms-zgw' ),
+			$message
+		);
+
+		// Log error if logger is available.
+		if ( isset( $this->logger ) ) {
+			$this->logger->error(
+				sprintf( 'OWC_GravityForms_ZGW: Error creating zaak. Error: %s', $message )
+			);
+		}
 	}
-
-	/**
-	 * Retrieves and unserializes the "zaak" object from the transient storage.
-	 *
-	 * This is used to access the previously stored Zaak instance,
-	 * typically set during the validation phase (e.g. in the "gform_validation" hook),
-	 * so it can be reused later in the submission flow.
-	 *
-	 * @throws Exception
-	 * @since 1.0.0
-	 */
-	protected function restore_serialized_zaak_from_transient(string $failed_message_type, bool $delete_transient = false ): Zaak
-	{
-		$zaak = get_transient( sprintf( '%s_%s', OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_CREATED_ZAAK, md5( $this->entry['ip'] ) ) );
-
-		if ( ! $zaak) {
-			$this->logger->error( 'OWC_GravityForms_ZGW: unable to retrieve a "zaak" object from the transient storage' );
-
-			throw new Exception( $this->failed_messages[ $failed_message_type ], 400 );
-
-		}
-
-		$zaak = @unserialize( $zaak );
-
-		if ( ! $zaak instanceof Zaak) {
-			$this->logger->error( 'OWC_GravityForms_ZGW: unable to unserialize the "zaak" object retrieved from the transient storage' );
-
-			// After unsuccessful retrieval, remove the transient.
-			delete_transient( sprintf( '%s_%s', OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_CREATED_ZAAK, md5( $this->entry['ip'] ) ) );
-
-			throw new Exception( $this->failed_messages[ $failed_message_type ], 400 );
-		}
-
-		// After successful retrieval, remove the transient if needed.
-		if ($delete_transient) {
-			delete_transient( sprintf( '%s_%s', OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_CREATED_ZAAK, md5( $this->entry['ip'] ) ) );
-		}
-
-		return $zaak;
-	}
-
-	/**
-	 * @since 1.0.0
-	 */
-	abstract protected function set_failed_messages_property(): array;
 }

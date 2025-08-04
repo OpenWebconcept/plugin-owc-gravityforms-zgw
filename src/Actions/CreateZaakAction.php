@@ -13,7 +13,7 @@ namespace OWCGravityFormsZGW\Actions;
  * Exit when accessed directly.
  */
 if ( ! defined( 'ABSPATH' )) {
-	exit;
+    exit;
 }
 
 use OWC\ZGW\Entities\Zaak;
@@ -26,15 +26,15 @@ use OWCGravityFormsZGW\Contracts\AbstractCreateZaakAction;
  */
 class CreateZaakAction extends AbstractCreateZaakAction
 {
-	public function create(): Zaak
-	{
-		$args = $this->get_mapped_required_zaak_creation_args();
-		$zaak = $this->client->zaken()->create( new Zaak( $args, $this->client ) );
+    public function create(): Zaak
+    {
+        $args = $this->get_mapped_required_zaak_creation_args();
+        $zaak = $this->client->zaken()->create( new Zaak( $args, $this->client ) );
 
-		$this->add_created_zaak_as_entry_meta( $zaak );
-		$this->add_rol_to_zaak( $zaak );
-		$this->create_zaak_properties( $zaak );
+        $this->add_created_zaak_as_entry_meta( $zaak );
+        $this->add_rol_to_zaak( $zaak );
+        $this->create_zaak_properties( $zaak );
 
-		return $zaak;
-	}
+        return $zaak;
+    }
 }

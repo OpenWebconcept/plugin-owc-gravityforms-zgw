@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' )) {
 use DI\ContainerBuilder;
 use OWCGravityFormsZGW\Providers\GravityFormsServiceProvider;
 use OWCGravityFormsZGW\Providers\SettingsServiceProvider;
+use OWCGravityFormsZGW\Providers\TransactionsServiceProvider;
 use Psr\Container\ContainerInterface;
 
 require_once __DIR__ . '/helpers.php';
@@ -69,8 +70,9 @@ final class Bootstrap
 	protected function get_providers(): array
 	{
 		$providers = array(
-			SettingsServiceProvider::class,
 			GravityFormsServiceProvider::class,
+			SettingsServiceProvider::class,
+			TransactionsServiceProvider::class,
 		);
 
 		foreach ($providers as &$provider) {

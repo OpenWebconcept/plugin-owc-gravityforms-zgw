@@ -93,15 +93,15 @@ class FormSettings
 		}
 
 		if (ContainerResolver::make()->get( 'dj.enabled' )) {
-			$supplier_choices[] = $this->prepare_supplier_choice( 'Decos Join', 'decos-join' );
+			$supplier_choices[] = $this->prepare_supplier_choice( 'DecosJoin', 'decosjoin' );
 		}
 
 		if (ContainerResolver::make()->get( 'rx.enabled' )) {
-			$supplier_choices[] = $this->prepare_supplier_choice( 'Rx.Mission', 'rx-mission' );
+			$supplier_choices[] = $this->prepare_supplier_choice( 'RxMission', 'rxmission' );
 		}
 
 		if (ContainerResolver::make()->get( 'xxllnc.enabled' )) {
-			$supplier_choices[] = $this->prepare_supplier_choice( 'Xxllnc', 'xxllnc' );
+			$supplier_choices[] = $this->prepare_supplier_choice( 'XXLLNC', 'xxllnc' );
 		}
 
 		if (ContainerResolver::make()->get( 'procura.enabled' )) {
@@ -152,8 +152,8 @@ class FormSettings
 			$fields = $this->prepare_supplier_configuration_fields( $fields, 'OpenZaak', 'openzaak' );
 		}
 
-		if (ContainerResolver::make()->get( 'rx.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'rx-mission' )) {
-			$fields = $this->prepare_supplier_configuration_fields( $fields, 'RxMission', 'rx-mission' );
+		if (ContainerResolver::make()->get( 'rx.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'rxmission' )) {
+			$fields = $this->prepare_supplier_configuration_fields( $fields, 'RxMission', 'rxmission' );
 		}
 
 		if (ContainerResolver::make()->get( 'xxllnc.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'xxllnc' )) {
@@ -164,8 +164,8 @@ class FormSettings
 			$fields = $this->prepare_supplier_configuration_fields( $fields, 'Procura', 'procura' );
 		}
 
-		if (ContainerResolver::make()->get( 'dj.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'decos-join' )) {
-			$fields = $this->prepare_supplier_configuration_fields( $fields, 'DecosJoin', 'decos-join' );
+		if (ContainerResolver::make()->get( 'dj.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'decosjoin' )) {
+			$fields = $this->prepare_supplier_configuration_fields( $fields, 'DecosJoin', 'decosjoin' );
 		}
 
 		return $fields;

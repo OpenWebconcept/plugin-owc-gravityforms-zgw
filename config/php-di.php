@@ -9,13 +9,16 @@ use OWCGravityFormsZGW\Settings\Settings;
 return array(
 	/**
 	 * Suppliers
+	 *
+	 * Note: keep in sync with:
+	 * https://github.com/OpenWebconcept/owc-zgw-api/blob/main/src/WordPress/SettingsProvider.php#L50
 	 */
 	'suppliers'                   => array(
-		'openzaak'   => 'OpenZaak',
-		'decos-join' => 'DecosJOIN',
-		'rx-mission' => 'RxMission',
-		'xxllnc'     => 'XXLLNC',
-		'procura'    => 'Procura',
+		'openzaak'  => 'OpenZaak',
+		'xxllnc'    => 'XXLLNC',
+		'rxmission' => 'RxMission',
+		'decosjoin' => 'Decos JOIN',
+		'procura'   => 'Procura',
 	),
 
 	/**
