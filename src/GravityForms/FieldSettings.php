@@ -21,6 +21,7 @@ use GFAPI;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\Traits\FormSetting;
 use OWC\ZGW\Endpoints\Filter\EigenschappenFilter;
+use OWC\ZGW\Entities\Attributes\Confidentiality;
 use OWC\ZGW\Entities\Informatieobjecttype;
 use OWC\ZGW\Entities\Zaaktype;
 use OWC\ZGW\Support\Collection;
@@ -56,8 +57,8 @@ class FieldSettings
 			return;
 		}
 
-		$supplier_name = $this->supplier_form_setting( $form );
-		$supplier_key  = $this->supplier_form_setting( $form, true );
+		$supplier_name = FormUtils::supplier_form_setting( $form );
+		$supplier_key  = FormUtils::supplier_form_setting( $form, true );
 
 		if (1 > strlen( $supplier_name ) || 1 > strlen( $supplier_key )) {
 			return;
@@ -243,8 +244,13 @@ class FieldSettings
 
 		return (array) Collection::collect( $types )->map(
 			function (Informatieobjecttype $object_type ) {
+				$designation = $object_type->vertrouwelijkheidaanduiding;
+				if ($designation instanceof Confidentiality) {
+					$designation = $designation->name ?? '';
+				}
+
 				return array(
-					'label' => "{$object_type->omschrijving} ({$object_type->vertrouwelijkheidaanduiding})",
+					'label' => "{$object_type->omschrijving} ({$designation})",
 					'value' => $object_type->url,
 				);
 			}
