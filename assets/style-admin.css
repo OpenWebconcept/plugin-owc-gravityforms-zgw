@@ -1,0 +1,19 @@
+.owc-gravityforms-zgw-transaction-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: middle;
+    text-indent: -999rem;
+}
+
+.owc-gravityforms-zgw-transaction-icon-success {
+    background: url('./images/icon-check.svg') no-repeat center / contain;
+}
+
+.owc-gravityforms-zgw-transaction-icon-failed {
+    background: url('./images/icon-exit.svg') no-repeat center / contain;
+}
+
+.owc-gravityforms-zgw-transaction-icon-pending {
+    background: url('./images/icon-clock.svg') no-repeat center / contain;
+}
