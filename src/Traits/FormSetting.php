@@ -16,8 +16,6 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use OWCGravityFormsZGW\ContainerResolver;
-
 /**
  * Form setting trait.
  *
@@ -57,30 +55,5 @@ trait FormSetting
 		}
 
 		return ! empty( $zaaktype_identifier ) ? $zaaktype_identifier : '';
-	}
-
-	/**
-	 * Get the supplier configured in the form settings.
-	 *
-	 * @since 1.0.0
-	 */
-	public function supplier_form_setting(array $form, bool $get_key = false ): string
-	{
-		$allowed  = ContainerResolver::make()->get( 'suppliers' );
-		$supplier = $form[ sprintf( '%s-form-setting-supplier', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '';
-
-		if ( ! is_array( $allowed ) || empty( $allowed ) || empty( $supplier )) {
-			return '';
-		}
-
-		if ( ! in_array( $supplier, array_keys( $allowed ), true )) {
-			return '';
-		}
-
-		if ($get_key) {
-			return $supplier;
-		}
-
-		return $allowed[ $supplier ] ?? '';
 	}
 }

@@ -96,7 +96,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		$start = substr( $field_value, 0, 1 );
 		$end   = substr( $field_value, -1, 1 );
 
-		// Check if field value is an array in JSON format and decode.
+		// Check if the field value is an array in JSON format and decode.
 		if ('[' === $start && ']' === $end) {
 			$field_value = $this->parse_information_object_json( $field_value, $field );
 		}
@@ -111,7 +111,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 			);
 		}
 
-		// After previous conversions it's possible the value is empty.
+		// After previous conversions, it's possible the value is empty.
 		if (empty( $field_value )) {
 			return $args;
 		}

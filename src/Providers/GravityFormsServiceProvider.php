@@ -18,13 +18,11 @@ if ( ! defined( 'ABSPATH' )) {
 
 use GFAddOn;
 use GFForms;
-use OWCGravityFormsZGW\GravityForms\Controllers\FormConfirmationController;
 use OWCGravityFormsZGW\GravityForms\Controllers\ZaakController;
-use OWCGravityFormsZGW\GravityForms\Controllers\ZaakControllerSubmissionPDF;
-use OWCGravityFormsZGW\GravityForms\Controllers\ZaakUploadsController;
 use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
+use OWCGravityFormsZGW\Transactions\TransactionController;
 
 /**
  * Register settings service provider.
@@ -47,10 +45,9 @@ class GravityFormsServiceProvider extends ServiceProvider
 		add_filter( 'gform_form_settings_fields', ( new FormSettings() )->add_form_settings( ... ), 10, 2 );
 		add_action( 'gform_field_standard_settings', ( new FieldSettings() )->add_select( ... ), 10, 2 );
 		add_action( 'gform_editor_js', ( new FieldSettings() )->add_select_script( ... ), 10, 0 );
-		add_action( 'gform_validation', ( new ZaakController() )->handle( ... ), 10, 1 );
-		add_action( 'gform_pre_submission_filter', ( new ZaakUploadsController() )->handle( ... ), 10, 1 );
-		add_action( 'gform_after_submission', ( new ZaakControllerSubmissionPDF() )->handle( ... ), 999, 2 );
-		add_filter( 'gform_confirmation', ( new FormConfirmationController() )->handle( ... ), 10, 3 );
+
+		add_action( 'gform_after_submission', ( new TransactionController() )->create( ... ), 10, 2 );
+		add_action( 'gform_after_submission', ( new ZaakController() )->handle( ... ), 20, 2 );
 	}
 
 	/**

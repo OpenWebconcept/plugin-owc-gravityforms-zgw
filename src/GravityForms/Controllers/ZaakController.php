@@ -20,9 +20,10 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use Exception;
+use OWC\ZGW\Entities\Zaak;
 use OWCGravityFormsZGW\Actions\CreateZaakAction;
 use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
-use OWC\ZGW\Entities\Zaak;
+use OWCGravityFormsZGW\GravityForms\FormUtils;
 
 /**
  * Zaak controller.
@@ -31,98 +32,81 @@ use OWC\ZGW\Entities\Zaak;
  */
 class ZaakController extends AbstractZaakFormController
 {
-	public function handle(array $validation_result ): array
+	private ZaakUploadsController $uploads_controller;
+	private ZaakUploadPDFController $upload_pdf_controller;
+
+	public function __construct()
 	{
-		$this->set_class_properties( $validation_result['form'] );
-
-		if ( ! $this->form_is_zgw()) {
-			return $validation_result;
-		}
-
-		try {
-			if ( ! count( $this->entry )) {
-				throw new Exception( $this->failed_messages['zaak'], 500 );
-			}
-
-			$this->handle_zaak_creation();
-		} catch (Exception $e) {
-			return $this->fail_form_validation(
-				validation_result: $validation_result,
-				failed_message: $e->getMessage()
-			);
-		}
-
-		return $validation_result;
-	}
-
-	protected function set_failed_messages_property(): array
-	{
-		return array(
-			'zaak' => __(
-				'Er is een fout opgetreden bij het aanmaken van uw zaak. Probeer het later opnieuw.',
-				'owc-gravityforms-zgw'
-			),
-		);
+		parent::__construct();
+		$this->uploads_controller    = new ZaakUploadsController();
+		$this->upload_pdf_controller = new ZaakUploadPDFController();
 	}
 
 	/**
+	 * Init Zaak creation and handle accordingly.
+	 */
+	public function handle( array $entry, array $form ): void
+	{
+		// Only create transaction for ZGW enabled forms.
+		if ( ! FormUtils::form_is_zgw( $form ) ) {
+			return;
+		}
+
+		// Make entry/form available to other methods that expect them.
+		$this->entry = $entry;
+		$this->form  = $form;
+
+		// Get the supplier name and key from form settings.
+		$supplier_name = FormUtils::supplier_form_setting( $form );
+		$supplier_key  = FormUtils::supplier_form_setting( $form, true );
+
+		try {
+			// Create the Zaak.
+			$zaak = $this->handle_zaak_creation( $supplier_name, $supplier_key );
+
+			// Call the upload handlers to attach files to the Zaak.
+			$this->uploads_controller->set_form_data( $entry, $form );
+			$this->uploads_controller->handle( $zaak, $supplier_name, $supplier_key );
+
+			// Call the PDF upload handler to attach documents to the Zaak.
+			$this->upload_pdf_controller->set_form_data( $entry, $form );
+			$this->upload_pdf_controller->handle( $zaak, $supplier_name, $supplier_key );
+
+			$this->mark_transaction_success( $zaak );
+		} catch ( \Throwable $e ) {
+			$this->mark_transaction_failed( $e->getMessage() );
+		}
+	}
+
+	/**
+	 * Create the Zaak using the supplier-specific Action class.
+	 *
 	 * @throws Exception
 	 */
-	protected function handle_zaak_creation(): Zaak
+	protected function handle_zaak_creation( string $supplier_name, string $supplier_key ): Zaak
 	{
 		try {
-			$action = ( new CreateZaakAction(
-				$this->entry,
-				$this->form,
-				$this->supplier_name,
-				$this->supplier_key
-			) );
+            $action = ( new CreateZaakAction(
+                $this->entry,
+                $this->form,
+                $supplier_name,
+                $supplier_key
+            ) );
 
-			$result = $action->create();
-		} catch (Exception $e) {
-			$this->logger->error(
+            $result = $action->create();
+
+            $this->add_zaak_reference_to_post($result);
+		} catch ( \Throwable $e ) {
+			throw new Exception(
 				sprintf(
 					'OWC_GravityForms_ZGW: %s',
 					$e->getMessage()
-				)
+				),
+				400,
+				$e
 			);
-
-			throw new Exception( $this->failed_messages['zaak'], 400 );
 		}
 
-		$this->store_serialized_zaak_in_transient( $result );
-
 		return $result;
-	}
-
-	/**
-	 * Stores the serialized "Zaak" object in a transient for later use,
-	 * for example, in the "gform_after_submission" hook.
-	 *
-	 * The "gform_after_submission" hook handles uploaded documents and the submitted PDF.
-	 */
-	protected function store_serialized_zaak_in_transient(Zaak $zaak ): void
-	{
-		set_transient( sprintf( '%s_%s', OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_CREATED_ZAAK, md5( $this->entry['ip'] ) ), serialize( $zaak ), 60 );
-	}
-
-	/**
-	 * Fail the form validation with a message.
-	 * Make sure this method is called inside the 'gform_validation' hook.
-	 */
-	public function fail_form_validation(array $validation_result, string $failed_message ): array
-	{
-		$validation_result['is_valid'] = false;
-
-		add_filter(
-			'gform_validation_message',
-			function ($message ) use ( $failed_message ) {
-				return $failed_message;
-			},
-			10,
-			1
-		);
-
-		return $validation_result;
 	}
 }
