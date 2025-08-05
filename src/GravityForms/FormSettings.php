@@ -1,9 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Form settings.
  *
  * @package OWC_GravityForms_ZGW
+ *
  * @author  Yard | Digital Agency
+ *
  * @since   1.0.0
  */
 
@@ -25,7 +30,9 @@ use function OWC\ZGW\apiClient;
  * Form settings.
  *
  * @package OWC_GravityForms_ZGW
+ *
  * @author  Yard | Digital Agency
+ *
  * @since   1.0.0
  */
 class FormSettings
@@ -51,7 +58,7 @@ class FormSettings
 				),
 				array(
 					'name'          => "{$this->prefix}-form-setting-supplier-manually",
-					'default_value' => "1",
+					'default_value' => '1',
 					'tooltip'       => '<h6>' . __( 'Leverancier instellingen', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Kies hoe de leverancier instellingen geconfigureerd moeten worden.', 'owc-gravityforms-zgw' ),
 					'type'          => 'radio',
 					'label'         => esc_html__( 'Leverancier instellingen', 'owc-gravityforms-zgw' ),
@@ -122,7 +129,7 @@ class FormSettings
 	{
 		$supplier_setting = $form[ "{$this->prefix}-form-setting-supplier" ] ?? '';
 		$manual           = $form[ "{$this->prefix}-form-setting-supplier-manually" ] ?? '0';
-		$suppliers_fields = $this->handle_suppliers_form_settings_fields();
+		$suppliers_fields = $this->handle_suppliers_form_settings_fields( $form );
 
 		if (empty( $supplier_setting ) || empty( $suppliers_fields[ $supplier_setting ][ $manual ? 'manual_setting' : 'select_setting' ] )) {
 			return $fields;
@@ -137,31 +144,43 @@ class FormSettings
 	 *
 	 * @since 1.0.0
 	 */
-	protected function handle_suppliers_form_settings_fields(): array
+	protected function handle_suppliers_form_settings_fields(array $form ): array
 	{
 		$fields = array();
 
-		if (ContainerResolver::make()->get( 'oz.enabled' )) {
+		if (ContainerResolver::make()->get( 'oz.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'openzaak' )) {
 			$fields = $this->prepare_supplier_configuration_fields( $fields, 'OpenZaak', 'openzaak' );
 		}
 
-		if (ContainerResolver::make()->get( 'rx.enabled' )) {
+		if (ContainerResolver::make()->get( 'rx.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'rx-mission' )) {
 			$fields = $this->prepare_supplier_configuration_fields( $fields, 'RxMission', 'rx-mission' );
 		}
 
-		if (ContainerResolver::make()->get( 'xxllnc.enabled' )) {
+		if (ContainerResolver::make()->get( 'xxllnc.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'xxllnc' )) {
 			$fields = $this->prepare_supplier_configuration_fields( $fields, 'XXLLNC', 'xxllnc' );
 		}
 
-		if (ContainerResolver::make()->get( 'procura.enabled' )) {
+		if (ContainerResolver::make()->get( 'procura.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'procura' )) {
 			$fields = $this->prepare_supplier_configuration_fields( $fields, 'Procura', 'procura' );
 		}
 
-		if (ContainerResolver::make()->get( 'dj.enabled' )) {
+		if (ContainerResolver::make()->get( 'dj.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'decos-join' )) {
 			$fields = $this->prepare_supplier_configuration_fields( $fields, 'DecosJoin', 'decos-join' );
 		}
 
 		return $fields;
+	}
+
+	/**
+	 * Check if a supplier is selected in the form settings.
+	 *
+	 * @since 1.0.0
+	 */
+	private function supplier_is_selected_in_form_settings(array $form, string $supplier ): bool
+	{
+		$supplier_form_setting = (string) ( $form[ "{$this->prefix}-form-setting-supplier" ] ?? '' );
+
+		return $supplier_form_setting === $supplier ? true : false;
 	}
 
 	protected function prepare_supplier_configuration_fields(array $fields, string $supplier_name, string $supplier_key ): array
