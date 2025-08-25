@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use Exception;
+use OWC\ZGW\Entities\Attributes\Confidentiality;
 use OWC\ZGW\Entities\Informatieobjecttype;
 
 /**
@@ -36,9 +37,19 @@ class InformatieobjecttypeAdapter extends Adapter
 				sprintf( '%s-form-settings-information-object-type', $this->transient_key_prefix() ), // Unique transient key.
 				'informatieobjecttypen',
 				function (Informatieobjecttype $objecttype ) {
+					$designation = $objecttype->vertrouwelijkheidaanduiding ?? ( $objecttype->vertrouwelijkheidsaanduiding ?? '' );
+
+					if ($designation instanceof Confidentiality) {
+						$designation = $designation->name ?? '';
+					}
+
+					if ( ! is_string( $designation ) || 1 > strlen( $designation )) {
+						$designation = 'Aanduiding onbekend';
+					}
+
 					return array(
 						'name'  => $objecttype->url,
-						'label' => "{$objecttype->omschrijving} ({$objecttype->vertrouwelijkheidaanduiding})",
+						'label' => "{$objecttype->omschrijving} ({$designation})",
 						'value' => $objecttype->url,
 					);
 				},

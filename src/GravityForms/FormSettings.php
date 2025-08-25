@@ -215,7 +215,7 @@ class FormSettings
 						'fields' => array(
 							array(
 								'field'  => "{$this->prefix}-form-setting-supplier",
-								'values' => array( 'openzaak' ),
+								'values' => array( $supplier_key ),
 							),
 							array(
 								'field'  => "{$this->prefix}-form-setting-supplier-manually",
