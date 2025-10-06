@@ -20,8 +20,8 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use Exception;
-use GFCommon;
 use GFFormsModel;
+use OWCGravityFormsZGW\Actions\CreateSubmissionPDFAction;
 use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Zaakinformatieobject;
@@ -33,9 +33,6 @@ use OWC\ZGW\Entities\Zaakinformatieobject;
  */
 class ZaakControllerSubmissionPDF extends AbstractZaakFormController
 {
-	/**
-	 * @since 1.0.0
-	 */
 	public function handle(array $entry, array $form ): void
 	{
 		$this->set_class_properties( $form, $entry );
@@ -61,10 +58,6 @@ class ZaakControllerSubmissionPDF extends AbstractZaakFormController
 			);
 		}
 	}
-
-	/**
-	 * @since 1.0.0
-	 */
 	protected function set_failed_messages_property(): array
 	{
 		return array(
@@ -81,22 +74,36 @@ class ZaakControllerSubmissionPDF extends AbstractZaakFormController
 
 	/**
 	 * @throws Exception
-	 * @since 1.0.0
 	 */
-	protected function handle_zaak_submission_pdf(Zaak $zaak ): void
+	protected function handle_zaak_submission_pdf( Zaak $zaak ): void
 	{
-		$action = sprintf( 'OWCGravityFormsZGW\Clients\%s\Actions\CreateSubmissionPDFAction', $this->supplier_name );
-
-		$this->validate_action_class( $action, 'submission_pdf' );
-
 		try {
-			$result = ( new $action( $this->entry, $this->form, $this->supplier_name, $this->supplier_key, $zaak ) )->add_submission_pdf();
+			$action = ( new CreateSubmissionPDFAction(
+				$this->entry,
+				$this->form,
+				$this->supplier_name,
+				$this->supplier_key,
+				$zaak
+			) );
+
+			$result = $action->add_submission_pdf();
 
 			if ( ! $result instanceof Zaakinformatieobject) {
-				throw new Exception( sprintf( 'something went wrong with connecting the submission PDF to zaak "%s"', $zaak->getValue( 'identificatie', '' ) ), 400 );
+				throw new Exception(
+					sprintf(
+						'something went wrong with connecting the submission PDF to zaak "%s"',
+						$zaak->getValue( 'identificatie', '' )
+					),
+					400
+				);
 			}
 		} catch (Exception $e) {
-			$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: %s', $e->getMessage() ) );
+			$this->logger->error(
+				sprintf(
+					'OWC_GravityForms_ZGW: %s',
+					$e->getMessage()
+				)
+			);
 
 			throw new Exception( $this->failed_messages['submission_pdf'], $e->getCode() );
 		}

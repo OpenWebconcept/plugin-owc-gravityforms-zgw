@@ -123,19 +123,5 @@ abstract class AbstractZaakFormController
 	/**
 	 * @since 1.0.0
 	 */
-	protected function validate_action_class(string $action, string $failed_message_type ): void
-	{
-		if (class_exists( $action )) {
-			return;
-		}
-
-		$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: class "%s" does not exists. Verify if the selected supplier has the required action class', $action ) );
-
-		throw new Exception( $this->failed_messages[ $failed_message_type ], 500 );
-	}
-
-	/**
-	 * @since 1.0.0
-	 */
 	abstract protected function set_failed_messages_property(): array;
 }

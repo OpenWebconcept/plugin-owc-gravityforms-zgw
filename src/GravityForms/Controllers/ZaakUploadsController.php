@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use Exception;
-use GFCommon;
+use OWCGravityFormsZGW\Actions\CreateUploadedDocumentsAction;
 use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
 use OWC\ZGW\Entities\Zaak;
 
@@ -31,9 +31,6 @@ use OWC\ZGW\Entities\Zaak;
  */
 class ZaakUploadsController extends AbstractZaakFormController
 {
-	/**
-	 * @since 1.0.0
-	 */
 	public function handle(array $form ): array
 	{
 		$this->set_class_properties( $form );
@@ -49,16 +46,13 @@ class ZaakUploadsController extends AbstractZaakFormController
 
 			$this->handle_zaak_uploads( $this->restore_serialized_zaak_from_transient( failed_message_type: 'transient', delete_transient: false ) );
 		} catch (Exception $e) {
-			// Value of this transient is used in the form confirmation message.
+			// The value of this transient is used in the form confirmation message.
 			set_transient( sprintf( '%s_%s', OWC_GRAVITYFORMS_ZGW_TRANSIENT_KEY_FAILED_SUBMISSION, md5( $this->entry['ip'] ) ), $e->getMessage(), 30 );
 		}
 
 		return $form;
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	protected function set_failed_messages_property(): array
 	{
 		return array(
@@ -75,22 +69,36 @@ class ZaakUploadsController extends AbstractZaakFormController
 
 	/**
 	 * @throws Exception
-	 * @since 1.0.0
 	 */
-	protected function handle_zaak_uploads(Zaak $zaak ): void
+	protected function handle_zaak_uploads( Zaak $zaak ): void
 	{
-		$action = sprintf( 'OWCGravityFormsZGW\Clients\%s\Actions\CreateUploadedDocumentsAction', $this->supplier_name );
-
-		$this->validate_action_class( $action, 'uploads' );
-
 		try {
-			$result = ( new $action( $this->entry, $this->form, $this->supplier_name, $this->supplier_key, $zaak ) )->add_uploaded_documents();
+			$action = ( new CreateUploadedDocumentsAction(
+				$this->entry,
+				$this->form,
+				$this->supplier_name,
+				$this->supplier_key,
+				$zaak
+			) );
+
+			$result = $action->add_uploaded_documents();
 
 			if ( false === $result) {
-				throw new Exception( sprintf( 'something went wrong with connecting the uploads to zaak "%s"', $zaak->getValue( 'identificatie', '' ) ), 400 );
+				throw new Exception(
+					sprintf(
+						'something went wrong with connecting the uploads to zaak "%s"',
+						$zaak->getValue( 'identificatie', '' )
+					),
+					400
+				);
 			}
 		} catch (Exception $e) {
-			$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: %s', $e->getMessage() ) );
+			$this->logger->error(
+				sprintf(
+					'OWC_GravityForms_ZGW: %s',
+					$e->getMessage()
+				)
+			);
 
 			throw new Exception( $this->failed_messages['uploads'], $e->getCode() );
 		}

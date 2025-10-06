@@ -7,7 +7,7 @@
  * @since   1.0.0
  */
 
-namespace OWCGravityFormsZGW\Clients\XXLLNC\Actions;
+namespace OWCGravityFormsZGW\Actions;
 
 /**
  * Exit when accessed directly.
@@ -16,8 +16,8 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use OWCGravityFormsZGW\Contracts\AbstractCreateZaakAction;
 use OWC\ZGW\Entities\Zaak;
+use OWCGravityFormsZGW\Contracts\AbstractCreateZaakAction;
 
 /**
  * Create Zaak action.
@@ -26,11 +26,6 @@ use OWC\ZGW\Entities\Zaak;
  */
 class CreateZaakAction extends AbstractCreateZaakAction
 {
-	/**
-	 * Create a new zaak.
-	 *
-	 * @since 1.0.0
-	 */
 	public function create(): Zaak
 	{
 		$args = $this->get_mapped_required_zaak_creation_args();
