@@ -86,7 +86,7 @@ class ZaakUploadsController extends AbstractZaakFormController
 			if ( false === $result) {
 				throw new Exception(
 					sprintf(
-						'something went wrong with connecting the uploads to zaak "%s"',
+						'Something went wrong with connecting the uploads to zaak "%s"',
 						$zaak->getValue( 'identificatie', '' )
 					),
 					400

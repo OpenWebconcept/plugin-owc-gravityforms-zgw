@@ -3,7 +3,7 @@
  * Zaak controller.
  *
  * This controller is responsible for handling form submissions after the form validation
- * and delegates the creation action towards the ZGW API.
+ * and delegates the create action towards the ZGW API.
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
@@ -99,7 +99,7 @@ class ZaakController extends AbstractZaakFormController
 	 * Stores the serialized "Zaak" object in a transient for later use,
 	 * for example, in the "gform_after_submission" hook.
 	 *
-	 * The "gform_after_submission" hook handles uploaded documents and the submission PDF.
+	 * The "gform_after_submission" hook handles uploaded documents and the submitted PDF.
 	 */
 	protected function store_serialized_zaak_in_transient(Zaak $zaak ): void
 	{
