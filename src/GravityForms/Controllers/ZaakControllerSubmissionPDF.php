@@ -91,7 +91,7 @@ class ZaakControllerSubmissionPDF extends AbstractZaakFormController
 			if ( ! $result instanceof Zaakinformatieobject) {
 				throw new Exception(
 					sprintf(
-						'something went wrong with connecting the submission PDF to zaak "%s"',
+						'Something went wrong with connecting the submission PDF to zaak "%s"',
 						$zaak->getValue( 'identificatie', '' )
 					),
 					400
