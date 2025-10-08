@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use Exception;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormSettingsPDF;
 use OWCGravityFormsZGW\Traits\CheckURL;
@@ -65,7 +66,10 @@ abstract class AbstractCreateSubmissionPDFAction
 	protected function get_submission_args_pdf(): array
 	{
 		if ( ! class_exists( 'GPDFAPI' )) {
-			return array();
+			throw new Exception(
+				sprintf( 'OWC_GravityForms_ZGW: Gravity PDF is required for the uploads.' ),
+				400
+			);
 		}
 
 		if ( ! $this->pdf_settings->pdf_form_setting_is_active()) {
