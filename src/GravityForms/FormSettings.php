@@ -6,9 +6,7 @@ declare(strict_types=1);
  * Form settings.
  *
  * @package OWC_GravityForms_ZGW
- *
  * @author  Yard | Digital Agency
- *
  * @since   1.0.0
  */
 
@@ -21,27 +19,17 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\InformatieobjecttypeAdapter;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\ZaaktypenAdapter;
 use function OWC\ZGW\apiClient;
 
 /**
  * Form settings.
- *
- * @package OWC_GravityForms_ZGW
- *
- * @author  Yard | Digital Agency
- *
- * @since   1.0.0
  */
 class FormSettings
 {
 	protected string $prefix = OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX;
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function add_form_settings(array $fields, array $form ): array
 	{
 		$fields['owc-gravityforms-zaaksysteem'] = array(
@@ -85,27 +73,15 @@ class FormSettings
 
 	protected function handle_supplier_choices(): array
 	{
+		$clients = (array) get_option( 'zgw_api_settings' );
+		$clients = $clients['zgw-api-configured-clients'] ?? array();
+
 		$supplier_choices   = array();
 		$supplier_choices[] = $this->prepare_supplier_choice( 'Selecteer leverancier', 'none' );
 
-		if (ContainerResolver::make()->get( 'oz.enabled' )) {
-			$supplier_choices[] = $this->prepare_supplier_choice( 'OpenZaak', 'openzaak' );
-		}
-
-		if (ContainerResolver::make()->get( 'dj.enabled' )) {
-			$supplier_choices[] = $this->prepare_supplier_choice( 'Decos Join', 'decos-join' );
-		}
-
-		if (ContainerResolver::make()->get( 'rx.enabled' )) {
-			$supplier_choices[] = $this->prepare_supplier_choice( 'Rx.Mission', 'rx-mission' );
-		}
-
-		if (ContainerResolver::make()->get( 'xxllnc.enabled' )) {
-			$supplier_choices[] = $this->prepare_supplier_choice( 'Xxllnc', 'xxllnc' );
-		}
-
-		if (ContainerResolver::make()->get( 'procura.enabled' )) {
-			$supplier_choices[] = $this->prepare_supplier_choice( 'Procura', 'procura' );
+		foreach ($clients as $key => $client) {
+			$label              = $client['name'];
+			$supplier_choices[] = $this->prepare_supplier_choice( $label, strtolower( $label ) );
 		}
 
 		return $supplier_choices;
@@ -122,8 +98,6 @@ class FormSettings
 
 	/**
 	 * Retrieves the fields associated with a specific supplier based on the form settings and merge with existing fields.
-	 *
-	 * @since 1.0.0
 	 */
 	protected function get_suppliers_form_settings_fields(array $form, array $fields ): array
 	{
@@ -135,37 +109,31 @@ class FormSettings
 			return $fields;
 		}
 
-		return array_merge( $fields, $suppliers_fields[ $supplier_setting ][ $manual ? 'manual_setting' : 'select_setting' ] );
+		return array_merge(
+			$fields,
+			$suppliers_fields[ $supplier_setting ][ $manual ? 'manual_setting' : 'select_setting' ]
+		);
 	}
 
 	/**
 	 * Fields associated with suppliers, used for matching the fields of the selected supplier in form settings.
 	 * This approach minimizes unnecessary requests to multiple sources that are not needed. Because only one supplier can be selected.
-	 *
-	 * @since 1.0.0
 	 */
 	protected function handle_suppliers_form_settings_fields(array $form ): array
 	{
 		$fields = array();
 
-		if (ContainerResolver::make()->get( 'oz.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'openzaak' )) {
-			$fields = $this->prepare_supplier_configuration_fields( $fields, 'OpenZaak', 'openzaak' );
-		}
+		$clients = (array) get_option( 'zgw_api_settings' );
+		$clients = $clients['zgw-api-configured-clients'] ?? array();
 
-		if (ContainerResolver::make()->get( 'rx.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'rx-mission' )) {
-			$fields = $this->prepare_supplier_configuration_fields( $fields, 'RxMission', 'rx-mission' );
-		}
+		foreach ($clients as $key => $client) {
+			$label        = $client['name'];
+			$supplier_key = strtolower( $label );
 
-		if (ContainerResolver::make()->get( 'xxllnc.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'xxllnc' )) {
-			$fields = $this->prepare_supplier_configuration_fields( $fields, 'XXLLNC', 'xxllnc' );
-		}
-
-		if (ContainerResolver::make()->get( 'procura.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'procura' )) {
-			$fields = $this->prepare_supplier_configuration_fields( $fields, 'Procura', 'procura' );
-		}
-
-		if (ContainerResolver::make()->get( 'dj.enabled' ) && $this->supplier_is_selected_in_form_settings( $form, 'decos-join' )) {
-			$fields = $this->prepare_supplier_configuration_fields( $fields, 'DecosJoin', 'decos-join' );
+			if ($this->supplier_is_selected_in_form_settings( $form, $supplier_key )) {
+				$supplier_type = $client['type'] ?? $label;
+				$fields        = $this->prepare_supplier_configuration_fields( $fields, $supplier_type, $supplier_key, $client );
+			}
 		}
 
 		return $fields;
@@ -173,18 +141,18 @@ class FormSettings
 
 	/**
 	 * Check if a supplier is selected in the form settings.
-	 *
-	 * @since 1.0.0
 	 */
 	private function supplier_is_selected_in_form_settings(array $form, string $supplier ): bool
 	{
 		$supplier_form_setting = (string) ( $form[ "{$this->prefix}-form-setting-supplier" ] ?? '' );
 
-		return $supplier_form_setting === $supplier ? true : false;
+		return $supplier_form_setting === $supplier;
 	}
 
-	protected function prepare_supplier_configuration_fields(array $fields, string $supplier_name, string $supplier_key ): array
+	protected function prepare_supplier_configuration_fields(array $fields, string $supplier_name, string $supplier_key, array $client ): array
 	{
+		$api_client = apiClient( $supplier_name );
+
 		$fields[ $supplier_key ] = array(
 			'select_setting' => array(
 				array(
@@ -204,7 +172,7 @@ class FormSettings
 							),
 						),
 					),
-					'choices'    => ( new ZaaktypenAdapter( apiClient( $supplier_name ) ) )->handle(),
+					'choices'    => ( new ZaaktypenAdapter( $api_client, $supplier_name ) )->handle(),
 				),
 				array(
 					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-information-object-type",
@@ -223,7 +191,7 @@ class FormSettings
 							),
 						),
 					),
-					'choices'    => ( new InformatieobjecttypeAdapter( apiClient( $supplier_name ) ) )->handle(),
+					'choices'    => ( new InformatieobjecttypeAdapter( $api_client, $supplier_name ) )->handle(),
 				),
 			),
 		);
