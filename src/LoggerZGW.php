@@ -17,9 +17,8 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use Monolog\Logger;
-use Monolog\Level;
-use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Logger;
+use OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Level;
 
 /**
  * A wrapper class for the Monolog Logger.
