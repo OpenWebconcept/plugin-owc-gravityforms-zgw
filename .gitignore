@@ -3,5 +3,6 @@
 owc-zgw-log-*.json
 
 # Folders
-vendor
 .vscode
+vendor
+vendor-prefixed

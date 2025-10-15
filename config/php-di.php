@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use DI\Container;
+use OWCGravityFormsZGW\Vendor_Prefixed\DI\Container;
 use OWCGravityFormsZGW\Auth\DigiD;
 use OWCGravityFormsZGW\Settings\Settings;
 
@@ -58,17 +58,17 @@ return array(
 	},
 	'message.logger.path'        => sprintf( '%s/owc-zgw-log.json', wp_get_upload_dir()['basedir'] ),
 	'message.logger'             => function (Container $container ) {
-		$logger   = new \Monolog\Logger( 'owc_zgw_log' );
+		$logger   = new OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Logger( 'owc_zgw_log' );
 		$maxFiles = apply_filters( 'owcgfzgw::logger/rotating_filer_handler_max_files', OWC_GRAVITYFORMS_ZGW_LOGGER_DEFAULT_MAX_FILES );
 
-		$handler = ( new \Monolog\Handler\RotatingFileHandler(
+		$handler = ( new OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Handler\RotatingFileHandler(
 			filename: $container->get( 'message.logger.path' ),
 			maxFiles: is_int( $maxFiles ) && 0 < $maxFiles ? $maxFiles : OWC_GRAVITYFORMS_ZGW_LOGGER_DEFAULT_MAX_FILES,
-			level: \Monolog\Level::Debug
-		) )->setFormatter( new \Monolog\Formatter\JsonFormatter() );
+			level: OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Level::Debug
+		) )->setFormatter( new OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Formatter\JsonFormatter() );
 
 		$logger->pushHandler( $handler );
-		$logger->pushProcessor( new \Monolog\Processor\IntrospectionProcessor() );
+		$logger->pushProcessor( new OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Processor\IntrospectionProcessor() );
 
 		return $logger;
 	},

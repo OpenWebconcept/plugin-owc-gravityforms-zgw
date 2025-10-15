@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use DI\Container;
+use OWCGravityFormsZGW\Vendor_Prefixed\DI\Container;
 
 /**
  * Class ContainerResolver.

@@ -16,11 +16,11 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use DI\ContainerBuilder;
+use OWCGravityFormsZGW\Vendor_Prefixed\DI\ContainerBuilder;
 use OWCGravityFormsZGW\Providers\GravityFormsServiceProvider;
 use OWCGravityFormsZGW\Providers\SettingsServiceProvider;
 use OWCGravityFormsZGW\Providers\TransactionsServiceProvider;
-use Psr\Container\ContainerInterface;
+use OWCGravityFormsZGW\Vendor_Prefixed\Psr\Container\ContainerInterface;
 
 require_once __DIR__ . '/helpers.php';
 

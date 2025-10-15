@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' )) {
 
 use DateTime;
 use Exception;
-use Monolog\Logger;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\LoggerZGW;
 use OWCGravityFormsZGW\Traits\FormSetting;

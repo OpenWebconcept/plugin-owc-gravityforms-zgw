@@ -7,11 +7,16 @@
 		"phpcs": "./vendor/squizlabs/php_codesniffer/bin/phpcs",
 		"phpcbf": "phpcbf",
 		"post-install-cmd": [
+            "@strauss",
 			"composer dump-autoload"
 		],
 		"post-update-cmd": [
+            "@strauss",
 			"composer dump-autoload"
 		],
+        "strauss": [
+          "vendor/bin/strauss"
+        ],
 		"test": "vendor/bin/pest",
 		"test:coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage"
 	},
@@ -46,14 +51,29 @@
 	],
 	"require": {
 		"monolog/monolog": "^3.0",
-		"owc/zgw-api": "^2.0",
+		"owc/zgw-api": "dev-dev",
 		"php": ">=8.1",
 		"php-di/php-di": "^7.0"
 	},
 	"require-dev": {
+        "brianhenryie/strauss": "^0.15.0",
 		"pestphp/pest": "^2.34",
 		"squizlabs/php_codesniffer": "^3.7",
 		"wp-coding-standards/wpcs": "^3.0",
 		"10up/wp_mock": "^0.4.2"
-	}
+	},
+    "extra": {
+      "strauss": {
+        "target_directory": "vendor-prefixed",
+        "namespace_prefix": "OWCGravityFormsZGW\\Vendor_Prefixed\\",
+        "classmap_prefix": "OWCGravityFormsZGW_Vendor_Prefixed_",
+        "constant_prefix": "OWC_GRAVITY_FORMS_ZGW_VENDOR",
+        "packages": [
+          "monolog/monolog",
+          "psr/container",
+          "php-di/php-di"
+        ],
+        "delete_vendor_packages": true
+      }
+    }
 }
