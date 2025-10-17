@@ -1,13 +1,21 @@
 # OWC GravityForms ZGW
 
-This plugin connects GravityForms with ZGW by using the owc/zgw-api package.
-In order for the connection(s) to work the ZGW registers must be configured on the settings page (/wp-admin/options-general.php?page=zgw_api_settings).
+This plugin integrates GravityForms with ZGW using the [owc/zgw-api package](https://github.com/OpenWebconcept/owc-zgw-api).
+To ensure the connection works properly, make sure the ZGW registers are configured on the ZGW API settings page.
 
-Read the documentation of the owc/zgw-api package on [how to get started](https://github.com/OpenWebconcept/owc-zgw-api/tree/main/docs)
+For detailed setup instructions, refer to the [owc/zgw-api documentation](https://github.com/OpenWebconcept/owc-zgw-api/tree/main/docs).
 
-## 📄 GravityForms Implementation
+## Requirements
 
-When this plugin is activated, it adds functionality to configure a form for creating a **zaak**, uploading **documents** to that zaak, and appending a **submission PDF**.
+- WordPress 6.7 or higher
+- GravityForms 2.5 or higher
+
+## Features
+
+- **Create** a zaak in a ZGW register
+- **Upload documents** to the created zaak
+- **Attach a submission PDF** to the zaak (requires [Gravity PDF](https://wordpress.org/plugins/gravity-forms-pdf-extended/))
+- **Track zaak creation attempts** via a dedicated Transactions post-type that logs each attempt and its status (pending, success, or failed)
 
 ---
 
