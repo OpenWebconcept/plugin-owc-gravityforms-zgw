@@ -19,7 +19,7 @@
  * License URI:       https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw/LICENSE.txt
  * Text Domain:       owc-gravityforms-zgw
  * Domain Path:       /languages
- * Requires Plugins:  gravityforms
+ * Requires Plugins:  gravityforms, cmb2
  */
 
 declare (strict_types = 1);
