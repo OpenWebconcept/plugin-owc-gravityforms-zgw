@@ -49,15 +49,15 @@ class ZaakUploadsController extends AbstractZaakFormController
 	protected function handle_zaak_uploads( Zaak $zaak, string $supplier_name, string $supplier_key ): void
 	{
 		try {
-            $action = ( new CreateUploadedDocumentsAction(
-                $this->entry,
-                $this->form,
-                $supplier_name,
-                $supplier_key,
-                $zaak
-            ) );
+			$action = ( new CreateUploadedDocumentsAction(
+				$this->entry,
+				$this->form,
+				$supplier_name,
+				$supplier_key,
+				$zaak
+			) );
 
-            $action->add_uploaded_documents();
+			$action->add_uploaded_documents();
 		} catch ( Exception $e ) {
 			$this->logger->error(
 				sprintf( 'OWC_GravityForms_ZGW: Error adding uploads to zaak. Error: %s', $e->getMessage() )

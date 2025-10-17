@@ -60,9 +60,9 @@ class TransactionCleaner
 		$query = call_user_func( $this->queryFactory, $args );
 
 		foreach ($query->posts as $post_id) {
-			\wp_delete_post( $post_id, true );
+			wp_delete_post( $post_id, true );
 		}
 
-		\wp_reset_postdata();
+		wp_reset_postdata();
 	}
 }

@@ -44,15 +44,15 @@ class ZaakUploadPDFController extends AbstractZaakFormController
 	 */
 	protected function handle_zaak_pdf_uploads( Zaak $zaak, string $supplier_name, string $supplier_key ): void
 	{
-        $action = ( new CreateSubmissionPDFAction(
-            $this->entry,
-            $this->form,
-            $supplier_name,
-            $supplier_key,
-            $zaak
-        ) );
+		$action = ( new CreateSubmissionPDFAction(
+			$this->entry,
+			$this->form,
+			$supplier_name,
+			$supplier_key,
+			$zaak
+		) );
 
-        $result = $action->add_submission_pdf();
+		$result = $action->add_submission_pdf();
 
 		if ( ! $result instanceof Zaakinformatieobject) {
 			throw new Exception(
