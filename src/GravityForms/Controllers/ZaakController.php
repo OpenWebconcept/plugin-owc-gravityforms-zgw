@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use Exception;
+use Throwable;
 use OWC\ZGW\Entities\Zaak;
 use OWCGravityFormsZGW\Actions\CreateZaakAction;
 use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
@@ -73,7 +74,7 @@ class ZaakController extends AbstractZaakFormController
 			$this->upload_pdf_controller->handle( $zaak, $supplier_name, $supplier_key );
 
 			$this->mark_transaction_success( $zaak );
-		} catch ( \Throwable $e ) {
+		} catch ( Throwable $e ) {
 			$this->mark_transaction_failed( $e->getMessage() );
 		}
 	}
@@ -86,17 +87,17 @@ class ZaakController extends AbstractZaakFormController
 	protected function handle_zaak_creation( string $supplier_name, string $supplier_key ): Zaak
 	{
 		try {
-            $action = ( new CreateZaakAction(
-                $this->entry,
-                $this->form,
-                $supplier_name,
-                $supplier_key
-            ) );
+			$action = ( new CreateZaakAction(
+				$this->entry,
+				$this->form,
+				$supplier_name,
+				$supplier_key
+			) );
 
-            $result = $action->create();
+			$result = $action->create();
 
-            $this->add_zaak_reference_to_post($result);
-		} catch ( \Throwable $e ) {
+			$this->add_zaak_reference_to_post( $result );
+		} catch ( Throwable $e ) {
 			throw new Exception(
 				sprintf(
 					'OWC_GravityForms_ZGW: %s',

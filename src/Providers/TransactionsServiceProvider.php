@@ -33,6 +33,11 @@ class TransactionsServiceProvider extends ServiceProvider
 
 		new TransactionPostType();
 
+		$this->schedule_cron_events();
+	}
+
+	public function schedule_cron_events(): void
+	{
 		// Schedule the transaction report event if not already scheduled.
 		if ( ! wp_next_scheduled( 'owc_zgw_transaction_report' ) ) {
 			wp_schedule_event( time(), 'daily', 'owc_zgw_transaction_report' );
@@ -55,10 +60,10 @@ class TransactionsServiceProvider extends ServiceProvider
 			'owc_zgw_transaction',
 			array(
 				'labels'             => array(
-					'name'               => __( 'Transactions', 'owc-gravityforms-zgw' ),
-					'singular_name'      => __( 'Transaction', 'owc-gravityforms-zgw' ),
-					'not_found'          => __( 'No transactions found.', 'owc-gravityforms-zgw' ),
-					'not_found_in_trash' => __( 'No transactions found in Trash.', 'owc-gravityforms-zgw' ),
+					'name'               => __( 'Transacties', 'owc-gravityforms-zgw' ),
+					'singular_name'      => __( 'Transactie', 'owc-gravityforms-zgw' ),
+					'not_found'          => __( 'Geen transacties gevonden', 'owc-gravityforms-zgw' ),
+					'not_found_in_trash' => __( 'Geen transaction gevonden in de prullenbak.', 'owc-gravityforms-zgw' ),
 				),
 				'menu_icon'          => 'dashicons-visibility',
 				'public'             => false,
