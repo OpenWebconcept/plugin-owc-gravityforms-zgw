@@ -5,4 +5,3 @@ owc-zgw-log-*.json
 # Folders
 .vscode
 vendor
-vendor-prefixed
