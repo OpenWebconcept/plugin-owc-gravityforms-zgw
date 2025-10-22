@@ -19,12 +19,13 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use Exception;
-use Throwable;
 use OWC\ZGW\Entities\Zaak;
 use OWCGravityFormsZGW\Actions\CreateZaakAction;
 use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
+use OWCGravityFormsZGW\Exceptions\ZaakException;
+use OWCGravityFormsZGW\Exceptions\ZaakUploadException;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
+use Throwable;
 
 /**
  * Zaak controller.
@@ -36,11 +37,13 @@ class ZaakController extends AbstractZaakFormController
 	private ZaakUploadsController $uploads_controller;
 	private ZaakUploadPDFController $upload_pdf_controller;
 
-	public function __construct()
-	{
+	public function __construct(
+		?ZaakUploadsController $uploads_controller = null,
+		?ZaakUploadPDFController $upload_pdf_controller = null
+	) {
 		parent::__construct();
-		$this->uploads_controller    = new ZaakUploadsController();
-		$this->upload_pdf_controller = new ZaakUploadPDFController();
+		$this->uploads_controller    = $uploads_controller ?? new ZaakUploadsController();
+		$this->upload_pdf_controller = $upload_pdf_controller ?? new ZaakUploadPDFController();
 	}
 
 	/**
@@ -53,6 +56,7 @@ class ZaakController extends AbstractZaakFormController
 			return;
 		}
 
+
 		// Make entry/form available to other methods that expect them.
 		$this->entry = $entry;
 		$this->form  = $form;
@@ -63,28 +67,25 @@ class ZaakController extends AbstractZaakFormController
 
 		try {
 			// Create the Zaak.
-			$zaak = $this->handle_zaak_creation( $supplier_name, $supplier_key );
-
-			// Call the upload handlers to attach files to the Zaak.
-			$this->uploads_controller->set_form_data( $entry, $form );
-			$this->uploads_controller->handle( $zaak, $supplier_name, $supplier_key );
-
-			// Call the PDF upload handler to attach documents to the Zaak.
-			$this->upload_pdf_controller->set_form_data( $entry, $form );
-			$this->upload_pdf_controller->handle( $zaak, $supplier_name, $supplier_key );
+			$zaak = $this->create_zaak( $supplier_name, $supplier_key );
+			$this->handle_uploads( $zaak, $supplier_name, $supplier_key );
 
 			$this->mark_transaction_success( $zaak );
-		} catch ( Throwable $e ) {
+		} catch (ZaakException $e) {
 			$this->mark_transaction_failed( $e->getMessage() );
+		} catch (Throwable $e) {
+			$this->mark_transaction_failed(
+				( new ZaakException( $e->getMessage(), 500, $e ) )->getMessage()
+			);
 		}
 	}
 
 	/**
 	 * Create the Zaak using the supplier-specific Action class.
 	 *
-	 * @throws Exception
+	 * @throws ZaakException
 	 */
-	protected function handle_zaak_creation( string $supplier_name, string $supplier_key ): Zaak
+	protected function create_zaak( string $supplier_name, string $supplier_key ): Zaak
 	{
 		try {
 			$action = ( new CreateZaakAction(
@@ -94,20 +95,36 @@ class ZaakController extends AbstractZaakFormController
 				$supplier_key
 			) );
 
-			$result = $action->create();
+			$zaak = $action->create();
+			$this->add_zaak_reference_to_post( $zaak );
 
-			$this->add_zaak_reference_to_post( $result );
+			return $zaak;
 		} catch ( Throwable $e ) {
-			throw new Exception(
-				sprintf(
-					'OWC_GravityForms_ZGW: %s',
-					$e->getMessage()
-				),
+			throw new ZaakException(
+				sprintf( 'OWC_GravityForms_ZGW: %s', $e->getMessage() ),
 				400,
 				$e
 			);
 		}
+	}
 
-		return $result;
+	/**
+	 * Handle both file and PDF uploads.
+	 *
+	 * @throws ZaakUploadException
+	 */
+	protected function handle_uploads(Zaak $zaak, string $supplier_name, string $supplier_key ): void
+	{
+		try {
+			// Handle normal uploads.
+			$this->uploads_controller->set_form_data( $this->entry, $this->form );
+			$this->uploads_controller->handle( $zaak, $supplier_name, $supplier_key );
+
+			// Handle PDF uploads.
+			$this->upload_pdf_controller->set_form_data( $this->entry, $this->form );
+			$this->upload_pdf_controller->handle( $zaak, $supplier_name, $supplier_key );
+		} catch (Throwable $e) {
+			throw new ZaakUploadException( $e->getMessage() );
+		}
 	}
 }

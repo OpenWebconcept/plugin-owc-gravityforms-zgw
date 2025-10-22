@@ -16,11 +16,12 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use Exception;
-use OWCGravityFormsZGW\Actions\CreateSubmissionPDFAction;
-use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Zaakinformatieobject;
+use OWCGravityFormsZGW\Actions\CreateSubmissionPDFAction;
+use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
+use OWCGravityFormsZGW\Exceptions\ZaakUploadException;
+use Throwable;
 
 /**
  * Zaak upload PDF controller.
@@ -30,35 +31,50 @@ use OWC\ZGW\Entities\Zaakinformatieobject;
 class ZaakUploadPDFController extends AbstractZaakFormController
 {
 	/**
-	 * Init Zaak upload PDFs and handle accordingly.
+	 * Initialize Zaak PDF uploads and handle accordingly.
 	 *
-	 * @throws Exception
+	 * @throws ZaakUploadException
 	 */
 	public function handle( Zaak $zaak, string $supplier_name, string $supplier_key ): void
 	{
-		$this->handle_zaak_pdf_uploads( $zaak, $supplier_name, $supplier_key );
+		try {
+			$this->handle_zaak_pdf_uploads( $zaak, $supplier_name, $supplier_key );
+		} catch (Throwable $e) {
+			$message = sprintf(
+				'Error while uploading PDFs for Zaak "%s": %s',
+				$zaak->getValue( 'identificatie', 'unknown' ),
+				$e->getMessage()
+			);
+
+			$this->logger->error( $message );
+
+			throw new ZaakUploadException( $message, 400, $e );
+		}
 	}
 
 	/**
 	 * Add PDF uploads to Zaak using the supplier-specific Action class.
+	 *
+	 * @throws ZaakUploadException
 	 */
 	protected function handle_zaak_pdf_uploads( Zaak $zaak, string $supplier_name, string $supplier_key ): void
 	{
-		$action = ( new CreateSubmissionPDFAction(
+		$action = new CreateSubmissionPDFAction(
 			$this->entry,
 			$this->form,
 			$supplier_name,
 			$supplier_key,
 			$zaak
-		) );
+		);
 
 		$result = $action->add_submission_pdf();
 
 		if ( ! $result instanceof Zaakinformatieobject) {
-			throw new Exception(
+			throw new ZaakUploadException(
 				sprintf(
-					'Failed adding PDF uploads to "%s"',
-					$zaak->getValue( 'identificatie', '' )
+					'Failed adding PDF uploads to Zaak "%s". Unexpected result type: %s',
+					$zaak->getValue( 'identificatie', 'unknown' ),
+					is_object( $result ) ? get_class( $result ) : gettype( $result )
 				),
 				400
 			);
