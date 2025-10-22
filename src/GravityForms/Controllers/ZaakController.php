@@ -100,8 +100,10 @@ class ZaakController extends AbstractZaakFormController
 
 			return $zaak;
 		} catch ( Throwable $e ) {
+            $reasonMessage = $this->extractApiErrorMessage($e);
+
 			throw new ZaakException(
-				sprintf( 'OWC_GravityForms_ZGW: %s', $e->getMessage() ),
+				sprintf( 'OWC_GravityForms_ZGW: %s', $reasonMessage ),
 				400,
 				$e
 			);
