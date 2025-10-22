@@ -26,7 +26,9 @@ This section allows you to configure general settings that apply to **all forms 
 
 #### Organization
 
-A **RSIN number** is required for creating a **zaak**.
+> [!IMPORTANT]  
+> A **RSIN number** is required for creating a **zaak**.
+
 Make sure to fill this out correctly as it is used in all zaak creation requests.
 
 #### Logging
