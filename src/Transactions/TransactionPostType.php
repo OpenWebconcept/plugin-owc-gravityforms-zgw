@@ -70,9 +70,9 @@ class TransactionPostType
 		}
 
 		$class   = 'notice notice-info';
-		$message = __( 'This page tracks Zaaksysteem Transactions via Gravity Forms and reports their status back here.', 'Transaction status', 'owc-gravityforms-zgw' );
+        $message = __( 'Overzicht van zaaksysteemtransacties vanuit Gravity Forms formulieren welke gekoppeld zijn met een zaaksysteem.', 'Transaction status', 'owc-gravityforms-zgw' );
 
-		printf(
+        printf(
 			'<div class="notice notice-%1$s"><p>%2$s</p></div>',
 			esc_attr( $class ),
 			esc_html( $message )
@@ -87,30 +87,30 @@ class TransactionPostType
 		register_post_status(
 			'transaction_success',
 			array(
-				'label'       => _x( 'Success', 'Transaction status', 'owc-gravityforms-zgw' ),
+				'label'       => _x( 'Voltooid', 'Transactie status', 'owc-gravityforms-zgw' ),
 				'public'      => true,
 				/* translators: %s: count value */
-				'label_count' => _n_noop( 'Success <span class="count">(%s)</span>', 'Success <span class="count">(%s)</span>', 'owc-gravityforms-zgw' ),
+				'label_count' => _n_noop( 'Voltooid <span class="count">(%s)</span>', 'Voltooid <span class="count">(%s)</span>', 'owc-gravityforms-zgw' ),
 			)
 		);
 
 		register_post_status(
 			'transaction_pending',
 			array(
-				'label'       => _x( 'Pending', 'Transaction status', 'owc-gravityforms-zgw' ),
+				'label'       => _x( 'In behandeling', 'Transactie status', 'owc-gravityforms-zgw' ),
 				'public'      => true,
 				/* translators: %s: count value */
-				'label_count' => _n_noop( 'Pending <span class="count">(%s)</span>', 'Pending <span class="count">(%s)</span>', 'owc-gravityforms-zgw' ),
+				'label_count' => _n_noop( 'In behandeling <span class="count">(%s)</span>', 'In behandeling <span class="count">(%s)</span>', 'owc-gravityforms-zgw' ),
 			)
 		);
 
 		register_post_status(
 			'transaction_failed',
 			array(
-				'label'       => _x( 'Failed', 'Transaction status', 'owc-gravityforms-zgw' ),
+				'label'       => _x( 'Mislukt', 'Transactie status', 'owc-gravityforms-zgw' ),
 				'public'      => true,
 				/* translators: %s: count value */
-				'label_count' => _n_noop( 'Failed <span class="count">(%s)</span>', 'Failed <span class="count">(%s)</span>', 'owc-gravityforms-zgw' ),
+				'label_count' => _n_noop( 'Mislukt <span class="count">(%s)</span>', 'Mislukt <span class="count">(%s)</span>', 'owc-gravityforms-zgw' ),
 			)
 		);
 	}
@@ -128,21 +128,21 @@ class TransactionPostType
 			),
 			'transaction_form_id'  => sprintf(
 				'<span>%s</span>',
-				esc_html__( 'Form ID', 'owc-gravityforms-zgw' ),
-				esc_html__( 'Form ID', 'owc-gravityforms-zgw' )
+				esc_html__( 'Formulier ID', 'owc-gravityforms-zgw' ),
+				esc_html__( 'Formulier ID', 'owc-gravityforms-zgw' )
 			),
 			'transaction_entry_id' => sprintf(
 				'<span>%s</span>',
-				esc_html__( 'Entry ID', 'owc-gravityforms-zgw' ),
-				esc_html__( 'Entry ID', 'owc-gravityforms-zgw' )
+				esc_html__( 'Inzending ID', 'owc-gravityforms-zgw' ),
+				esc_html__( 'Inzending ID', 'owc-gravityforms-zgw' )
 			),
 			'transaction_zaak_id'  => sprintf(
 				'<span>%s</span>',
 				esc_html__( 'Zaak ID', 'owc-gravityforms-zgw' ),
 				esc_html__( 'Zaak ID', 'owc-gravityforms-zgw' )
 			),
-			'transaction_message'  => __( 'Message', 'owc-gravityforms-zgw' ),
-			'transaction_datetime' => __( 'Datetime', 'owc-gravityforms-zgw' ),
+			'transaction_message'  => __( 'Melding', 'owc-gravityforms-zgw' ),
+			'transaction_datetime' => __( 'Datumtijd', 'owc-gravityforms-zgw' ),
 		);
 
 		return $columns;
@@ -183,7 +183,7 @@ class TransactionPostType
 					break;
 				}
 
-				$label = __( 'Unknown', 'owc-gravityforms-zgw' );
+				$label = __( 'Onbekend', 'owc-gravityforms-zgw' );
 
 				if ( 'trash' === $post_status ) {
 					$post_status = get_post_meta( $post_id, '_wp_trash_meta_status', true );
