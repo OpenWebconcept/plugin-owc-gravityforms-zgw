@@ -152,7 +152,7 @@ abstract class AbstractZaakFormController
 
         $data = json_decode($body, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            return 'Invalid JSON in API error response.';
+            return 'Invalid JSON in API error response; Body: ' . $body;
         }
 
         // Priority: invalidParams → detail → title → generic fallback
