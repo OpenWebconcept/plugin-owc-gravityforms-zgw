@@ -75,7 +75,7 @@ abstract class AbstractZaakFormController
 		$transaction_post_id = gform_get_meta( $this->entry['id'], 'transaction_post_id' );
 
 		if ( ! $transaction_post_id ) {
-			$this->logger->error( 'OWC_GravityForms_ZGW: No transaction post linked to this entry.' );
+			$this->logger->error( 'No transaction post linked to this entry.' );
 			return;
 		}
 
@@ -98,7 +98,7 @@ abstract class AbstractZaakFormController
 		$transaction_post_id = gform_get_meta( $this->entry['id'], 'transaction_post_id' );
 
 		if ( ! $transaction_post_id ) {
-			$this->logger->error( 'OWC_GravityForms_ZGW: No transaction post linked to this entry.' );
+			$this->logger->error( 'No transaction post linked to this entry.' );
 			return;
 		}
 
@@ -117,15 +117,15 @@ abstract class AbstractZaakFormController
 		GFFormsModel::add_note(
 			$this->entry['id'],
 			0,
-			__( 'System', 'owc-gravityforms-zgw' ),
-			__( 'OWC_GravityForms_ZGW: Zaak creation failed', 'owc-gravityforms-zgw' ),
+			__( 'Systeem', 'owc-gravityforms-zgw' ),
+			__( 'Er waren problemen bij het succesvol indienen van deze zaak, bekijk de transacties voor meer informatie.', 'owc-gravityforms-zgw' ),
 			$message
 		);
 
 		// Log error if logger is available.
 		if ( isset( $this->logger ) ) {
 			$this->logger->error(
-				sprintf( 'OWC_GravityForms_ZGW: Error creating zaak. Error: %s', $message )
+				sprintf( 'Transactie error: %s', $message )
 			);
 		}
 	}

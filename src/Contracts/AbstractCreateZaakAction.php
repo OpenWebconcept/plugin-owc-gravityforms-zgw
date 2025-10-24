@@ -138,9 +138,9 @@ abstract class AbstractCreateZaakAction
 			try {
 				$rol = $this->client->rollen()->create( new Rol( $args, $this->client ) );
 			} catch (BadRequestError $e) {
-				$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: failed to add rol to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
+				$this->logger->error( sprintf( 'Failed to add rol to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
 			} catch (Exception $e) {
-				$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: failed to add rol to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
+				$this->logger->error( sprintf( 'Failed to add rol to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
 			}
 
 			break;
@@ -181,10 +181,10 @@ abstract class AbstractCreateZaakAction
 					new Zaakeigenschap( $property, $this->client )
 				);
 			} catch (BadRequestError $e) {
-				$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: failed to create zaak property for zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
+				$this->logger->error( sprintf( 'Failed to create zaak property for zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
 
 			} catch (Exception $e) {
-				$this->logger->error( sprintf( 'OWC_GravityForms_ZGW: failed to create zaak property for zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
+				$this->logger->error( sprintf( 'Failed to create zaak property for zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
 			}
 		}
 	}

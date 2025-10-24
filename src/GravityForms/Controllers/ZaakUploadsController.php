@@ -84,7 +84,7 @@ class ZaakUploadsController extends AbstractZaakFormController
 			$reasonMessage = $this->extractApiErrorMessage( $e );
 
 			throw new ZaakUploadException(
-				sprintf( 'OWC_GravityForms_ZGW: %s', $reasonMessage ),
+				$reasonMessage,
 				400,
 				$e
 			);
