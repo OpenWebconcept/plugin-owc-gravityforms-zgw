@@ -41,21 +41,19 @@ abstract class AbstractCreateSubmissionPDFAction
 
 	protected array $entry;
 	protected array $form;
-	protected string $supplier_name;
 	protected string $supplier_key;
 	protected Zaak $zaak;
 	protected Client $client;
 	protected FormSettingsPDF $pdf_settings;
 
-	public function __construct(array $entry, array $form, string $supplier_name, string $supplier_key, Zaak $zaak )
+	public function __construct(array $entry, array $form, array $supplier_config, Zaak $zaak )
 	{
-		$this->entry         = $entry;
-		$this->form          = $form;
-		$this->supplier_name = $supplier_name;
-		$this->supplier_key  = $supplier_key;
-		$this->zaak          = $zaak;
-		$this->client        = apiClient( $this->supplier_name );
-		$this->pdf_settings  = new FormSettingsPDF( $entry, $form );
+		$this->entry        = $entry;
+		$this->form         = $form;
+		$this->supplier_key = $supplier_config['client_type'] ?? '';
+		$this->zaak         = $zaak;
+		$this->client       = apiClient( $supplier_config['name'] );
+		$this->pdf_settings = new FormSettingsPDF( $entry, $form );
 	}
 
 	abstract public function add_submission_pdf(): ?Zaakinformatieobject;
@@ -67,7 +65,7 @@ abstract class AbstractCreateSubmissionPDFAction
 	{
 		if ( ! class_exists( 'GPDFAPI' )) {
 			throw new Exception(
-				sprintf( 'OWC_GravityForms_ZGW: Gravity PDF is required for the uploads.' ),
+				sprintf( 'Gravity PDF is required for the uploads.' ),
 				400
 			);
 		}

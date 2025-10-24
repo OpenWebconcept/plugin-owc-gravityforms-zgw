@@ -37,13 +37,13 @@ class ZaakUploadsController extends AbstractZaakFormController
 	 *
 	 * @throws ZaakUploadException
 	 */
-	public function handle( Zaak $zaak, string $supplier_name, string $supplier_key ): void
+	public function handle( Zaak $zaak, array $supplier_config ): void
 	{
 		try {
-			$this->handle_zaak_uploads( $zaak, $supplier_name, $supplier_key );
+			$this->handle_zaak_uploads( $zaak, $supplier_config );
 		} catch (Throwable $e) {
 			$message = sprintf(
-				'Error while uploading attachments for Zaak "%s": %s',
+				'Error while uploading attachments for zaak: %s: %s',
 				$zaak->getValue( 'identificatie', 'unknown' ),
 				$e->getMessage()
 			);
@@ -59,14 +59,13 @@ class ZaakUploadsController extends AbstractZaakFormController
 	 *
 	 * @throws ZaakUploadException
 	 */
-	protected function handle_zaak_uploads( Zaak $zaak, string $supplier_name, string $supplier_key ): void
+	protected function handle_zaak_uploads( Zaak $zaak, array $supplier_config ): void
 	{
 		try {
 			$action = new CreateUploadedDocumentsAction(
 				$this->entry,
 				$this->form,
-				$supplier_name,
-				$supplier_key,
+				$supplier_config,
 				$zaak
 			);
 
@@ -75,19 +74,17 @@ class ZaakUploadsController extends AbstractZaakFormController
 			if ($result === null) {
 				throw new ZaakUploadException(
 					sprintf(
-						'No uploads were added to Zaak "%s". Action returned null.',
+						'No uploads were added to zaak %s. Action returned null.',
 						$zaak->getValue( 'identificatie', 'unknown' )
 					),
 					400
 				);
 			}
 		} catch ( Throwable $e ) {
+			$reasonMessage = $this->extractApiErrorMessage( $e );
+
 			throw new ZaakUploadException(
-				sprintf(
-					'Failed adding uploads to Zaak "%s": %s',
-					$zaak->getValue( 'identificatie', 'unknown' ),
-					$e->getMessage()
-				),
+				sprintf( 'OWC_GravityForms_ZGW: %s', $reasonMessage ),
 				400,
 				$e
 			);

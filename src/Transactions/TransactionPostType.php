@@ -70,9 +70,9 @@ class TransactionPostType
 		}
 
 		$class   = 'notice notice-info';
-        $message = __( 'Overzicht van zaaksysteemtransacties vanuit Gravity Forms formulieren welke gekoppeld zijn met een zaaksysteem.', 'Transactie status', 'owc-gravityforms-zgw' );
+		$message = __( 'Overzicht van zaaksysteemtransacties vanuit Gravity Forms formulieren welke gekoppeld zijn met een zaaksysteem.', 'Transactie status', 'owc-gravityforms-zgw' );
 
-        printf(
+		printf(
 			'<div class="notice notice-%1$s"><p>%2$s</p></div>',
 			esc_attr( $class ),
 			esc_html( $message )

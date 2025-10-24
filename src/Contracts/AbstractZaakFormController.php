@@ -130,53 +130,53 @@ abstract class AbstractZaakFormController
 		}
 	}
 
-    /**
-     * Extracts a readable error message from an API exception.
-     */
-    protected function extractApiErrorMessage(Throwable $e): string
-    {
-        if (!method_exists($e, 'getResponse')) {
-            return $e->getMessage() ?: 'Unknown error occurred.';
-        }
+	/**
+	 * Extracts a readable error message from an API exception.
+	 */
+	protected function extractApiErrorMessage(Throwable $e ): string
+	{
+		if ( ! method_exists( $e, 'getResponse' )) {
+			return $e->getMessage() ?: 'Unknown error occurred.';
+		}
 
-        $response = $e->getResponse();
+		$response = $e->getResponse();
 
-        if (!$response || !method_exists($response, 'getBody')) {
-            return $e->getMessage() ?: 'Unknown API response.';
-        }
+		if ( ! $response || ! method_exists( $response, 'getBody' )) {
+			return $e->getMessage() ?: 'Unknown API response.';
+		}
 
-        $body = (string) $response->getBody();
-        if (!$body) {
-            return 'Empty API response body.';
-        }
+		$body = (string) $response->getBody();
+		if ( ! $body) {
+			return 'Empty API response body.';
+		}
 
-        $data = json_decode($body, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return 'Invalid JSON in API error response; Body: ' . $body;
-        }
+		$data = json_decode( $body, true );
+		if (json_last_error() !== JSON_ERROR_NONE) {
+			return 'Invalid JSON in API error response; Body: ' . $body;
+		}
 
-        // Priority: invalidParams → detail → title → generic fallback
-        if (!empty($data['invalidParams'])) {
-            $messages = array_map(
-                fn($param) => sprintf(
-                    "%s: %s",
-                    $param['name'] ?? '(unknown field)',
-                    $param['reason'] ?? '(no reason)'
-                ),
-                $data['invalidParams']
-            );
+		// Priority: invalidParams → detail → title → generic fallback
+		if ( ! empty( $data['invalidParams'] )) {
+			$messages = array_map(
+				fn($param ) => sprintf(
+					"%s: %s",
+					$param['name'] ?? '(unknown field)',
+					$param['reason'] ?? '(no reason)'
+				),
+				$data['invalidParams']
+			);
 
-            return implode('; ', $messages);
-        }
+			return implode( '; ', $messages );
+		}
 
-        if (!empty($data['detail'])) {
-            return $data['detail'];
-        }
+		if ( ! empty( $data['detail'] )) {
+			return $data['detail'];
+		}
 
-        if (!empty($data['title'])) {
-            return $data['title'];
-        }
+		if ( ! empty( $data['title'] )) {
+			return $data['title'];
+		}
 
-        return 'An unknown API error occurred.';
-    }
+		return 'An unknown API error occurred.';
+	}
 }
