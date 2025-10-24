@@ -41,7 +41,7 @@ class ZaakUploadPDFController extends AbstractZaakFormController
 			$this->handle_zaak_pdf_uploads( $zaak, $supplier_config );
 		} catch (Throwable $e) {
 			$message = sprintf(
-				'Error while uploading PDFs for Zaak "%s": %s',
+				'Error processing zaak PDF: %s: %s',
 				$zaak->getValue( 'identificatie', 'unknown' ),
 				$e->getMessage()
 			);
@@ -71,8 +71,7 @@ class ZaakUploadPDFController extends AbstractZaakFormController
 		if ( ! $result instanceof Zaakinformatieobject) {
 			throw new ZaakUploadException(
 				sprintf(
-					'Failed adding PDF uploads to Zaak "%s". Unexpected result type: %s',
-					$zaak->getValue( 'identificatie', 'unknown' ),
+					'Unexpected result type: %s',
 					is_object( $result ) ? get_class( $result ) : gettype( $result )
 				),
 				400

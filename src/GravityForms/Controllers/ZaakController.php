@@ -63,8 +63,8 @@ class ZaakController extends AbstractZaakFormController
 		// Get the supplier name and key from form settings.
 		$supplier_config = FormUtils::get_supplier_config( $form );
 
+		// Create the Zaak.
 		try {
-			// Create the Zaak.
 			$zaak = $this->create_zaak( $supplier_config );
 			$this->handle_uploads( $zaak, $supplier_config );
 
@@ -130,7 +130,7 @@ class ZaakController extends AbstractZaakFormController
 			$this->upload_pdf_controller->set_form_data( $this->entry, $this->form );
 			$this->upload_pdf_controller->handle( $zaak, $supplier_config );
 		} catch (Throwable $e) {
-			$this->logger->error( 'PDF upload failed: ' . $e->getMessage() );
+			$this->logger->error( 'PDF generation failed: ' . $e->getMessage() );
 			$caughtException = $e;
 		}
 

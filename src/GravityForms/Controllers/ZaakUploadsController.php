@@ -43,7 +43,7 @@ class ZaakUploadsController extends AbstractZaakFormController
 			$this->handle_zaak_uploads( $zaak, $supplier_config );
 		} catch (Throwable $e) {
 			$message = sprintf(
-				'Error while uploading attachments for zaak: %s: %s',
+				'Error processing uploads: %s: %s',
 				$zaak->getValue( 'identificatie', 'unknown' ),
 				$e->getMessage()
 			);
@@ -71,15 +71,18 @@ class ZaakUploadsController extends AbstractZaakFormController
 
 			$result = $action->add_uploaded_documents();
 
-			if ($result === null) {
+			if ($result === false) {
 				throw new ZaakUploadException(
 					sprintf(
-						'No uploads were added to zaak %s. Action returned null.',
+						'Not all uploads were successfully added to zaak %s.',
 						$zaak->getValue( 'identificatie', 'unknown' )
 					),
 					400
 				);
 			}
+
+			// $result === null → no uploads mapped, skip silently
+			// $result === true → all uploads succeeded
 		} catch ( Throwable $e ) {
 			$reasonMessage = $this->extractApiErrorMessage( $e );
 
