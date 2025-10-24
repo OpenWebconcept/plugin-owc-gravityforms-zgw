@@ -31,21 +31,28 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 		$mapped_args = $this->get_mapped_required_information_object_creation_args();
 
 		if (empty( $mapped_args['informatieobject'] )) {
-			return null;
+			return null; // No files mapped → not an error
 		}
 
 		$count   = count( $mapped_args['informatieobject'] );
 		$success = 0;
 
 		foreach ($mapped_args['informatieobject'] as $object) {
-			$args              = $this->prepare_information_object_args( $object['url'], $object['type'], $object['description'] );
-			$connection_result = $this->connect_zaak_to_information_object( $this->create_information_object( $args ) );
+			$args              = $this->prepare_information_object_args(
+				$object['url'],
+				$object['type'],
+				$object['description']
+			);
+
+			$connection_result = $this->connect_zaak_to_information_object(
+                $this->create_information_object( $args )
+            );
 
 			if ($connection_result instanceof Zaakinformatieobject) {
 				++$success;
 			}
 		}
 
-		return $count === $success;
+		return $count === $success; // true = all succeeded, false = partial failure
 	}
 }
