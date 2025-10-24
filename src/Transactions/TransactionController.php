@@ -44,11 +44,11 @@ class TransactionController
 	public function create( array $entry, array $form ): void
 	{
 		// Only create transaction for ZGW enabled forms.
-		if ( ! FormUtils::form_is_zgw( $form )) {
+		if ( ! FormUtils::is_form_zgw( $form )) {
 			return;
 		}
 
-		$post_id = \wp_insert_post(
+		$post_id = wp_insert_post(
 			array(
 				'post_type'   => self::POST_TYPE,
 				'post_title'  => sprintf( 'Entry %d (Form %d)', $entry['id'], $entry['form_id'] ),

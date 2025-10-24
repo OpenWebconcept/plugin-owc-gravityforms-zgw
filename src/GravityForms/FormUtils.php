@@ -34,32 +34,34 @@ class FormUtils
 	/**
 	 * Get the supplier configured in the form settings.
 	 */
-	public static function supplier_form_setting(array $form, bool $get_key = false ): string
+	public static function get_supplier_config(array $form ): array
 	{
-		$allowed  = ContainerResolver::make()->get( 'suppliers' );
 		$supplier = $form[ sprintf( '%s-form-setting-supplier', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '';
 
-		if ( ! is_array( $allowed ) || empty( $allowed ) || empty( $supplier )) {
-			return '';
+		$clients = (array) get_option( 'zgw_api_settings' );
+		$clients = $clients['zgw-api-configured-clients'] ?? array();
+
+		foreach ($clients as $clientConfig) {
+			if (strtolower( $clientConfig['name'] ) === $supplier) {
+				return $clientConfig;
+			}
 		}
 
-		if ( ! in_array( $supplier, array_keys( $allowed ), true )) {
-			return '';
-		}
-
-		if ($get_key) {
-			return $supplier;
-		}
-
-		return $allowed[ $supplier ] ?? '';
+		return array();
 	}
 
-	public static function form_is_zgw( array $form ): bool
+	/**
+	 * Check if the form is configured for ZGW.
+	 */
+	public static function is_form_zgw( array $form ): bool
 	{
-		$supplier_name = self::supplier_form_setting( form: $form );
-		$supplier_key  = self::supplier_form_setting( form: $form, get_key: true );
+		$supplier_setting = self::get_supplier_config( form: $form );
 
-		return 0 < strlen( $supplier_name ) || 0 < strlen( $supplier_key );
+		if ( empty( $supplier_setting ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

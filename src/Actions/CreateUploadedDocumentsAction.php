@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' )) {
 
 use OWC\ZGW\Entities\Zaakinformatieobject;
 use OWCGravityFormsZGW\Contracts\AbstractCreateUploadedDocumentsAction;
-use OWCGravityFormsZGW\Traits\CheckURL;
 
 /**
  * Create uploaded documents action.
@@ -27,8 +26,6 @@ use OWCGravityFormsZGW\Traits\CheckURL;
  */
 class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsAction
 {
-	use CheckURL;
-
 	public function add_uploaded_documents(): ?bool
 	{
 		$mapped_args = $this->get_mapped_required_information_object_creation_args();
@@ -41,16 +38,7 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 		$success = 0;
 
 		foreach ($mapped_args['informatieobject'] as $object) {
-
-			if (empty( $object['url']->tmp_url ) || empty( $object['type'] )) {
-				continue;
-			}
-
-			if ( ! $this->check_url( $object['url']->tmp_url )) {
-				continue;
-			}
-
-			$args              = $this->prepare_information_object_args( $object['url']->tmp_url, $object['type'], $object['description'] );
+			$args              = $this->prepare_information_object_args( $object['url'], $object['type'], $object['description'] );
 			$connection_result = $this->connect_zaak_to_information_object( $this->create_information_object( $args ) );
 
 			if ($connection_result instanceof Zaakinformatieobject) {

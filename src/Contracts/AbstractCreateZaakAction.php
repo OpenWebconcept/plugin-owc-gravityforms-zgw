@@ -44,17 +44,15 @@ abstract class AbstractCreateZaakAction
 	protected array $entry;
 	protected array $form;
 	protected string $supplier_name;
-	protected string $supplier_key;
 	protected Client $client;
 	protected LoggerZGW $logger;
 
-	public function __construct(array $entry, array $form, string $supplier_name, string $supplier_key )
+	public function __construct(array $entry, array $form, array $supplier_config )
 	{
 		$this->entry         = $entry;
 		$this->form          = $form;
-		$this->supplier_name = $supplier_name;
-		$this->supplier_key  = $supplier_key;
-		$this->client        = apiClient( $this->supplier_name );
+		$this->supplier_name = $supplier_config['name'] ?? '';
+		$this->client        = apiClient( $supplier_config['name'] );
 		$this->logger        = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
@@ -62,8 +60,6 @@ abstract class AbstractCreateZaakAction
 
 	/**
 	 * Merge mapped arguments with defaults.
-	 *
-	 * @since 1.0.0
 	 */
 	protected function get_mapped_required_zaak_creation_args(): array
 	{
@@ -73,7 +69,7 @@ abstract class AbstractCreateZaakAction
 			'registratiedatum'             => date( 'Y-m-d' ),
 			'startdatum'                   => date( 'Y-m-d' ),
 			'verantwoordelijkeOrganisatie' => ContainerResolver::make()->get( 'zgw.rsin' ),
-			'zaaktype'                     => $this->zaaktype_identifier_form_setting( $this->form, $this->supplier_key ),
+			'zaaktype'                     => $this->zaaktype_identifier_form_setting( $this->form, $this->supplier_name ),
 		);
 
 		return $this->map_required_zaak_creation_args( $args );
@@ -83,8 +79,6 @@ abstract class AbstractCreateZaakAction
 	 * Add form field values to arguments required for creating a "zaak".
 	 * The mapping is based on the relationship between argument keys
 	 * and form fields via their mappedFieldValueZGW values.
-	 *
-	 * @since 1.0.0
 	 */
 	protected function map_required_zaak_creation_args(array $args ): array
 	{
@@ -111,8 +105,6 @@ abstract class AbstractCreateZaakAction
 
 	/**
 	 * Assign a submitter to the created "zaak".
-	 *
-	 * @since 1.0.0
 	 */
 	public function add_rol_to_zaak(Zaak $zaak ): ?Rol
 	{
@@ -159,20 +151,15 @@ abstract class AbstractCreateZaakAction
 
 	/**
 	 * Get all available "roltypen" based on the given "zaaktype".
-	 *
-	 * @since 1.0.0
 	 */
 	public function get_rol_types(): PagedCollection
 	{
 		$filter = new RoltypenFilter();
-		$filter->add( 'zaaktype', $this->zaaktype_identifier_form_setting( $this->form, $this->supplier_key ) );
+		$filter->add( 'zaaktype', $this->zaaktype_identifier_form_setting( $this->form, $this->supplier_name ) );
 
 		return $this->client->roltypen()->filter( $filter );
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function create_zaak_properties(Zaak $zaak ): void
 	{
 		$zaak_properties = $this->map_zaak_properties_args();
@@ -204,9 +191,7 @@ abstract class AbstractCreateZaakAction
 
 	/**
 	 * Add form field values to arguments for creating "zaak" properties.
-	 * Mapping is done by the relation between arguments keys and form fields mappedFieldValueZGWs.
-	 *
-	 * @since 1.0.0
+	 * Mapping is done by the relation between argument keys and form fields mappedFieldValueZGWs.
 	 */
 	protected function map_zaak_properties_args(): array
 	{
@@ -236,9 +221,6 @@ abstract class AbstractCreateZaakAction
 		return $mappedFields;
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	private function handle_zaak_date_property(string $property_value ): string
 	{
 		try {
@@ -253,8 +235,6 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * Store generated "zaak" information in the entry's metadata.
 	 * Could be used for further processing or debugging.
-	 *
-	 * @since 1.0.0
 	 */
 	protected function add_created_zaak_as_entry_meta(Zaak $zaak ): void
 	{

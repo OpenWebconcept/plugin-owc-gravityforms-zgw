@@ -35,10 +35,10 @@ class ZaakUploadPDFController extends AbstractZaakFormController
 	 *
 	 * @throws ZaakUploadException
 	 */
-	public function handle( Zaak $zaak, string $supplier_name, string $supplier_key ): void
+	public function handle( Zaak $zaak, array $supplier_config ): void
 	{
 		try {
-			$this->handle_zaak_pdf_uploads( $zaak, $supplier_name, $supplier_key );
+			$this->handle_zaak_pdf_uploads( $zaak, $supplier_config );
 		} catch (Throwable $e) {
 			$message = sprintf(
 				'Error while uploading PDFs for Zaak "%s": %s',
@@ -57,13 +57,12 @@ class ZaakUploadPDFController extends AbstractZaakFormController
 	 *
 	 * @throws ZaakUploadException
 	 */
-	protected function handle_zaak_pdf_uploads( Zaak $zaak, string $supplier_name, string $supplier_key ): void
+	protected function handle_zaak_pdf_uploads( Zaak $zaak, array $supplier_config ): void
 	{
 		$action = new CreateSubmissionPDFAction(
 			$this->entry,
 			$this->form,
-			$supplier_name,
-			$supplier_key,
+			$supplier_config,
 			$zaak
 		);
 
