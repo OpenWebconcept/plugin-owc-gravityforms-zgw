@@ -137,8 +137,7 @@ class ZaakController extends AbstractZaakFormController
 		if ($caughtException) {
 			throw new ZaakUploadException(
 				$caughtException->getMessage(),
-				400,
-				$caughtException
+				400
 			);
 		}
 	}

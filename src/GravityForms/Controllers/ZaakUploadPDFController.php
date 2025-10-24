@@ -41,8 +41,7 @@ class ZaakUploadPDFController extends AbstractZaakFormController
 			$this->handle_zaak_pdf_uploads( $zaak, $supplier_config );
 		} catch (Throwable $e) {
 			$message = sprintf(
-				'Error processing zaak PDF: %s: %s',
-				$zaak->getValue( 'identificatie', 'unknown' ),
+				'Error processing zaak PDF: %s',
 				$e->getMessage()
 			);
 

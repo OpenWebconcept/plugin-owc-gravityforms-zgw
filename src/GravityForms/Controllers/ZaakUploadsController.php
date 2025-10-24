@@ -43,8 +43,7 @@ class ZaakUploadsController extends AbstractZaakFormController
 			$this->handle_zaak_uploads( $zaak, $supplier_config );
 		} catch (Throwable $e) {
 			$message = sprintf(
-				'Error processing uploads: %s: %s',
-				$zaak->getValue( 'identificatie', 'unknown' ),
+				'Error processing uploads: %s',
 				$e->getMessage()
 			);
 
