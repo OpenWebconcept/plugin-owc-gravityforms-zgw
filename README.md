@@ -5,30 +5,20 @@ To ensure the connection works properly, make sure the ZGW registers are configu
 
 For detailed setup instructions, refer to the [owc/zgw-api documentation](https://github.com/OpenWebconcept/owc-zgw-api/tree/main/docs).
 
-## 🚨 Requirements
+## Requirements
 
-- WordPress 6.7 or higher
-- GravityForms 2.5 or higher
+- PHP >= 8.1
+- WordPress >= 6.7
+- GravityForms >= 2.5
 
-## ⭐️ Features
+## Features
 
-- **Create** a zaak in a ZGW register
-- **Upload documents** to the created zaak
-- **Attach a submission PDF** to the zaak (requires [Gravity PDF](https://wordpress.org/plugins/gravity-forms-pdf-extended/))
-- **Track zaak creation attempts** via a dedicated Transactions post-type that logs each attempt and its status (pending, success, or failed)
+- Connect a form to a ZGW "zaaktype"
+- Submit a form to create a zaak in a connected ZGW "zaaksysteem"
+- Upload and attach documents to the created "zaak"
+- Generate a PDF and attach it to a "zaak" (requires [Gravity PDF](https://wordpress.org/plugins/gravity-forms-pdf-extended/))
+- Track "zaaksysteem" transactions and their status
 
-## 💡Wiki
+## Wiki
 
 For detailed setup instructions and documentation, visit our [Wiki on GitHub](https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw/wiki).
-
-## Disabling SSL verification in local environments
-
-The plugin disables SSL peer verification only when the environment value contains 'dev' (at the bare minimum).
-To enable this behavior, you need to define the WP_ENVIRONMENT_TYPE constant in your wp-config.php.
-
-```php
-define( 'WP_ENVIRONMENT_TYPE', 'development' );
-```
-
-Local environments often lack valid SSL certificates, which can cause file_get_contents() or other HTTP requests to fail due to peer verification errors.
-This configuration ensures smoother development without compromising production security.
