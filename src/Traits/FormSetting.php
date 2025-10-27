@@ -46,6 +46,8 @@ trait FormSetting
 	 */
 	public function information_object_type_form_setting(array $form, string $supplier_name ): string
 	{
+		$supplier_name = strtolower( $supplier_name );
+
 		if ('1' === ( $form[ sprintf( '%s-form-setting-supplier-manually', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '0' )) {
 			$zaaktype_identifier = $form[ sprintf( '%s-form-setting-%s-information-object-type-manual', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $supplier_name ) ] ?? null;
 		} else {

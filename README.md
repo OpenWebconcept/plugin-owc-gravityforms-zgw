@@ -3,8 +3,6 @@
 This plugin integrates GravityForms with ZGW using the [owc/zgw-api package](https://github.com/OpenWebconcept/owc-zgw-api).
 To ensure the connection works properly, make sure the ZGW registers are configured on the ZGW API settings page.
 
-For detailed setup instructions, refer to the [owc/zgw-api documentation](https://github.com/OpenWebconcept/owc-zgw-api/tree/main/docs).
-
 ## Requirements
 
 - PHP >= 8.1
