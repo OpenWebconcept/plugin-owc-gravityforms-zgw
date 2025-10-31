@@ -111,7 +111,7 @@ abstract class AbstractZaakFormController
 				'ID'          => $transaction_post_id,
 				'post_status' => 'transaction_failed',
 				'meta_input'  => array(
-					'transaction_actions' => 'Add icon here', // TODO: add icon handling.
+					'transaction_actions' => OWC_GRAVITYFORMS_ZGW_PLUGIN_URL . '/assets/images/icon-retry.svg',
 				),
 			)
 		);
