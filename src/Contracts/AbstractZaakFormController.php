@@ -107,6 +107,9 @@ abstract class AbstractZaakFormController
 			array(
 				'ID'          => $transaction_post_id,
 				'post_status' => 'transaction_failed',
+				'meta_input'  => array(
+					'transaction_actions' => 'Add icon here', // TODO: add icon handling.
+				),
 			)
 		);
 

@@ -48,12 +48,12 @@ abstract class AbstractCreateSubmissionPDFAction
 
 	public function __construct(array $entry, array $form, array $supplier_config, Zaak $zaak )
 	{
-		$this->entry        = $entry;
-		$this->form         = $form;
+		$this->entry         = $entry;
+		$this->form          = $form;
 		$this->supplier_name = $supplier_config['name'] ?? '';
-		$this->zaak         = $zaak;
-		$this->client       = apiClient( $supplier_config['name'] );
-		$this->pdf_settings = new FormSettingsPDF( $entry, $form );
+		$this->zaak          = $zaak;
+		$this->client        = apiClient( $supplier_config['name'] );
+		$this->pdf_settings  = new FormSettingsPDF( $entry, $form );
 	}
 
 	abstract public function add_submission_pdf(): ?Zaakinformatieobject;

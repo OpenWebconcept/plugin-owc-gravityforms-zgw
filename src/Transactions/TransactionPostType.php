@@ -143,6 +143,7 @@ class TransactionPostType
 			),
 			'transaction_message'  => __( 'Melding', 'owc-gravityforms-zgw' ),
 			'transaction_datetime' => __( 'Datumtijd', 'owc-gravityforms-zgw' ),
+			'transaction_actions'  => __( 'Acties', 'owc-gravityforms-zgw' ),
 		);
 
 		return $columns;
@@ -236,6 +237,9 @@ class TransactionPostType
 				break;
 			case 'transaction_datetime':
 				echo esc_html( get_post_meta( $post_id, 'transaction_datetime', true ) );
+				break;
+			case 'transaction_actions':
+				echo esc_html( get_post_meta( $post_id, 'transaction_actions', true ) );
 				break;
 		}
 	}
