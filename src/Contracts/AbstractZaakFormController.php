@@ -84,6 +84,9 @@ abstract class AbstractZaakFormController
 			array(
 				'ID'          => (int) $transaction_post_id,
 				'post_status' => 'transaction_success',
+				'meta_input'  => array(
+					'transaction_actions' => '',
+				),
 			)
 		);
 	}
