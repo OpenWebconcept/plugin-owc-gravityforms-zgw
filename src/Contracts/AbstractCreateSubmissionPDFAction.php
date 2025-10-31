@@ -41,7 +41,7 @@ abstract class AbstractCreateSubmissionPDFAction
 
 	protected array $entry;
 	protected array $form;
-	protected string $supplier_key;
+	protected string $supplier_name;
 	protected Zaak $zaak;
 	protected Client $client;
 	protected FormSettingsPDF $pdf_settings;
@@ -50,7 +50,7 @@ abstract class AbstractCreateSubmissionPDFAction
 	{
 		$this->entry        = $entry;
 		$this->form         = $form;
-		$this->supplier_key = $supplier_config['client_type'] ?? '';
+		$this->supplier_name = $supplier_config['name'] ?? '';
 		$this->zaak         = $zaak;
 		$this->client       = apiClient( $supplier_config['name'] );
 		$this->pdf_settings = new FormSettingsPDF( $entry, $form );
@@ -58,9 +58,6 @@ abstract class AbstractCreateSubmissionPDFAction
 
 	abstract public function add_submission_pdf(): ?Zaakinformatieobject;
 
-	/**
-	 * @since 1.0.0
-	 */
 	protected function get_submission_args_pdf(): array
 	{
 		if ( ! class_exists( 'GPDFAPI' )) {
@@ -82,12 +79,6 @@ abstract class AbstractCreateSubmissionPDFAction
 
 		$this->pdf_settings->update_public_access_setting_pdf( 'enable' );
 
-		if ( ! $this->check_url( $url_pdf )) {
-			$this->pdf_settings->update_public_access_setting_pdf( 'disable' );
-
-			return array();
-		}
-
 		$args = $this->prepare_args_pdf( 'Aanvraag - eFormulier', $url_pdf );
 
 		$this->pdf_settings->update_public_access_setting_pdf( 'disable' );
@@ -95,13 +86,9 @@ abstract class AbstractCreateSubmissionPDFAction
 		return $args;
 	}
 
-
-	/**
-	 * @since 1.0.0
-	 */
 	public function prepare_args_pdf(string $file_name, string $object_url ): array
 	{
-		$information_object_type = $this->information_object_type_form_setting( $this->form, $this->supplier_key );
+		$information_object_type = $this->information_object_type_form_setting( $this->form, $this->supplier_name );
 
 		if (empty( $information_object_type )) {
 			return array();
@@ -127,9 +114,6 @@ abstract class AbstractCreateSubmissionPDFAction
 		return $args;
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function create_submission_pdf(array $args ): ?Enkelvoudiginformatieobject
 	{
 		if (empty( $args )) {
@@ -142,9 +126,6 @@ abstract class AbstractCreateSubmissionPDFAction
 		return $pdf;
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function connect_pdf_to_zaak(?Enkelvoudiginformatieobject $pdf ): ?Zaakinformatieobject
 	{
 		if ( ! $pdf instanceof Enkelvoudiginformatieobject) {

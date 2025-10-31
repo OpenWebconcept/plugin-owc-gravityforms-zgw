@@ -19,15 +19,12 @@ if ( ! defined( 'ABSPATH' )) {
 use Exception;
 
 /**
- * Informtion object trait.
+ * Information object trait.
  *
  * @since 1.0.0
  */
 trait InformationObject
 {
-	/**
-	 * @since 1.0.0
-	 */
 	public function encode_base64_from_url(string $url ): string
 	{
 		try {
@@ -39,9 +36,6 @@ trait InformationObject
 		return $file ? base64_encode( $file ) : '';
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function get_content_length(string $url ): string
 	{
 		$headers        = $this->get_headers( $url );
@@ -54,9 +48,6 @@ trait InformationObject
 		return $content_length ?: '';
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function get_extension(string $url ): string
 	{
 		$type    = $this->get_content_type( $url );
@@ -76,9 +67,6 @@ trait InformationObject
 		return $mimeMap[ $type ] ?? '';
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function get_content_type(string $url ): string
 	{
 		$headers      = $this->get_headers( $url );
@@ -91,9 +79,6 @@ trait InformationObject
 		return $content_type ?: '';
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	protected function get_headers(string $url ): array
 	{
 		if (empty( $url )) {
@@ -117,8 +102,6 @@ trait InformationObject
 	 * Otherwise, it creates and returns a stream context with SSL peer verification disabled.
 	 *
 	 * @return resource|null The stream context resource or null if not in a 'dev' environment.
-	 *
-	 * @since 1.0.0
 	 */
 	protected function stream_context(): mixed
 	{

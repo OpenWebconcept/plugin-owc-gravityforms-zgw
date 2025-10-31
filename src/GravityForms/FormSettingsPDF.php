@@ -38,8 +38,6 @@ class FormSettingsPDF
 
 	/**
 	 * Get the first ID of the PDF settings configured per form.
-	 *
-	 * @since 1.0.0
 	 */
 	public function pdf_form_setting_id(): string
 	{
@@ -48,9 +46,6 @@ class FormSettingsPDF
 		return $settings[0] ?? '';
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	protected function get_form_settings_pdf($default = null ): mixed
 	{
 		if (empty( $this->form['gfpdf_form_settings'] ) || ! is_array( $this->form['gfpdf_form_settings'] )) {
@@ -65,9 +60,6 @@ class FormSettingsPDF
 		);
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function pdf_form_setting_is_active(): bool
 	{
 		$settings = $this->get_form_settings_pdf();
@@ -81,9 +73,6 @@ class FormSettingsPDF
 		return $settings['active'] ?? false;
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function url_pdf(): string
 	{
 		$setting_id = $this->pdf_form_setting_id();
@@ -104,8 +93,6 @@ class FormSettingsPDF
 	/**
 	 * Toggles the "public_access" setting for the generated PDFs.
 	 * By default, the PDFs are protected and not publicly accessible.
-	 *
-	 * @since 1.0.0
 	 */
 	public function update_public_access_setting_pdf(string $access = '' ): bool
 	{
