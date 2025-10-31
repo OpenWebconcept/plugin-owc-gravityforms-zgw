@@ -239,7 +239,15 @@ class TransactionPostType
 				echo esc_html( get_post_meta( $post_id, 'transaction_datetime', true ) );
 				break;
 			case 'transaction_actions':
-				echo esc_html( get_post_meta( $post_id, 'transaction_actions', true ) );
+				$post_status    = get_post_status( $post_id );
+				$action_content = get_post_meta( $post_id, 'transaction_actions', true );
+
+				if ( $post_status === 'transaction_failed' && $action_content ) {
+					printf(
+						'<img src="%s" alt="Retry" />', // TODO: make button
+						esc_url( (string) $action_content )
+					);
+				}
 				break;
 		}
 	}
