@@ -39,7 +39,7 @@ class TransactionController
 	}
 
 	/**
-	 * Create transaction.
+	 * Create a transaction.
 	 */
 	public function create( array $entry, array $form ): void
 	{
