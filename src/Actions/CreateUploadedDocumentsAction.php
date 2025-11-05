@@ -38,15 +38,15 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 		$success = 0;
 
 		foreach ($mapped_args['informatieobject'] as $object) {
-			$args              = $this->prepare_information_object_args(
+			$args = $this->prepare_information_object_args(
 				$object['url'],
 				$object['type'],
 				$object['description']
 			);
 
 			$connection_result = $this->connect_zaak_to_information_object(
-                $this->create_information_object( $args )
-            );
+				$this->create_information_object( $args )
+			);
 
 			if ($connection_result instanceof Zaakinformatieobject) {
 				++$success;
