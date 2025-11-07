@@ -7,7 +7,7 @@
  * @since   1.0.0
  */
 
-namespace OWCGravityFormsZGW\Transactions;
+namespace OWCGravityFormsZGW\Transactions\Controllers;
 
 /**
  * Exit when accessed directly.
@@ -16,7 +16,10 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
+use OWCGravityFormsZGW\Services\EncryptionService;
+use OWCGravityFormsZGW\Transactions\TransactionStatus;
 
 /**
  * Transaction Controller.
@@ -69,6 +72,7 @@ class TransactionController
 			'transaction_form_id'  => $entry['form_id'],
 			'transaction_entry_id' => $entry['id'],
 			'transaction_datetime' => $entry['date_created'],
+			'transaction_user_bsn' => EncryptionService::encrypt( ContainerResolver::make()->get( 'digid.current_user_bsn' ) ),
 		);
 	}
 }

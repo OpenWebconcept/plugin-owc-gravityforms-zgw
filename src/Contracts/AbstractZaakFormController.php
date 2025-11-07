@@ -17,10 +17,10 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use GFFormsModel;
-use OWC\ZGW\Entities\Zaak;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\LoggerZGW;
 use OWCGravityFormsZGW\Traits\FormSetting;
+use OWC\ZGW\Entities\Zaak;
 use Throwable;
 
 /**
@@ -111,7 +111,7 @@ abstract class AbstractZaakFormController
 				'ID'          => $transaction_post_id,
 				'post_status' => 'transaction_failed',
 				'meta_input'  => array(
-					'transaction_actions' => OWC_GRAVITYFORMS_ZGW_PLUGIN_URL . '/assets/images/icon-retry.svg',
+					'transaction_actions' => untrailingslashit( OWC_GRAVITYFORMS_ZGW_PLUGIN_URL ) . '/assets/images/icon-retry.svg',
 				),
 			)
 		);
