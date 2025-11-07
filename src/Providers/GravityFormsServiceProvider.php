@@ -22,7 +22,7 @@ use OWCGravityFormsZGW\GravityForms\Controllers\ZaakController;
 use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
-use OWCGravityFormsZGW\Transactions\TransactionController;
+use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
 
 /**
  * Register settings service provider.
