@@ -17,3 +17,9 @@
 .owc-gravityforms-zgw-transaction-icon-pending {
     background: url('./images/icon-clock.svg') no-repeat center / contain;
 }
+
+.owc-gravityforms-zgw-btn-retry {
+	background-color: transparent;
+	cursor: pointer;
+	border: none;
+}

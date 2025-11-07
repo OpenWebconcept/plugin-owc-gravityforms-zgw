@@ -20,3 +20,27 @@ To ensure the connection works properly, make sure the ZGW registers are configu
 ## Wiki
 
 For detailed setup instructions and documentation, visit our [Wiki on GitHub](https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw/wiki).
+
+Below should be added to github wiki
+
+## Encryption
+
+To enable secure storage of sensitive data, you **must define an encryption key** in your `wp-config.php` file. This key is used to encrypt and decrypt the sensitive data and should be kept secret at all times.
+
+Add the following line to your `wp-config.php`:
+
+```php
+// OWC | GravityForms ZGW – Encryption Key
+define('OWC_GRAVITYFORMS_ZGW_ENCRYPTION_KEY', 'your-unique-32-character-key');
+```
+
+## Hooks
+
+The access to the transactions overview page is restricted by capabilities. In order to give a custom role access the following filter can be used:
+
+```php
+add_filter('owc_zgw_transaction_roles_to_grant_capabilities', function (array $roles): array {
+ $roles[] = 'superuser';
+ return $roles;
+}, 20);
+```

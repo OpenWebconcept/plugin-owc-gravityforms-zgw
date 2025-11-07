@@ -27,7 +27,7 @@ use OWCGravityFormsZGW\GravityForms\FormUtils;
  */
 class TransactionPostType
 {
-	const POST_TYPE = 'owc_zgw_transaction';
+	public const POST_TYPE = 'owc_zgw_transaction';
 
 	public function __construct()
 	{
@@ -65,7 +65,7 @@ class TransactionPostType
 	{
 		$screen = get_current_screen();
 
-		if ( ! isset( $screen->id ) || $screen->id !== 'edit-' . self::POST_TYPE ) {
+		if ( ! isset( $screen->id ) || $screen->id !== 'edit-' . self::POST_TYPE) {
 			return;
 		}
 
@@ -118,7 +118,7 @@ class TransactionPostType
 	/**
 	 * Columns.
 	 */
-	public function columns( array $columns ): array
+	public function columns(array $columns ): array
 	{
 		$columns = array(
 			'transaction_status'   => sprintf(
@@ -152,7 +152,7 @@ class TransactionPostType
 	/**
 	 * Sortable columns.
 	 */
-	public function sortable_columns( array $sortable_columns ): array
+	public function sortable_columns(array $sortable_columns ): array
 	{
 		$sortable_columns['transaction_form_id']  = 'ID';
 		$sortable_columns['transaction_entry_id'] = 'ID';
@@ -162,9 +162,9 @@ class TransactionPostType
 		return $sortable_columns;
 	}
 
-	public static function get_post_status_css_class( $post_status ): string
+	public static function get_post_status_css_class($post_status ): string
 	{
-		return match ( $post_status ) {
+		return match ($post_status) {
 			'transaction_success', => 'owc-gravityforms-zgw-transaction-icon-success',
 			'transaction_failed', => 'owc-gravityforms-zgw-transaction-icon-failed',
 			default => 'owc-gravityforms-zgw-transaction-icon-pending',
@@ -174,25 +174,25 @@ class TransactionPostType
 	/**
 	 * Custom columns.
 	 */
-	public function custom_columns( string $column, int $post_id ): void
+	public function custom_columns(string $column, int $post_id ): void
 	{
-		switch ( $column ) {
+		switch ($column) {
 			case 'transaction_status':
 				$post_status = get_post_status( $post_id );
 
-				if ( false === $post_status ) {
+				if (false === $post_status) {
 					break;
 				}
 
 				$label = __( 'Onbekend', 'owc-gravityforms-zgw' );
 
-				if ( 'trash' === $post_status ) {
+				if ('trash' === $post_status) {
 					$post_status = get_post_meta( $post_id, '_wp_trash_meta_status', true );
 				}
 
 				$status_object = get_post_status_object( $post_status );
 
-				if ( isset( $status_object, $status_object->label ) ) {
+				if (isset( $status_object, $status_object->label )) {
 					$label = $status_object->label;
 				}
 
@@ -207,7 +207,7 @@ class TransactionPostType
 			case 'transaction_form_id':
 				$form_id = get_post_meta( $post_id, 'transaction_form_id', true );
 
-				if ( $form_id ) {
+				if ($form_id) {
 					$url = add_query_arg(
 						array(
 							'page' => 'gf_edit_forms',
@@ -241,10 +241,13 @@ class TransactionPostType
 			case 'transaction_actions':
 				$post_status    = get_post_status( $post_id );
 				$action_content = get_post_meta( $post_id, 'transaction_actions', true );
+				$entry_id       = get_post_meta( $post_id, 'transaction_entry_id', true );
 
-				if ( $post_status === 'transaction_failed' && $action_content ) {
+				if ($post_status === 'transaction_failed' && $action_content) {
 					printf(
-						'<img src="%s" alt="Retry" />', // TODO: make button
+						'<button type="button" class="owc-gravityforms-zgw-btn-retry" data-entry-id="%d" data-spinner-icon="%s"><img src="%s" alt="Retry" /></button>',
+						esc_attr( $entry_id ),
+						untrailingslashit( OWC_GRAVITYFORMS_ZGW_PLUGIN_URL ) . '/assets/images/icon-spinner.svg',
 						esc_url( (string) $action_content )
 					);
 				}

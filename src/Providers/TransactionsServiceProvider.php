@@ -9,16 +9,17 @@
 
 namespace OWCGravityFormsZGW\Providers;
 
-use OWCGravityFormsZGW\Transactions\TransactionCleaner;
-use OWCGravityFormsZGW\Transactions\TransactionMailer;
-use OWCGravityFormsZGW\Transactions\TransactionPostType;
-
 /**
  * Exit when accessed directly.
  */
 if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
+
+use OWCGravityFormsZGW\Transactions\Controllers\RetryController;
+use OWCGravityFormsZGW\Transactions\TransactionCleaner;
+use OWCGravityFormsZGW\Transactions\TransactionMailer;
+use OWCGravityFormsZGW\Transactions\TransactionPostType;
 
 /**
  * Register transactions service provider.
@@ -29,26 +30,14 @@ class TransactionsServiceProvider extends ServiceProvider
 {
 	public function register(): void
 	{
-		add_action( 'init', array( $this, 'register_post_type' ) );
+		add_action( 'init', $this->register_post_type( ... ) );
+		add_action( 'init', $this->grant_capabilities_to_roles( ... ) );
 
 		new TransactionPostType();
 
 		$this->schedule_cron_events();
-	}
-
-	public function schedule_cron_events(): void
-	{
-		// Schedule the transaction report event if not already scheduled.
-		if ( ! wp_next_scheduled( 'owc_zgw_transaction_report' ) ) {
-			wp_schedule_event( time(), 'daily', 'owc_zgw_transaction_report' );
-		}
-		add_action( 'owc_zgw_transaction_report', array( $this, 'handle_transaction_report' ) );
-
-		// Schedule the cleaner event if not already scheduled.
-		if ( ! wp_next_scheduled( 'owc_zgw_transaction_cleaner' )) {
-			wp_schedule_event( time(), 'daily', 'owc_zgw_transaction_cleaner' );
-		}
-		add_action( 'owc_zgw_transaction_cleaner', array( $this, 'handle_transaction_cleaner' ) );
+		$this->enqueue_scripts();
+		$this->register_ajax_handlers();
 	}
 
 	/**
@@ -77,6 +66,39 @@ class TransactionsServiceProvider extends ServiceProvider
 				'map_meta_cap'       => true,
 			)
 		);
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	public function grant_capabilities_to_roles(): void
+	{
+		$roles_to_grant = apply_filters(
+			'owc_zgw_transaction_roles_to_grant_capabilities',
+			array()
+		);
+
+		if (array() === $roles_to_grant ) {
+			return;
+		}
+
+		$capabilities = self::get_capabilities();
+
+		foreach ( $roles_to_grant as $role_name ) {
+			$role                            = get_role( $role_name );
+			$roles_with_granted_capabilities = get_option( 'owc_zgw_roles_with_transaction_capabilities', array() );
+
+			if ( ! $role || in_array( $role_name, $roles_with_granted_capabilities, true )) {
+				continue;
+			}
+
+			foreach ( $capabilities as $cap ) {
+				$role->add_cap( $cap );
+			}
+
+			$roles_with_granted_capabilities[] = $role_name;
+			update_option( 'owc_zgw_roles_with_transaction_capabilities', $roles_with_granted_capabilities );
+		}
 	}
 
 	/**
@@ -123,5 +145,66 @@ class TransactionsServiceProvider extends ServiceProvider
 
 		$cleaner = new TransactionCleaner();
 		$cleaner->delete_old_transactions( (int) $days );
+	}
+
+	public function schedule_cron_events(): void
+	{
+		// Schedule the transaction report event if not already scheduled.
+		if ( ! wp_next_scheduled( 'owc_zgw_transaction_report' ) ) {
+			wp_schedule_event( time(), 'daily', 'owc_zgw_transaction_report' );
+		}
+		add_action( 'owc_zgw_transaction_report', array( $this, 'handle_transaction_report' ) );
+
+		// Schedule the cleaner event if not already scheduled.
+		if ( ! wp_next_scheduled( 'owc_zgw_transaction_cleaner' )) {
+			wp_schedule_event( time(), 'daily', 'owc_zgw_transaction_cleaner' );
+		}
+		add_action( 'owc_zgw_transaction_cleaner', array( $this, 'handle_transaction_cleaner' ) );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	public function enqueue_scripts(): void
+	{
+		add_action(
+			'admin_enqueue_scripts',
+			function () {
+				$plugin_root_path = OWC_GRAVITYFORMS_ZGW_DIR_PATH;
+				$plugin_root_url  = OWC_GRAVITYFORMS_ZGW_PLUGIN_URL;
+
+				$rel         = 'assets/failed-zgw-transaction-retry.js';
+				$script_path = $plugin_root_path . $rel;
+				$script_url  = $plugin_root_url . $rel;
+
+				wp_enqueue_script(
+					'owc-gravityforms-zgw-admin-script',
+					$script_url,
+					array( 'jquery' ),
+					file_exists( $script_path ) ? filemtime( $script_path ) : null,
+					true
+				);
+
+				wp_localize_script(
+					'owc-gravityforms-zgw-admin-script',
+					'owcZGW',
+					array(
+						'url'   => admin_url( 'admin-ajax.php' ),
+						'nonce' => wp_create_nonce( 'retry_submission' ),
+					)
+				);
+			}
+		);
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	public function register_ajax_handlers(): void
+	{
+		add_action(
+			'wp_ajax_retry_submission',
+			( new RetryController() )->retry( ... )
+		);
 	}
 }
