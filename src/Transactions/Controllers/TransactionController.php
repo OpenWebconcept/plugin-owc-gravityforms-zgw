@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use Exception;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\Services\EncryptionService;
@@ -68,11 +69,22 @@ class TransactionController
 
 	private static function add_metadata( $entry ): array
 	{
-		return array(
+		$standard = array(
 			'transaction_form_id'  => $entry['form_id'],
 			'transaction_entry_id' => $entry['id'],
 			'transaction_datetime' => $entry['date_created'],
-			'transaction_user_bsn' => EncryptionService::encrypt( ContainerResolver::make()->get( 'digid.current_user_bsn' ) ),
 		);
+
+		try {
+			$sensitive = array(
+				'transaction_user_bsn' => EncryptionService::encrypt( ContainerResolver::make()->get( 'digid.current_user_bsn' ) ),
+				'transaction_user_kvk' => EncryptionService::encrypt( ContainerResolver::make()->get( 'eherkenning.current_user_kvk' ) ),
+			);
+		} catch ( Exception $e ) {
+			ContainerResolver::make()->get( 'logger.zgw' )->error( 'Error encrypting sensitive transaction metadata: ' . $e->getMessage() );
+			$sensitive = array();
+		}
+
+		return array_merge( array_filter( $standard ), array_filter( $sensitive ) );
 	}
 }
