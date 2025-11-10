@@ -64,6 +64,11 @@ abstract class AbstractZaakFormController
 		if ( isset( $value ) ) {
 			update_post_meta( $transaction_post_id, 'transaction_zaak_id', $value );
 		}
+
+		$value = $zaak->getValue( 'uuid' );
+		if ( isset( $value ) ) {
+			update_post_meta( $transaction_post_id, 'transaction_zaak_uuid', $value );
+		}
 	}
 
 	/**
@@ -86,6 +91,7 @@ abstract class AbstractZaakFormController
 				'post_status' => 'transaction_success',
 				'meta_input'  => array(
 					'transaction_actions' => '',
+					'transaction_message' => '',
 				),
 			)
 		);

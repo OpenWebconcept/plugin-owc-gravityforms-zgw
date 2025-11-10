@@ -204,7 +204,7 @@ class TransactionsServiceProvider extends ServiceProvider
 	{
 		add_action(
 			'wp_ajax_retry_submission',
-			( new RetryController() )->retry( ... )
+			( new RetryController() )->handle( ... )
 		);
 	}
 }
