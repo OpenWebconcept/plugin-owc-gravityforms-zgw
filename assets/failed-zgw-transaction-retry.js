@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					errorDiv.id = 'retry-error-message';
 					errorDiv.style.color = 'red';
 					errorDiv.style.marginTop = '10px';
-					errorDiv.textContent = 'Fout bij opnieuw uitvoeren: ' + (result.data.message ?? 'Onbekende fout.');
+					errorDiv.textContent = result.data.message ?? 'Onbekende fout.';
 					if (parentRow) {
 						this.parentNode.appendChild(errorDiv);
 					}

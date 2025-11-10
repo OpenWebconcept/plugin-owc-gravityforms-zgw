@@ -34,6 +34,8 @@ class DigiD
 	 */
 	public function bsn(): string
 	{
+		// To-do: remove test bsn
+		return '123456789';
 		if ($bsn = $this->handle_digid_idp()) {
 			return $bsn;
 		}
