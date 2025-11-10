@@ -19,12 +19,12 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use OWC\ZGW\Entities\Zaak;
 use OWCGravityFormsZGW\Actions\CreateZaakAction;
 use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
 use OWCGravityFormsZGW\Exceptions\ZaakException;
 use OWCGravityFormsZGW\Exceptions\ZaakUploadException;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
+use OWC\ZGW\Entities\Zaak;
 use Throwable;
 
 /**
@@ -49,11 +49,11 @@ class ZaakController extends AbstractZaakFormController
 	/**
 	 * Initialize Zaak creation and handle accordingly.
 	 */
-	public function handle( array $entry, array $form ): void
+	public function handle( array $entry, array $form ): ?Zaak
 	{
 		// Only handle zaak creation for ZGW enabled forms.
 		if ( ! FormUtils::is_form_zgw( $form ) ) {
-			return;
+			return null;
 		}
 
 		// Make entry/form available to other methods that expect them.
@@ -63,6 +63,9 @@ class ZaakController extends AbstractZaakFormController
 		// Get the supplier name and key from form settings.
 		$supplier_config = FormUtils::get_supplier_config( $form );
 
+		$zaak      = null;
+		$is_failed = false;
+
 		// Create the Zaak.
 		try {
 			$zaak = $this->create_zaak( $supplier_config );
@@ -71,11 +74,21 @@ class ZaakController extends AbstractZaakFormController
 			$this->mark_transaction_success( $zaak );
 		} catch (ZaakException $e) {
 			$this->mark_transaction_failed( $e->getMessage() );
+
+			$is_failed = true;
 		} catch (Throwable $e) {
 			$this->mark_transaction_failed(
 				( new ZaakException( $e->getMessage(), 500, $e ) )->getMessage()
 			);
+
+			$is_failed = true;
 		}
+
+		if ($is_failed && $zaak instanceof Zaak) {
+			$zaak->setValue( 'creation_failed', true ); // Value is used by the retry mechanism.
+		}
+
+		return $zaak instanceof Zaak ? $zaak : null;
 	}
 
 	/**
@@ -83,7 +96,7 @@ class ZaakController extends AbstractZaakFormController
 	 *
 	 * @throws ZaakException
 	 */
-	protected function create_zaak( array $supplier_config ): Zaak
+	public function create_zaak( array $supplier_config ): Zaak
 	{
 		try {
 			$action = ( new CreateZaakAction(
