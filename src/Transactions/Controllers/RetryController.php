@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Transactions\Controllers;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -29,13 +29,17 @@ class RetryController
 {
 	public function handle(): mixed
 	{
+		if ( current_user_can( 'edit_owc_zgw_transactions' ) === false ) {
+			return wp_send_json_error( array( 'message' => 'Unauthorized.' ) );
+		}
+
 		check_ajax_referer( 'retry_submission' );
 
 		$entry_id      = absint( $_POST['entry_id'] ?? 0 );
 		$mapped_values = $this->get_mapped_fields_and_values( $entry_id ); // Is not necessarily needed, but validates the request and could be of use later.
 
 		if ( is_wp_error( $mapped_values ) ) {
-			wp_send_json_error( array( 'message' => $mapped_values->get_error_message() ) );
+			return wp_send_json_error( array( 'message' => $mapped_values->get_error_message() ) );
 		}
 
 		$entry               = GFAPI::get_entry( $entry_id );
@@ -83,13 +87,13 @@ class RetryController
 
 		$mapped_zgw_fields = $this->get_mapped_zgw_form_fields( $transaction_form_id );
 
-		if (array() === $mapped_zgw_fields ) {
+		if ( array() === $mapped_zgw_fields ) {
 			return new WP_Error( 'missing_zgw_fields', 'No valid linked ZGW fields found in the form.' );
 		}
 
 		$meta = $this->get_entry_meta( $entry_id );
 
-		if (array() === $meta ) {
+		if ( array() === $meta ) {
 			return new WP_Error( 'missing_entry_metadata', 'No entry metadata found.' );
 		}
 

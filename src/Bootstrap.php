@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -75,7 +75,7 @@ final class Bootstrap
 			TransactionsServiceProvider::class,
 		);
 
-		foreach ($providers as &$provider) {
+		foreach ( $providers as &$provider ) {
 			$provider = self::$container->get( $provider );
 		}
 
@@ -89,7 +89,7 @@ final class Bootstrap
 	 */
 	protected function register_providers(): void
 	{
-		foreach ($this->providers as $provider) {
+		foreach ( $this->providers as $provider ) {
 			$provider->register();
 		}
 	}
@@ -101,7 +101,7 @@ final class Bootstrap
 	 */
 	protected function boot_providers(): void
 	{
-		foreach ($this->providers as $provider) {
+		foreach ( $this->providers as $provider ) {
 			$provider->boot();
 		}
 	}

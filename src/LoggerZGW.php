@@ -13,7 +13,7 @@ namespace OWCGravityFormsZGW;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -79,7 +79,7 @@ class LoggerZGW
 	 */
 	protected function add_record(int $level, string $message, array $context = array() ): void
 	{
-		if ( ! ( (bool) ContainerResolver::make()->get( 'message.logger.active' ) )) {
+		if ( ! ( (bool) ContainerResolver::make()->get( 'message.logger.active' ) ) ) {
 			return;
 		}
 

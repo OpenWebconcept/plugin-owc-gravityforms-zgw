@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Auth;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -34,13 +34,11 @@ class DigiD
 	 */
 	public function bsn(): string
 	{
-		// To-do: remove test bsn
-		return '123456789';
-		if ($bsn = $this->handle_digid_idp()) {
+		if ( $bsn = $this->handle_digid_idp() ) {
 			return $bsn;
 		}
 
-		if ($bsn = $this->handle_digid_saml()) {
+		if ( $bsn = $this->handle_digid_saml() ) {
 			return $bsn;
 		}
 
@@ -52,11 +50,11 @@ class DigiD
 	 */
 	private function handle_digid_idp(): string
 	{
-		if ( ! class_exists( '\OWC\IdpUserData\DigiDSession' )) {
+		if ( ! class_exists( '\OWC\IdpUserData\DigiDSession' ) ) {
 			return '';
 		}
 
-		if ( ! \OWC\IdpUserData\DigiDSession::isLoggedIn() || is_null( \OWC\IdpUserData\DigiDSession::getUserData() )) {
+		if ( ! \OWC\IdpUserData\DigiDSession::isLoggedIn() || is_null( \OWC\IdpUserData\DigiDSession::getUserData() ) ) {
 			return '';
 		}
 

@@ -19,8 +19,8 @@ beforeEach(
 					103 => '2022-12-31 23:59:59', // very old
 				);
 
-				foreach ($posts as $id => $date) {
-					if ($date < $threshold) {
+				foreach ( $posts as $id => $date ) {
+					if ( $date < $threshold ) {
 						$this->posts[] = $id;
 					}
 				}

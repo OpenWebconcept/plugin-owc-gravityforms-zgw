@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\GravityForms;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -48,7 +48,7 @@ class FormSettingsPDF
 
 	protected function get_form_settings_pdf($default = null ): mixed
 	{
-		if (empty( $this->form['gfpdf_form_settings'] ) || ! is_array( $this->form['gfpdf_form_settings'] )) {
+		if ( ! is_array( $this->form['gfpdf_form_settings'] ?? false ) || array() === $this->form['gfpdf_form_settings'] ) {
 			return $default;
 		}
 
@@ -64,7 +64,7 @@ class FormSettingsPDF
 	{
 		$settings = $this->get_form_settings_pdf();
 
-		if (empty( $settings )) {
+		if ( ! is_array( $settings ) || array() === $settings ) {
 			return false;
 		}
 
@@ -77,13 +77,13 @@ class FormSettingsPDF
 	{
 		$setting_id = $this->pdf_form_setting_id();
 
-		if (empty( $setting_id )) {
+		if ( empty( $setting_id ) ) {
 			return '';
 		}
 
 		$pdf_model = GPDFAPI::get_pdf_class( 'model' );
 
-		if (is_wp_error( $pdf_model )) {
+		if ( is_wp_error( $pdf_model ) ) {
 			return '';
 		}
 
@@ -99,7 +99,7 @@ class FormSettingsPDF
 		$setting_id = $this->pdf_form_setting_id();
 		$settings   = GPDFAPI::get_pdf( $this->form['id'], $setting_id );
 
-		if ( ! is_array( $settings )) {
+		if ( ! is_array( $settings ) ) {
 			return false;
 		}
 

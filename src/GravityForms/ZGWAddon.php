@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\GravityForms;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -70,7 +70,7 @@ class ZGWAddon extends GFAddon
 	 */
 	public static function get_instance(): self
 	{
-		if (null == self::$_instance) {
+		if ( null == self::$_instance ) {
 			self::$_instance = new self();
 		}
 

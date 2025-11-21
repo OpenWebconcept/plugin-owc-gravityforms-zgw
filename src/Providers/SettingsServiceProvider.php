@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Providers;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 

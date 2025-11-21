@@ -15,7 +15,7 @@ namespace OWCGravityFormsZGW\GravityForms;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -79,7 +79,7 @@ class FormSettings
 		$supplier_choices   = array();
 		$supplier_choices[] = $this->prepare_supplier_choice( 'Selecteer leverancier', 'none' );
 
-		foreach ($clients as $key => $client) {
+		foreach ( $clients as $key => $client ) {
 			$label              = $client['name'];
 			$supplier_choices[] = $this->prepare_supplier_choice( $label, strtolower( $label ) );
 		}
@@ -105,7 +105,7 @@ class FormSettings
 		$manual           = $form[ "{$this->prefix}-form-setting-supplier-manually" ] ?? '0';
 		$suppliers_fields = $this->handle_suppliers_form_settings_fields( $form );
 
-		if (empty( $supplier_setting ) || empty( $suppliers_fields[ $supplier_setting ][ $manual ? 'manual_setting' : 'select_setting' ] )) {
+		if ( empty( $supplier_setting ) || empty( $suppliers_fields[ $supplier_setting ][ $manual ? 'manual_setting' : 'select_setting' ] ) ) {
 			return $fields;
 		}
 
@@ -126,11 +126,11 @@ class FormSettings
 		$clients = (array) get_option( 'zgw_api_settings' );
 		$clients = $clients['zgw-api-configured-clients'] ?? array();
 
-		foreach ($clients as $key => $client) {
+		foreach ( $clients as $key => $client ) {
 			$label        = $client['name'];
 			$supplier_key = strtolower( $label );
 
-			if ($this->supplier_is_selected_in_form_settings( $form, $supplier_key )) {
+			if ( $this->supplier_is_selected_in_form_settings( $form, $supplier_key ) ) {
 				$supplier_type = $client['type'] ?? $label;
 				$fields        = $this->prepare_supplier_configuration_fields( $fields, $supplier_type, $supplier_key, $client );
 			}

@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Transactions\Controllers;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -53,13 +53,13 @@ class ExecuteRetryController
 	{
 		$retried_zaak = ( new ZaakController() )->handle( $this->entry, $this->form );
 
-		if ( ! $retried_zaak instanceof Zaak) {
+		if ( ! $retried_zaak instanceof Zaak ) {
 			$this->restore_original_transaction_meta();
 
 			throw new Exception( 'retry failed' );
 		}
 
-		if ($retried_zaak->getValue( 'creation_failed', false ) === true ) {
+		if ( $retried_zaak->getValue( 'creation_failed', false ) === true ) {
 			$this->handle_failure_retried_zaak( $retried_zaak );
 		}
 
@@ -87,7 +87,7 @@ class ExecuteRetryController
 		try {
 			( new DeleteZaakAction( $this->supplier_config ) )->delete( $zaak_uuid );
 		} catch ( Exception $e ) {
-			if ($is_handling_retried_zaak ) {
+			if ( $is_handling_retried_zaak ) {
 				$this->supplement_transaction_message( sprintf( 'Failed to delete retried zaak %s after retry failure: %s', $zaak_reference, $e->getMessage() ) );
 				throw new Exception( sprintf( 'failed to delete retried zaak %s after retry failure.', $zaak_reference ) );
 			}

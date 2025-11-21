@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Services;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -75,7 +75,7 @@ class EncryptionService
 			$tag
 		);
 
-		if ( ! is_string( $plaintext )) {
+		if ( ! is_string( $plaintext ) ) {
 			throw new Exception( 'Decryption failed. Invalid data or key.', 500 );
 		}
 
@@ -87,7 +87,7 @@ class EncryptionService
 	 */
 	private static function get_encryption_key(): string
 	{
-		if ( ! defined( 'OWC_GRAVITYFORMS_ZGW_ENCRYPTION_KEY' ) || strlen( OWC_GRAVITYFORMS_ZGW_ENCRYPTION_KEY ) < 32) {
+		if ( ! defined( 'OWC_GRAVITYFORMS_ZGW_ENCRYPTION_KEY' ) || strlen( OWC_GRAVITYFORMS_ZGW_ENCRYPTION_KEY ) < 32 ) {
 			throw new Exception( 'Encryption key is not defined or too short. Please define a constant OWC_GRAVITYFORMS_ZGW_ENCRYPTION_KEY with at least 32 characters in wp-config.php', 500 );
 		}
 

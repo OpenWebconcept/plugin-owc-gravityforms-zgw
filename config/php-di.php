@@ -58,8 +58,8 @@ return array(
 	'message.logger.active'        => function (Container $container ) {
 		return (bool) $container->make( 'zgw.addon.settings', array( 'owc-gf-zgw-add-on-logging-enabled' ) );
 	},
-	'message.logger.path'        => sprintf( '%s/owc-zgw-log.json', dirname( ABSPATH ) ),
-	'message.logger'             => function (Container $container ) {
+	'message.logger.path'          => sprintf( '%s/owc-zgw-log.json', dirname( ABSPATH ) ),
+	'message.logger'               => function (Container $container ) {
 		$logger   = new OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Logger( 'owc_zgw_log' );
 		$maxFiles = apply_filters( 'owcgfzgw::logger/rotating_filer_handler_max_files', OWC_GRAVITYFORMS_ZGW_LOGGER_DEFAULT_MAX_FILES );
 

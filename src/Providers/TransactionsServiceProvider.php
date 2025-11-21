@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Providers;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -69,6 +69,8 @@ class TransactionsServiceProvider extends ServiceProvider
 	}
 
 	/**
+	 * Grant capabilities to specified roles required to manage transactions.
+	 *
 	 * @since NEXT
 	 */
 	public function grant_capabilities_to_roles(): void
@@ -78,17 +80,17 @@ class TransactionsServiceProvider extends ServiceProvider
 			array()
 		);
 
-		if (array() === $roles_to_grant ) {
+		if ( array() === $roles_to_grant ) {
 			return;
 		}
 
-		$capabilities = self::get_capabilities();
+		$capabilities                    = self::get_capabilities();
+		$roles_with_granted_capabilities = get_option( 'owc_zgw_roles_with_transaction_capabilities', array() );
 
 		foreach ( $roles_to_grant as $role_name ) {
-			$role                            = get_role( $role_name );
-			$roles_with_granted_capabilities = get_option( 'owc_zgw_roles_with_transaction_capabilities', array() );
+			$role = get_role( $role_name );
 
-			if ( ! $role || in_array( $role_name, $roles_with_granted_capabilities, true )) {
+			if ( ! $role || in_array( $role_name, $roles_with_granted_capabilities, true ) ) {
 				continue;
 			}
 
@@ -97,8 +99,9 @@ class TransactionsServiceProvider extends ServiceProvider
 			}
 
 			$roles_with_granted_capabilities[] = $role_name;
-			update_option( 'owc_zgw_roles_with_transaction_capabilities', $roles_with_granted_capabilities );
 		}
+
+		update_option( 'owc_zgw_roles_with_transaction_capabilities', array_unique( array_filter( $roles_with_granted_capabilities ) ) );
 	}
 
 	/**
@@ -153,13 +156,13 @@ class TransactionsServiceProvider extends ServiceProvider
 		if ( ! wp_next_scheduled( 'owc_zgw_transaction_report' ) ) {
 			wp_schedule_event( time(), 'daily', 'owc_zgw_transaction_report' );
 		}
-		add_action( 'owc_zgw_transaction_report', array( $this, 'handle_transaction_report' ) );
+		add_action( 'owc_zgw_transaction_report', $this->handle_transaction_report( ... ) );
 
 		// Schedule the cleaner event if not already scheduled.
-		if ( ! wp_next_scheduled( 'owc_zgw_transaction_cleaner' )) {
+		if ( ! wp_next_scheduled( 'owc_zgw_transaction_cleaner' ) ) {
 			wp_schedule_event( time(), 'daily', 'owc_zgw_transaction_cleaner' );
 		}
-		add_action( 'owc_zgw_transaction_cleaner', array( $this, 'handle_transaction_cleaner' ) );
+		add_action( 'owc_zgw_transaction_cleaner', $this->handle_transaction_cleaner( ... ) );
 	}
 
 	/**

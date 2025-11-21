@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\GravityForms\FormSettingAdapters;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -44,7 +44,7 @@ class ZaaktypenAdapter extends Adapter
 				},
 				'No zaaktypen found.'
 			);
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			$this->logger->error( $e->getMessage() );
 
 			return $this->handle_no_choices( 'zaaktypen' );

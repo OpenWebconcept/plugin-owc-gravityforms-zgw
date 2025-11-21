@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\GravityForms\FormSettingAdapters;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -53,14 +53,14 @@ abstract class Adapter
 	{
 		$types = get_transient( $transient_key );
 
-		if (is_array( $types ) && $types) {
+		if ( is_array( $types ) && $types ) {
 			return $types;
 		}
 
 		$types = $this->fetch_types( $empty_message, $endpoint );
 		$types = $this->prepare_types( $types, $prepare_callback );
 
-		if (empty( $types )) {
+		if ( empty( $types ) ) {
 			return array();
 		}
 
@@ -75,10 +75,10 @@ abstract class Adapter
 		$types             = array();
 		$request_exception = '';
 
-		while ($page) {
+		while ( $page ) {
 			try {
 				$result = $this->client->$endpoint()->all( ( new ResultaattypenFilter() )->page( $page ) );
-			} catch (Exception $e) {
+			} catch ( Exception $e ) {
 				$request_exception = $e->getMessage();
 
 				break;
@@ -103,10 +103,10 @@ abstract class Adapter
 	 */
 	protected function handle_empty_result(array $types, string $empty_message, string $request_exception ): void
 	{
-		if (0 === count( $types )) {
+		if ( 0 === count( $types ) ) {
 			$exception_message = esc_html( $empty_message );
 
-			if ( ! empty( $request_exception )) {
+			if ( ! empty( $request_exception ) ) {
 				$exception_message = sprintf( '%s %s', $exception_message, esc_html( $request_exception ) );
 			}
 

@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\GravityForms\FormSettingAdapters;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -39,11 +39,11 @@ class InformatieobjecttypeAdapter extends Adapter
 				function (Informatieobjecttype $objecttype ) {
 					$designation = $objecttype->vertrouwelijkheidaanduiding ?? ( $objecttype->vertrouwelijkheidsaanduiding ?? '' );
 
-					if ($designation instanceof Confidentiality) {
+					if ( $designation instanceof Confidentiality ) {
 						$designation = $designation->name ?? '';
 					}
 
-					if ( ! is_string( $designation ) || 1 > strlen( $designation )) {
+					if ( ! is_string( $designation ) || 1 > strlen( $designation ) ) {
 						$designation = 'Aanduiding onbekend';
 					}
 
@@ -55,7 +55,7 @@ class InformatieobjecttypeAdapter extends Adapter
 				},
 				'No information object types found.'
 			);
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			$this->logger->error( $e->getMessage() );
 
 			return $this->handle_no_choices( 'informatieobjecttypen' );

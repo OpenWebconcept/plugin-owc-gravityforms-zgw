@@ -15,7 +15,7 @@ namespace OWCGravityFormsZGW\GravityForms\Controllers;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -72,11 +72,11 @@ class ZaakController extends AbstractZaakFormController
 			$this->handle_uploads( $zaak, $supplier_config );
 
 			$this->mark_transaction_success( $zaak );
-		} catch (ZaakException $e) {
+		} catch ( ZaakException $e ) {
 			$this->mark_transaction_failed( $e->getMessage() );
 
 			$is_failed = true;
-		} catch (Throwable $e) {
+		} catch ( Throwable $e ) {
 			$this->mark_transaction_failed(
 				( new ZaakException( $e->getMessage(), 500, $e ) )->getMessage()
 			);
@@ -84,7 +84,7 @@ class ZaakController extends AbstractZaakFormController
 			$is_failed = true;
 		}
 
-		if ($is_failed && $zaak instanceof Zaak) {
+		if ( $is_failed && $zaak instanceof Zaak ) {
 			$zaak->setValue( 'creation_failed', true ); // Value is used by the retry mechanism.
 		}
 
@@ -96,7 +96,7 @@ class ZaakController extends AbstractZaakFormController
 	 *
 	 * @throws ZaakException
 	 */
-	public function create_zaak( array $supplier_config ): Zaak
+	protected function create_zaak( array $supplier_config ): Zaak
 	{
 		try {
 			$action = ( new CreateZaakAction(
@@ -133,7 +133,7 @@ class ZaakController extends AbstractZaakFormController
 		try {
 			$this->uploads_controller->set_form_data( $this->entry, $this->form );
 			$this->uploads_controller->handle( $zaak, $supplier_config );
-		} catch (Throwable $e) {
+		} catch ( Throwable $e ) {
 			$this->logger->error( 'File uploads failed: ' . $e->getMessage() );
 			$caughtException = $e;
 		}
@@ -142,12 +142,12 @@ class ZaakController extends AbstractZaakFormController
 		try {
 			$this->upload_pdf_controller->set_form_data( $this->entry, $this->form );
 			$this->upload_pdf_controller->handle( $zaak, $supplier_config );
-		} catch (Throwable $e) {
+		} catch ( Throwable $e ) {
 			$this->logger->error( 'PDF generation failed: ' . $e->getMessage() );
 			$caughtException = $e;
 		}
 
-		if ($caughtException) {
+		if ( $caughtException ) {
 			throw new ZaakUploadException(
 				$caughtException->getMessage(),
 				400
