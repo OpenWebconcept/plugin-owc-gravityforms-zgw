@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Contracts;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -52,7 +52,7 @@ abstract class AbstractCreateSubmissionPDFAction
 		$this->form          = $form;
 		$this->supplier_name = $supplier_config['name'] ?? '';
 		$this->zaak          = $zaak;
-		$this->client        = apiClient( $supplier_config['name'] );
+		$this->client        = apiClient( $supplier_config['name'] ?? '' );
 		$this->pdf_settings  = new FormSettingsPDF( $entry, $form );
 	}
 
@@ -60,20 +60,20 @@ abstract class AbstractCreateSubmissionPDFAction
 
 	protected function get_submission_args_pdf(): array
 	{
-		if ( ! class_exists( 'GPDFAPI' )) {
+		if ( ! class_exists( 'GPDFAPI' ) ) {
 			throw new Exception(
 				sprintf( 'Gravity PDF is required for the uploads.' ),
 				400
 			);
 		}
 
-		if ( ! $this->pdf_settings->pdf_form_setting_is_active()) {
+		if ( ! $this->pdf_settings->pdf_form_setting_is_active() ) {
 			return array();
 		}
 
 		$url_pdf = $this->pdf_settings->url_pdf();
 
-		if (empty( $url_pdf )) {
+		if ( empty( $url_pdf ) ) {
 			return array();
 		}
 
@@ -90,7 +90,7 @@ abstract class AbstractCreateSubmissionPDFAction
 	{
 		$information_object_type = $this->information_object_type_form_setting( $this->form, $this->supplier_name );
 
-		if (empty( $information_object_type )) {
+		if ( empty( $information_object_type ) ) {
 			return array();
 		}
 
@@ -116,7 +116,7 @@ abstract class AbstractCreateSubmissionPDFAction
 
 	public function create_submission_pdf(array $args ): ?Enkelvoudiginformatieobject
 	{
-		if (empty( $args )) {
+		if ( empty( $args ) ) {
 			return null;
 		}
 
@@ -128,7 +128,7 @@ abstract class AbstractCreateSubmissionPDFAction
 
 	public function connect_pdf_to_zaak(?Enkelvoudiginformatieobject $pdf ): ?Zaakinformatieobject
 	{
-		if ( ! $pdf instanceof Enkelvoudiginformatieobject) {
+		if ( ! $pdf instanceof Enkelvoudiginformatieobject ) {
 			return null;
 		}
 

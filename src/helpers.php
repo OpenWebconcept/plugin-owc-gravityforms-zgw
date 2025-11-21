@@ -10,7 +10,7 @@
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' )) {
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */
-if ( ! function_exists( 'owc_gravityforms_zgw_prefix' )) {
+if ( ! function_exists( 'owc_gravityforms_zgw_prefix' ) ) {
 	function owc_gravityforms_zgw_prefix($name ): string
 	{
 		return 'owc-gravityforms-zgw-' . $name;
@@ -35,7 +35,7 @@ if ( ! function_exists( 'owc_gravityforms_zgw_prefix' )) {
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */
-if ( ! function_exists( 'owc_gravityforms_zgw_url' )) {
+if ( ! function_exists( 'owc_gravityforms_zgw_url' ) ) {
 	function owc_gravityforms_zgw_url(string $path ): string
 	{
 		return OWC_GRAVITYFORMS_ZGW_PLUGIN_URL . $path;
@@ -49,7 +49,7 @@ if ( ! function_exists( 'owc_gravityforms_zgw_url' )) {
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */
-if ( ! function_exists( 'owc_gravityforms_zgw_asset_url' )) {
+if ( ! function_exists( 'owc_gravityforms_zgw_asset_url' ) ) {
 	function owc_gravityforms_zgw_asset_url(string $path ): string
 	{
 		return owc_gravityforms_zgw_url( 'dist/' . $path );
@@ -67,12 +67,12 @@ function owc_gravityforms_zgw_render_view(string $file_path, $data = array() )
 {
 	$full_path = OWC_GRAVITYFORMS_ZGW_DIR_PATH . 'src/Views/' . $file_path . '.php';
 
-	if ( ! file_exists( $full_path )) {
+	if ( ! file_exists( $full_path ) ) {
 		return '';
 	}
 
 	// Manually extract variables from the $data array
-	foreach ($data as $key => $value) {
+	foreach ( $data as $key => $value ) {
 		${$key} = $value;
 	}
 

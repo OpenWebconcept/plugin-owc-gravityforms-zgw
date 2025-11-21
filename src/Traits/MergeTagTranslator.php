@@ -14,7 +14,7 @@ namespace OWCGravityFormsZGW\Traits;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -43,7 +43,7 @@ trait MergeTagTranslator
 				$field_id    = trim( $matches[0], '[]' );
 				$field_value = $this->resolve_field_value( $form, $field_id, $entry );
 
-				if ( ! is_string( $field_value ) || trim( $field_value ) === '') {
+				if ( ! is_string( $field_value ) || trim( $field_value ) === '' ) {
 					return '';
 				}
 
@@ -62,11 +62,11 @@ trait MergeTagTranslator
 	 */
 	protected function resolve_field_value(array $form, string $field_id, array $entry ): mixed
 	{
-		if ($field = $this->field_by_type( $form, $field_id, 'checkbox' )) {
+		if ( $field = $this->field_by_type( $form, $field_id, 'checkbox' ) ) {
 			return $this->implode_with_conjunction( $this->handle_checkbox_field( $entry, $field ) );
 		}
 
-		if ($this->field_by_type( $form, $field_id, 'multiselect' )) {
+		if ( $this->field_by_type( $form, $field_id, 'multiselect' ) ) {
 			$value = json_decode( rgar( $entry, $field_id ), true ) ?: array();
 
 			return $this->implode_with_conjunction( $value );
@@ -84,7 +84,7 @@ trait MergeTagTranslator
 	{
 		$field_value = array();
 
-		foreach ($field->inputs as $input) {
+		foreach ( $field->inputs as $input ) {
 			$field_value[] = rgar( $entry, $input['id'] );
 		}
 
@@ -119,11 +119,11 @@ trait MergeTagTranslator
 	{
 		$items = array_filter( $items, fn ($item ) => trim( $item ) !== '' );
 
-		if (empty( $items )) {
+		if ( empty( $items ) ) {
 			return null;
 		}
 
-		if (count( $items ) === 1) {
+		if ( count( $items ) === 1 ) {
 			return reset( $items );
 		}
 
@@ -142,13 +142,13 @@ trait MergeTagTranslator
 		/**
 		 * A valid date string has a length of 10.
 		 */
-		if (strlen( $value ) !== 10) {
+		if ( strlen( $value ) !== 10 ) {
 			return '';
 		}
 
 		try {
 			$date = new DateTime( $value );
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			return '';
 		}
 

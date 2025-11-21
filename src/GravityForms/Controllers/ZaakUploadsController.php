@@ -15,7 +15,7 @@ namespace OWCGravityFormsZGW\GravityForms\Controllers;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -41,7 +41,7 @@ class ZaakUploadsController extends AbstractZaakFormController
 	{
 		try {
 			$this->handle_zaak_uploads( $zaak, $supplier_config );
-		} catch (Throwable $e) {
+		} catch ( Throwable $e ) {
 			$message = sprintf(
 				'Error processing uploads: %s',
 				$e->getMessage()
@@ -70,7 +70,7 @@ class ZaakUploadsController extends AbstractZaakFormController
 
 			$result = $action->add_uploaded_documents();
 
-			if ($result === false) {
+			if ( $result === false ) {
 				throw new ZaakUploadException(
 					sprintf(
 						'Not all uploads were successfully added to zaak %s.',

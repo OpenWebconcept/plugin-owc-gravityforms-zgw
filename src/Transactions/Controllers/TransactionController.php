@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Transactions\Controllers;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -48,7 +48,7 @@ class TransactionController
 	public function create( array $entry, array $form ): void
 	{
 		// Only create transaction for ZGW enabled forms.
-		if ( ! FormUtils::is_form_zgw( $form )) {
+		if ( ! FormUtils::is_form_zgw( $form ) ) {
 			return;
 		}
 

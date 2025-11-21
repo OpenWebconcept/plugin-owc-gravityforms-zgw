@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Contracts;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -34,7 +34,7 @@ abstract class AbstractDeleteZaakAction
 
 	public function __construct(array $supplier_config )
 	{
-		$this->client = apiClient( $supplier_config['name'] );
+		$this->client = apiClient( $supplier_config['name'] ?? '' );
 		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 

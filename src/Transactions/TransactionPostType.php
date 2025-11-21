@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Transactions;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -65,7 +65,7 @@ class TransactionPostType
 	{
 		$screen = get_current_screen();
 
-		if ( ! isset( $screen->id ) || $screen->id !== 'edit-' . self::POST_TYPE) {
+		if ( ! isset( $screen->id ) || $screen->id !== 'edit-' . self::POST_TYPE ) {
 			return;
 		}
 
@@ -164,7 +164,7 @@ class TransactionPostType
 
 	public static function get_post_status_css_class($post_status ): string
 	{
-		return match ($post_status) {
+		return match ( $post_status ) {
 			'transaction_success', => 'owc-gravityforms-zgw-transaction-icon-success',
 			'transaction_failed', => 'owc-gravityforms-zgw-transaction-icon-failed',
 			default => 'owc-gravityforms-zgw-transaction-icon-pending',
@@ -176,23 +176,23 @@ class TransactionPostType
 	 */
 	public function custom_columns(string $column, int $post_id ): void
 	{
-		switch ($column) {
+		switch ( $column ) {
 			case 'transaction_status':
 				$post_status = get_post_status( $post_id );
 
-				if (false === $post_status) {
+				if ( false === $post_status ) {
 					break;
 				}
 
 				$label = __( 'Onbekend', 'owc-gravityforms-zgw' );
 
-				if ('trash' === $post_status) {
+				if ( 'trash' === $post_status ) {
 					$post_status = get_post_meta( $post_id, '_wp_trash_meta_status', true );
 				}
 
 				$status_object = get_post_status_object( $post_status );
 
-				if (isset( $status_object, $status_object->label )) {
+				if ( isset( $status_object, $status_object->label ) ) {
 					$label = $status_object->label;
 				}
 
@@ -207,7 +207,7 @@ class TransactionPostType
 			case 'transaction_form_id':
 				$form_id = get_post_meta( $post_id, 'transaction_form_id', true );
 
-				if ($form_id) {
+				if ( $form_id ) {
 					$url = add_query_arg(
 						array(
 							'page' => 'gf_edit_forms',
@@ -243,7 +243,7 @@ class TransactionPostType
 				$action_content = get_post_meta( $post_id, 'transaction_actions', true );
 				$entry_id       = get_post_meta( $post_id, 'transaction_entry_id', true );
 
-				if ($post_status === 'transaction_failed' && $action_content) {
+				if ( $post_status === 'transaction_failed' && $action_content ) {
 					printf(
 						'<button type="button" class="owc-gravityforms-zgw-btn-retry" data-entry-id="%d" data-spinner-icon="%s"><img src="%s" alt="Retry" /></button>',
 						esc_attr( $entry_id ),

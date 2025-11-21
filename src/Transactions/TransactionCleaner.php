@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Transactions;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -59,7 +59,7 @@ class TransactionCleaner
 
 		$query = call_user_func( $this->queryFactory, $args );
 
-		foreach ($query->posts as $post_id) {
+		foreach ( $query->posts as $post_id ) {
 			wp_delete_post( $post_id, true );
 		}
 

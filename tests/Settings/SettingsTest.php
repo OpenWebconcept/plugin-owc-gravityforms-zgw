@@ -6,7 +6,7 @@ use OWCGravityFormsZGW\Settings\Settings;
 
 beforeAll(
 	function () {
-		if ( ! defined( 'ABSPATH' )) {
+		if ( ! defined( 'ABSPATH' ) ) {
 			define( 'ABSPATH', __DIR__ . '/../../../' );
 		}
 	}

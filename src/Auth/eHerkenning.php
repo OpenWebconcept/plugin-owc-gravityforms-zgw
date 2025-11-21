@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Auth;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -34,11 +34,11 @@ class eHerkenning
 	 */
 	public function kvk(): string
 	{
-		if ( ! class_exists( '\OWC\IdpUserData\eHerkenningSession' )) {
+		if ( ! class_exists( '\OWC\IdpUserData\eHerkenningSession' ) ) {
 			return '';
 		}
 
-		if ( ! \OWC\IdpUserData\eHerkenningSession::isLoggedIn() || is_null( \OWC\IdpUserData\eHerkenningSession::getUserData() )) {
+		if ( ! \OWC\IdpUserData\eHerkenningSession::isLoggedIn() || is_null( \OWC\IdpUserData\eHerkenningSession::getUserData() ) ) {
 			return '';
 		}
 

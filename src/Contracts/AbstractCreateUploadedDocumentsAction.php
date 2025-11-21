@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Contracts;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -50,7 +50,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		$this->form         = $form;
 		$this->supplier_key = $supplier_config['client_type'] ?? '';
 		$this->zaak         = $zaak;
-		$this->client       = apiClient( $supplier_config['name'] );
+		$this->client       = apiClient( $supplier_config['name'] ?? '' );
 	}
 
 	abstract public function add_uploaded_documents(): ?bool;
@@ -65,14 +65,14 @@ abstract class AbstractCreateUploadedDocumentsAction
 	{
 		$args = array( 'informatieobject' => array() );
 
-		foreach ($this->form['fields'] as $field) {
-			if (empty( $field->mappedFieldValueZGW ) || 'informatieobject' !== $field->mappedFieldValueZGW || empty( $field->mappedFieldDocumentTypeValueZGW )) {
+		foreach ( $this->form['fields'] as $field ) {
+			if ( empty( $field->mappedFieldValueZGW ) || 'informatieobject' !== $field->mappedFieldValueZGW || empty( $field->mappedFieldDocumentTypeValueZGW ) ) {
 				continue;
 			}
 
 			$field_value = rgar( $this->entry, (string) $field->id );
 
-			if (empty( $field_value )) {
+			if ( empty( $field_value ) ) {
 				continue;
 			}
 
@@ -91,11 +91,11 @@ abstract class AbstractCreateUploadedDocumentsAction
 		$end   = substr( $field_value, -1, 1 );
 
 		// Check if the field value is an array in JSON format and decode.
-		if ('[' === $start && ']' === $end) {
+		if ( '[' === $start && ']' === $end ) {
 			$field_value = $this->parse_information_object_json( $field_value, $field );
 		}
 
-		if (is_string( $field_value )) {
+		if ( is_string( $field_value ) ) {
 			$field_value = array(
 				array(
 					'type'        => $field->mappedFieldDocumentTypeValueZGW,
@@ -106,7 +106,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		}
 
 		// After previous conversions, it's possible the value is empty.
-		if (empty( $field_value )) {
+		if ( empty( $field_value ) ) {
 			return $args;
 		}
 
@@ -126,7 +126,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	{
 		$field_values = json_decode( $field_value );
 
-		if (empty( $field_values ) || ! is_array( $field_values )) {
+		if ( empty( $field_values ) || ! is_array( $field_values ) ) {
 			return array();
 		}
 
@@ -144,7 +144,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 
 	protected function prepare_information_object_args(string $object_url, string $information_object_type, string $object_description = '' ): array
 	{
-		if (1 > strlen( $information_object_type )) {
+		if ( 1 > strlen( $information_object_type ) ) {
 			return array();
 		}
 
@@ -180,7 +180,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 
 	protected function create_information_object(array $args ): ?Enkelvoudiginformatieobject
 	{
-		if (empty( $args )) {
+		if ( empty( $args ) ) {
 			return null;
 		}
 
@@ -192,7 +192,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 
 	protected function connect_zaak_to_information_object(?Enkelvoudiginformatieobject $object ): ?Zaakinformatieobject
 	{
-		if (empty( $object )) {
+		if ( empty( $object ) ) {
 			return null;
 		}
 
