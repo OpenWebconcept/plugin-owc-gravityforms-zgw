@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Contracts;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -52,7 +52,7 @@ abstract class AbstractCreateZaakAction
 		$this->entry         = $entry;
 		$this->form          = $form;
 		$this->supplier_name = $supplier_config['name'] ?? '';
-		$this->client        = apiClient( $supplier_config['name'] );
+		$this->client        = apiClient( $supplier_config['name'] ?? '' );
 		$this->logger        = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
@@ -82,18 +82,18 @@ abstract class AbstractCreateZaakAction
 	 */
 	protected function map_required_zaak_creation_args(array $args ): array
 	{
-		foreach ($this->form['fields'] as $field) {
-			if (empty( $field->mappedFieldValueZGW ) || ! isset( $args[ $field->mappedFieldValueZGW ] )) {
+		foreach ( $this->form['fields'] as $field ) {
+			if ( empty( $field->mappedFieldValueZGW ) || ! isset( $args[ $field->mappedFieldValueZGW ] ) ) {
 				continue;
 			}
 
 			$field_value = rgar( $this->entry, (string) $field->id );
 
-			if (empty( $field_value )) {
+			if ( empty( $field_value ) ) {
 				continue;
 			}
 
-			if ('date' === $field->type) {
+			if ( 'date' === $field->type ) {
 				$field_value = ( new DateTime( $field_value ) )->format( 'Y-m-d' );
 			}
 
@@ -110,18 +110,18 @@ abstract class AbstractCreateZaakAction
 	{
 		$rol_types = $this->get_rol_types();
 
-		if ($rol_types->isEmpty()) {
+		if ( $rol_types->isEmpty() ) {
 			throw new Exception( 'No role types found for this "zaaktype"', 400 );
 		}
 
 		$current_bsn = ContainerResolver::make()->get( 'digid.current_user_bsn' );
 
-		if (empty( $current_bsn )) {
+		if ( empty( $current_bsn ) ) {
 			throw new Exception( 'This session appears to have no BSN', 400 );
 		}
 
-		foreach ($rol_types as $rol_type) {
-			if ('initiator' !== $rol_type['omschrijvingGeneriek']) {
+		foreach ( $rol_types as $rol_type ) {
+			if ( 'initiator' !== $rol_type['omschrijvingGeneriek'] ) {
 				continue;
 			}
 
@@ -137,9 +137,9 @@ abstract class AbstractCreateZaakAction
 
 			try {
 				$rol = $this->client->rollen()->create( new Rol( $args, $this->client ) );
-			} catch (BadRequestError $e) {
+			} catch ( BadRequestError $e ) {
 				$this->logger->error( sprintf( 'Failed to add rol to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
-			} catch (Exception $e) {
+			} catch ( Exception $e ) {
 				$this->logger->error( sprintf( 'Failed to add rol to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
 			}
 
@@ -164,8 +164,8 @@ abstract class AbstractCreateZaakAction
 	{
 		$zaak_properties = $this->map_zaak_properties_args();
 
-		foreach ($zaak_properties as $zaak_property) {
-			if (empty( $zaak_property['eigenschap'] ) || empty( $zaak_property['waarde'] )) {
+		foreach ( $zaak_properties as $zaak_property ) {
+			if ( empty( $zaak_property['eigenschap'] ) || empty( $zaak_property['waarde'] ) ) {
 				continue;
 			}
 
@@ -180,10 +180,10 @@ abstract class AbstractCreateZaakAction
 					$zaak,
 					new Zaakeigenschap( $property, $this->client )
 				);
-			} catch (BadRequestError $e) {
+			} catch ( BadRequestError $e ) {
 				$this->logger->error( sprintf( 'Failed to create zaak property for zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
 
-			} catch (Exception $e) {
+			} catch ( Exception $e ) {
 				$this->logger->error( sprintf( 'Failed to create zaak property for zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
 			}
 		}
@@ -197,18 +197,18 @@ abstract class AbstractCreateZaakAction
 	{
 		$mappedFields = array();
 
-		foreach ($this->form['fields'] as $field) {
-			if (empty( $field->mappedFieldValueZGW ) || strpos( $field->mappedFieldValueZGW, 'https://' ) === false) {
+		foreach ( $this->form['fields'] as $field ) {
+			if ( empty( $field->mappedFieldValueZGW ) || strpos( $field->mappedFieldValueZGW, 'https://' ) === false ) {
 				continue;
 			}
 
 			$property_value = rgar( $this->entry, (string) $field->id );
 
-			if (empty( $property_value )) {
+			if ( empty( $property_value ) ) {
 				continue;
 			}
 
-			if ('date' === $field->type) {
+			if ( 'date' === $field->type ) {
 				$property_value = $this->handle_zaak_date_property( $property_value );
 			}
 
@@ -225,7 +225,7 @@ abstract class AbstractCreateZaakAction
 	{
 		try {
 			$property_value = ( new DateTime( $property_value ) )->format( 'Y-m-d' );
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			$property_value = '0000-00-00';
 		}
 

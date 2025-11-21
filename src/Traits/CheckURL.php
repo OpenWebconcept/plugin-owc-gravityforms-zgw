@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Traits;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -28,7 +28,7 @@ trait CheckURL
 	 */
 	public function check_url($url ): bool
 	{
-		if ( ! $this->is_valid_url( $url )) {
+		if ( ! $this->is_valid_url( $url ) ) {
 			return false;
 		}
 
@@ -39,7 +39,7 @@ trait CheckURL
 			)
 		);
 
-		if (is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200) {
+		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200 ) {
 			return false;
 		}
 

@@ -27,7 +27,7 @@ declare (strict_types = 1);
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -43,10 +43,10 @@ const OWC_GRAVITYFORMS_ZGW_PLUGIN_SLUG              = 'owc-gravityforms-zgw';
 const OWC_GRAVITYFORMS_ZGW_LOGGER_DEFAULT_MAX_FILES = 7;
 
 // Require autoload if they exist.
-foreach (array( 'vendor/autoload.php', 'vendor-prefixed/autoload.php' ) as $autoload) {
+foreach ( array( 'vendor/autoload.php', 'vendor-prefixed/autoload.php' ) as $autoload ) {
 	$path = __DIR__ . '/' . $autoload;
 
-	if (file_exists( $path )) {
+	if ( file_exists( $path ) ) {
 		require_once $path;
 	}
 }

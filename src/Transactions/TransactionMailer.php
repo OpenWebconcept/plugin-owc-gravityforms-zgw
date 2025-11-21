@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Transactions;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -63,7 +63,7 @@ class TransactionMailer
 
 		$query = call_user_func( $this->queryFactory, $args );
 
-		if ($query->have_posts()) {
+		if ( $query->have_posts() ) {
 			$table  = '<table>';
 			$table .= '<thead><tr>
                 <th>' . __( 'Transaction ID', 'owc-gravityforms-zgw' ) . '</th>
@@ -72,7 +72,7 @@ class TransactionMailer
                 <th>' . __( 'Datetime', 'owc-gravityforms-zgw' ) . '</th>
             </tr></thead><tbody>';
 
-			foreach ($query->posts as $post) {
+			foreach ( $query->posts as $post ) {
 				$entry_id = get_post_meta( $post->ID, 'transaction_entry_id', true );
 				$table   .= sprintf(
 					'<tr>
@@ -90,7 +90,7 @@ class TransactionMailer
 
 			$table .= '</tbody></table>';
 
-			if ($to !== $default_email && is_email( $to )) {
+			if ( $to !== $default_email && is_email( $to ) ) {
 				$subject = __( 'Zaaksysteem Failed Transactions Report', 'owc-gravityforms-zgw' );
 				$message = __( 'The following transactions had failures:', 'owc-gravityforms-zgw' ) . "<br><br>" . $table;
 				wp_mail( $to, $subject, $message );

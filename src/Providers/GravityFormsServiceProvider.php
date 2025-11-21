@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Providers;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -22,7 +22,7 @@ use OWCGravityFormsZGW\GravityForms\Controllers\ZaakController;
 use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
-use OWCGravityFormsZGW\Transactions\TransactionController;
+use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
 
 /**
  * Register settings service provider.
@@ -55,7 +55,7 @@ class GravityFormsServiceProvider extends ServiceProvider
 	 */
 	public function register_addon(): void
 	{
-		if ( ! method_exists( 'GFForms', 'include_addon_framework' )) {
+		if ( ! method_exists( 'GFForms', 'include_addon_framework' ) ) {
 			return;
 		}
 

@@ -18,7 +18,7 @@ use OWCGravityFormsZGW\ContainerResolver;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -41,8 +41,8 @@ class FormUtils
 		$clients = (array) get_option( 'zgw_api_settings' );
 		$clients = $clients['zgw-api-configured-clients'] ?? array();
 
-		foreach ($clients as $clientConfig) {
-			if (strtolower( $clientConfig['name'] ) === $supplier) {
+		foreach ( $clients as $clientConfig ) {
+			if ( strtolower( $clientConfig['name'] ) === $supplier ) {
 				return $clientConfig;
 			}
 		}

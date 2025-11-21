@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\GravityForms;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -45,13 +45,13 @@ class FieldSettings
 	 */
 	public function add_select($position, $form_id ): void
 	{
-		if ( ! class_exists( 'GFAPI' ) || 0 !== $position) {
+		if ( ! class_exists( 'GFAPI' ) || 0 !== $position ) {
 			return;
 		}
 
 		$form = GFAPI::get_form( $form_id );
 
-		if (false === $form) {
+		if ( false === $form ) {
 			return;
 		}
 
@@ -64,7 +64,7 @@ class FieldSettings
 		$zaak_type_identifier = $this->zaaktype_identifier_form_setting( $form, $supplier_config['name'] );
 		$zaak_type            = $this->get_zaak_type( $supplier_config['name'], $zaak_type_identifier );
 
-		if ( ! $zaak_type) {
+		if ( ! $zaak_type ) {
 			return;
 		}
 
@@ -104,7 +104,7 @@ class FieldSettings
 		$transient_key = sprintf( '%s-%s', sanitize_title( $supplier_name ), sanitize_title( $zaak_type_identifier ) );
 		$zaak_type     = get_transient( $transient_key );
 
-		if ($zaak_type instanceof Zaaktype) {
+		if ( $zaak_type instanceof Zaaktype ) {
 			return $zaak_type;
 		}
 
@@ -112,11 +112,11 @@ class FieldSettings
 
 		try {
 			$zaak_type = $this->get_zaak_type_by_client( $client, $zaak_type_identifier );
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			$zaak_type = null;
 		}
 
-		if ( ! $zaak_type instanceof Zaaktype) {
+		if ( ! $zaak_type instanceof Zaaktype ) {
 			return null;
 		}
 
@@ -135,7 +135,7 @@ class FieldSettings
 		 * In previous versions the UUID of a "zaaktype" was saved instead of its URL.
 		 * This check takes the last part of the URL, the identifier, and is here to support backwards compatibility.
 		 */
-		if (filter_var( $zaak_type_identifier, FILTER_VALIDATE_URL )) {
+		if ( filter_var( $zaak_type_identifier, FILTER_VALIDATE_URL ) ) {
 			$explode              = explode( '/', $zaak_type_identifier ) ? explode( '/', $zaak_type_identifier ) : array();
 			$zaak_type_identifier = end( $explode );
 		}
@@ -162,12 +162,12 @@ class FieldSettings
 		$types  = array();
 		$page   = 1;
 
-		while ($page) {
+		while ( $page ) {
 			try {
 				$result = $client->eigenschappen()->filter( $filter->page( $page ) );
 				$types  = array_merge( $types, $result->all() );
 				$page   = $result->pageMeta()->getNextPageNumber();
-			} catch (Exception $e) {
+			} catch ( Exception $e ) {
 				ContainerResolver::make()->get( 'logger.zgw' )->error( $e->getMessage() );
 
 				break;
@@ -182,7 +182,7 @@ class FieldSettings
 	{
 		$options = $properties->map(
 			function ($property ) {
-				if (empty( $property['naam'] ) || empty( $property['url'] )) {
+				if ( empty( $property['naam'] ) || empty( $property['url'] ) ) {
 					return array();
 				}
 
@@ -201,13 +201,13 @@ class FieldSettings
 		$transient_key = sprintf( 'zaaktype-%s-mapping-information-object-types', sanitize_title( $zaak_type_identification ) );
 		$types         = get_transient( $transient_key );
 
-		if (is_array( $types ) && $types) {
+		if ( is_array( $types ) && $types ) {
 			return $types;
 		}
 
 		$types = $zaak_type->informatieobjecttypen ? $zaak_type->informatieobjecttypen->all() : array();
 
-		if (empty( $types )) {
+		if ( empty( $types ) ) {
 			return array();
 		}
 
@@ -218,14 +218,14 @@ class FieldSettings
 
 	protected function prepare_object_types_options(array $types ): array
 	{
-		if (empty( $types )) {
+		if ( empty( $types ) ) {
 			return array();
 		}
 
 		return (array) Collection::collect( $types )->map(
 			function (Informatieobjecttype $object_type ) {
 				$designation = $object_type->vertrouwelijkheidaanduiding;
-				if ($designation instanceof Confidentiality) {
+				if ( $designation instanceof Confidentiality ) {
 					$designation = $designation->name ?? '';
 				}
 

@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\GravityForms\Controllers;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -39,7 +39,7 @@ class ZaakUploadPDFController extends AbstractZaakFormController
 	{
 		try {
 			$this->handle_zaak_pdf_uploads( $zaak, $supplier_config );
-		} catch (Throwable $e) {
+		} catch ( Throwable $e ) {
 			$message = sprintf(
 				'Error processing zaak PDF: %s',
 				$e->getMessage()
@@ -67,7 +67,7 @@ class ZaakUploadPDFController extends AbstractZaakFormController
 
 		$result = $action->add_submission_pdf();
 
-		if ( ! $result instanceof Zaakinformatieobject) {
+		if ( ! $result instanceof Zaakinformatieobject ) {
 			throw new ZaakUploadException(
 				sprintf(
 					'Unexpected result type: %s',

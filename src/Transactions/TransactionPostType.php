@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Transactions;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -27,7 +27,7 @@ use OWCGravityFormsZGW\GravityForms\FormUtils;
  */
 class TransactionPostType
 {
-	const POST_TYPE = 'owc_zgw_transaction';
+	public const POST_TYPE = 'owc_zgw_transaction';
 
 	public function __construct()
 	{
@@ -118,7 +118,7 @@ class TransactionPostType
 	/**
 	 * Columns.
 	 */
-	public function columns( array $columns ): array
+	public function columns(array $columns ): array
 	{
 		$columns = array(
 			'transaction_status'   => sprintf(
@@ -143,6 +143,7 @@ class TransactionPostType
 			),
 			'transaction_message'  => __( 'Melding', 'owc-gravityforms-zgw' ),
 			'transaction_datetime' => __( 'Datumtijd', 'owc-gravityforms-zgw' ),
+			'transaction_actions'  => __( 'Acties', 'owc-gravityforms-zgw' ),
 		);
 
 		return $columns;
@@ -151,7 +152,7 @@ class TransactionPostType
 	/**
 	 * Sortable columns.
 	 */
-	public function sortable_columns( array $sortable_columns ): array
+	public function sortable_columns(array $sortable_columns ): array
 	{
 		$sortable_columns['transaction_form_id']  = 'ID';
 		$sortable_columns['transaction_entry_id'] = 'ID';
@@ -161,7 +162,7 @@ class TransactionPostType
 		return $sortable_columns;
 	}
 
-	public static function get_post_status_css_class( $post_status ): string
+	public static function get_post_status_css_class($post_status ): string
 	{
 		return match ( $post_status ) {
 			'transaction_success', => 'owc-gravityforms-zgw-transaction-icon-success',
@@ -173,7 +174,7 @@ class TransactionPostType
 	/**
 	 * Custom columns.
 	 */
-	public function custom_columns( string $column, int $post_id ): void
+	public function custom_columns(string $column, int $post_id ): void
 	{
 		switch ( $column ) {
 			case 'transaction_status':
@@ -236,6 +237,20 @@ class TransactionPostType
 				break;
 			case 'transaction_datetime':
 				echo esc_html( get_post_meta( $post_id, 'transaction_datetime', true ) );
+				break;
+			case 'transaction_actions':
+				$post_status    = get_post_status( $post_id );
+				$action_content = get_post_meta( $post_id, 'transaction_actions', true );
+				$entry_id       = get_post_meta( $post_id, 'transaction_entry_id', true );
+
+				if ( $post_status === 'transaction_failed' && $action_content ) {
+					printf(
+						'<button type="button" class="owc-gravityforms-zgw-btn-retry" data-entry-id="%d" data-spinner-icon="%s"><img src="%s" alt="Retry" /></button>',
+						esc_attr( $entry_id ),
+						untrailingslashit( OWC_GRAVITYFORMS_ZGW_PLUGIN_URL ) . '/assets/images/icon-spinner.svg',
+						esc_url( (string) $action_content )
+					);
+				}
 				break;
 		}
 	}

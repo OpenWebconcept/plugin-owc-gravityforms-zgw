@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Traits;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -29,7 +29,7 @@ trait InformationObject
 	{
 		try {
 			$file = file_get_contents( $url, false, $this->stream_context() );
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			$file = '';
 		}
 
@@ -41,7 +41,7 @@ trait InformationObject
 		$headers        = $this->get_headers( $url );
 		$content_length = $headers['Content-Length'] ?? '';
 
-		if (is_array( $content_length ) && ! empty( $content_length[0] )) {
+		if ( is_array( $content_length ) && ! empty( $content_length[0] ) ) {
 			return $content_length[0];
 		}
 
@@ -72,7 +72,7 @@ trait InformationObject
 		$headers      = $this->get_headers( $url );
 		$content_type = $headers['content-type'] ?? $headers['Content-Type'] ?? '';
 
-		if (is_array( $content_type ) && ! empty( $content_type[0] )) {
+		if ( is_array( $content_type ) && ! empty( $content_type[0] ) ) {
 			return $content_type[0];
 		}
 
@@ -81,13 +81,13 @@ trait InformationObject
 
 	protected function get_headers(string $url ): array
 	{
-		if (empty( $url )) {
+		if ( empty( $url ) ) {
 			return array();
 		}
 
 		try {
 			$response = get_headers( $url, 1, $this->stream_context() );
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			return array();
 		}
 
@@ -105,7 +105,7 @@ trait InformationObject
 	 */
 	protected function stream_context(): mixed
 	{
-		if (false === owc_gravityforms_zgw_env_is_dev()) {
+		if ( false === owc_gravityforms_zgw_env_is_dev() ) {
 			return null;
 		}
 

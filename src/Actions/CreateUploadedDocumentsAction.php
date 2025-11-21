@@ -12,12 +12,12 @@ namespace OWCGravityFormsZGW\Actions;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use OWC\ZGW\Entities\Zaakinformatieobject;
 use OWCGravityFormsZGW\Contracts\AbstractCreateUploadedDocumentsAction;
+use OWC\ZGW\Entities\Zaakinformatieobject;
 
 /**
  * Create uploaded documents action.
@@ -30,14 +30,14 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 	{
 		$mapped_args = $this->get_mapped_required_information_object_creation_args();
 
-		if (empty( $mapped_args['informatieobject'] )) {
+		if ( ! is_array( $mapped_args['informatieobject'] ?? false ) || array() === $mapped_args['informatieobject'] ) {
 			return null; // No files mapped → not an error
 		}
 
 		$count   = count( $mapped_args['informatieobject'] );
 		$success = 0;
 
-		foreach ($mapped_args['informatieobject'] as $object) {
+		foreach ( $mapped_args['informatieobject'] as $object ) {
 			$args = $this->prepare_information_object_args(
 				$object['url'],
 				$object['type'],
@@ -48,7 +48,7 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 				$this->create_information_object( $args )
 			);
 
-			if ($connection_result instanceof Zaakinformatieobject) {
+			if ( $connection_result instanceof Zaakinformatieobject ) {
 				++$success;
 			}
 		}

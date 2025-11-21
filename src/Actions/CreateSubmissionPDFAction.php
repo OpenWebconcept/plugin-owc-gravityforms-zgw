@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Actions;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -30,7 +30,7 @@ class CreateSubmissionPDFAction extends AbstractCreateSubmissionPDFAction
 	{
 		$args = $this->get_submission_args_pdf();
 
-		if ( ! count( $args )) {
+		if ( ! count( $args ) ) {
 			return null;
 		}
 

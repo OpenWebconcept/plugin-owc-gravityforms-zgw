@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Traits;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -31,7 +31,7 @@ trait FormSetting
 	{
 		$supplier_name = strtolower( $supplier_name );
 
-		if ('1' === ( $form[ sprintf( '%s-form-setting-supplier-manually', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '0' )) {
+		if ( '1' === ( $form[ sprintf( '%s-form-setting-supplier-manually', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '0' ) ) {
 			$zaaktype_identifier = $form[ sprintf( '%s-form-setting-%s-identifier-manual', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $supplier_name ) ] ?? null;
 		} else {
 			$zaaktype_identifier = $form[ sprintf( '%s-form-setting-%s-identifier', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $supplier_name ) ] ?? null;
@@ -48,7 +48,7 @@ trait FormSetting
 	{
 		$supplier_name = strtolower( $supplier_name );
 
-		if ('1' === ( $form[ sprintf( '%s-form-setting-supplier-manually', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '0' )) {
+		if ( '1' === ( $form[ sprintf( '%s-form-setting-supplier-manually', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '0' ) ) {
 			$zaaktype_identifier = $form[ sprintf( '%s-form-setting-%s-information-object-type-manual', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $supplier_name ) ] ?? null;
 		} else {
 			$zaaktype_identifier = $form[ sprintf( '%s-form-setting-%s-information-object-type', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $supplier_name ) ] ?? null;

@@ -10,7 +10,7 @@
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -24,14 +24,14 @@ spl_autoload_register(
 		$namespace    = array_shift( $parts );
 		$classifiable = array_pop( $parts ) . '.php';
 
-		if ( ! array_key_exists( $namespace, $classmap )) {
+		if ( ! array_key_exists( $namespace, $classmap ) ) {
 			return;
 		}
 
 		$path = implode( DIRECTORY_SEPARATOR, $parts );
 		$file = $classmap[ $namespace ] . $path . DIRECTORY_SEPARATOR . $classifiable;
 
-		if ( ! file_exists( $file ) && ! class_exists( $classname )) {
+		if ( ! file_exists( $file ) && ! class_exists( $classname ) ) {
 			return;
 		}
 

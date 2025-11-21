@@ -12,7 +12,7 @@ namespace OWCGravityFormsZGW\Providers;
 /**
  * Exit when accessed directly.
  */
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -32,7 +32,7 @@ class ServiceProvider
 	 */
 	public function register(): void
 	{
-		foreach ($this->services as $service) {
+		foreach ( $this->services as $service ) {
 			$service->register();
 		}
 	}
@@ -44,8 +44,8 @@ class ServiceProvider
 	 */
 	public function boot(): void
 	{
-		foreach ($this->services as $service) {
-			if (false === $service) {
+		foreach ( $this->services as $service ) {
+			if ( false === $service ) {
 				continue;
 			}
 			$service->boot();
