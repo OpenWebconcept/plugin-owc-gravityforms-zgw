@@ -312,7 +312,7 @@
                 "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/dev",
                 "issues": "https://github.com/OpenWebconcept/owc-zgw-api/issues"
             },
-            "time": "2025-10-28T13:17:44+00:00"
+            "time": "2025-11-12T12:23:54+00:00"
         },
         {
             "name": "php-di/invoker",
