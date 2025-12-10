@@ -5,7 +5,7 @@
 	"type": "wordpress-plugin",
 	"scripts": {
 		"phpcs": "./vendor/squizlabs/php_codesniffer/bin/phpcs",
-		"phpcbf": "phpcbf",
+		"phpcbf": "./vendor/squizlabs/php_codesniffer/bin/phpcbf",
 		"post-install-cmd": [
             "@strauss",
 			"composer dump-autoload"
