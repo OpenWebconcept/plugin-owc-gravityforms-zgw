@@ -194,6 +194,44 @@ class FormSettings
 					'choices'    => ( new InformatieobjecttypeAdapter( $api_client, $supplier_name ) )->handle(),
 				),
 			),
+			'manual_setting' => array(
+				array(
+					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-identifier",
+					'type'       => 'text',
+					'label'      => esc_html__( 'Zaaktype', 'owc-gravityforms-zgw' ),
+					'dependency' => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => "{$this->prefix}-form-setting-supplier",
+								'values' => array( $supplier_key ),
+							),
+							array(
+								'field'  => "{$this->prefix}-form-setting-supplier-manually",
+								'values' => array( true, 'on' ),
+							),
+						),
+					),
+				),
+				array(
+					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-information-object-type",
+					'type'       => 'text',
+					'label'      => esc_html__( 'Informatie object type', 'owc-gravityforms-zgw' ),
+					'dependency' => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => "{$this->prefix}-form-setting-supplier",
+								'values' => array( $supplier_key ),
+							),
+							array(
+								'field'  => "{$this->prefix}-form-setting-supplier-manually",
+								'values' => array( true, 'on' ),
+							),
+						),
+					),
+				),
+			),
 		);
 
 		return $fields;
