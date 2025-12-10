@@ -63,6 +63,12 @@ class FormSettings
 						),
 					),
 				),
+				array(
+					'name'    => "{$this->prefix}-form-setting-overwrite-bsn",
+					'type'    => 'text',
+					'label'   => esc_html__( 'Dummy BSN', 'owc-gravityforms-zgw' ),
+					'tooltip' => '<h6>' . __( 'BSN vervangen door dummywaarde (BSN)', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Vul hier een 9 cijferig BSN in die gebruikt wordt bij het aanmaken van een zaak. Handig voor zaken waarbij er geen BSN vereist is van een burger.', 'owc-gravityforms-zgw' ),
+				),
 			),
 		);
 

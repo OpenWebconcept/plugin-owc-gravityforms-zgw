@@ -116,7 +116,11 @@ abstract class AbstractCreateZaakAction
 
 		$current_bsn = ContainerResolver::make()->get( 'digid.current_user_bsn' );
 
-		if ( empty( $current_bsn ) ) {
+		if ( ! is_string( $current_bsn ) || '' === $current_bsn ) {
+			$current_bsn = $this->overwrite_bsn_form_setting( $this->form );
+		}
+
+		if ( ! is_string( $current_bsn ) || '' === $current_bsn ) {
 			throw new Exception( 'This session appears to have no BSN', 400 );
 		}
 

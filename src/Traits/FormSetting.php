@@ -56,4 +56,14 @@ trait FormSetting
 
 		return ! empty( $zaaktype_identifier ) ? $zaaktype_identifier : '';
 	}
+
+	/**
+	 * Return the value of the overwrite bsn form setting.
+	 */
+	public function overwrite_bsn_form_setting(array $form ): ?string
+	{
+		$bsn = $form[ sprintf( '%s-form-setting-overwrite-bsn', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? null;
+
+		return is_string( $bsn ) && '' !== $bsn ? $bsn : null;
+	}
 }
