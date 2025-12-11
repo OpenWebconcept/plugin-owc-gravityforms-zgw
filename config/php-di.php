@@ -49,6 +49,7 @@ return array(
 	'zgw.addon.settings'           => function (Container $container, string $type, string $name ) {
 		return Settings::make( 'gravityformsaddon_owc-gravityforms-zgw_settings' )->get( $name );
 	},
+	'zgw.site_options'             => OWCGravityFormsZGW\Singletons\SiteOptionsSingleton::get_instance( get_option( OWC_GRAVITYFORMS_ZGW_SITE_OPTION_NAME, array() ) ),
 	'digid.current_user_bsn'       => DigiD::make()->bsn(),
 	'eherkenning.current_user_kvk' => eHerkenning::make()->kvk(),
 

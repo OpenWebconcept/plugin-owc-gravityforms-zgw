@@ -16,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\Transactions\Controllers\RetryController;
 use OWCGravityFormsZGW\Transactions\TransactionCleaner;
 use OWCGravityFormsZGW\Transactions\TransactionMailer;
@@ -31,7 +32,7 @@ class TransactionsServiceProvider extends ServiceProvider
 	public function register(): void
 	{
 		add_action( 'init', $this->register_post_type( ... ) );
-		add_action( 'init', $this->grant_capabilities_to_roles( ... ) );
+		add_action( 'init', $this->handle_role_capabilities( ... ) );
 
 		new TransactionPostType();
 
@@ -69,39 +70,41 @@ class TransactionsServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * Grant capabilities to specified roles required to manage transactions.
+	 * Add or remove capabilities for roles conditionally.
 	 *
 	 * @since NEXT
 	 */
-	public function grant_capabilities_to_roles(): void
+	public function handle_role_capabilities(): void
 	{
-		$roles_to_grant = apply_filters(
-			'owc_zgw_transaction_roles_to_grant_capabilities',
-			array()
-		);
+		$roles_to_grant  = ContainerResolver::make()->get( 'zgw.site_options' )->transaction_user_roles();
+		$available_roles = array_keys( (array) wp_roles()->roles );
 
-		if ( array() === $roles_to_grant ) {
-			return;
-		}
+		$capabilities = self::get_capabilities();
 
-		$capabilities                    = self::get_capabilities();
-		$roles_with_granted_capabilities = get_option( 'owc_zgw_roles_with_transaction_capabilities', array() );
-
-		foreach ( $roles_to_grant as $role_name ) {
+		foreach ( $available_roles as $role_name ) {
 			$role = get_role( $role_name );
 
-			if ( ! $role || in_array( $role_name, $roles_with_granted_capabilities, true ) ) {
+			if ( ! $role ) {
+				continue;
+			}
+
+			if ( in_array( $role_name, $roles_to_grant, true ) ) {
+				foreach ( $capabilities as $cap ) {
+					$role->add_cap( $cap );
+				}
+
+				continue;
+			}
+
+			// Skip administrator role, as it should always have all capabilities.
+			if ( 'administrator' === $role_name ) {
 				continue;
 			}
 
 			foreach ( $capabilities as $cap ) {
-				$role->add_cap( $cap );
+				$role->remove_cap( $cap );
 			}
-
-			$roles_with_granted_capabilities[] = $role_name;
 		}
-
-		update_option( 'owc_zgw_roles_with_transaction_capabilities', array_unique( array_filter( $roles_with_granted_capabilities ) ) );
 	}
 
 	/**
