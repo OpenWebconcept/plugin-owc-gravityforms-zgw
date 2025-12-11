@@ -68,7 +68,7 @@ class FormSettings
 							'value' => '1',
 						),
 					),
-				)
+				),
 			),
 		);
 
