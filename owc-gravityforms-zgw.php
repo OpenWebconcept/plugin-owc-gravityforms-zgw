@@ -41,6 +41,7 @@ const OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX          = 'owc-gf-zgw';
 const OWC_GRAVITYFORMS_ZGW_ADD_ON_SETTINGS_PREFIX   = 'owc-gf-zgw-add-on';
 const OWC_GRAVITYFORMS_ZGW_PLUGIN_SLUG              = 'owc-gravityforms-zgw';
 const OWC_GRAVITYFORMS_ZGW_LOGGER_DEFAULT_MAX_FILES = 7;
+const OWC_GRAVITYFORMS_ZGW_SITE_OPTION_NAME         = 'owc_gf_zgw_options';
 
 // Require autoload if they exist.
 foreach ( array( 'vendor/autoload.php', 'vendor-prefixed/autoload.php' ) as $autoload ) {
