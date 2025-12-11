@@ -45,6 +45,12 @@ class FormSettings
 					'choices'       => $this->handle_supplier_choices(),
 				),
 				array(
+					'name'    => "{$this->prefix}-form-setting-overwrite-bsn",
+					'type'    => 'text',
+					'label'   => esc_html__( 'Dummy BSN', 'owc-gravityforms-zgw' ),
+					'tooltip' => '<h6>' . __( 'BSN vervangen door dummywaarde (BSN)', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Vul hier een 9 cijferig BSN in die gebruikt wordt bij het aanmaken van een zaak. Handig voor zaken waarbij er geen BSN vereist is van een burger.', 'owc-gravityforms-zgw' ),
+				),
+				array(
 					'name'          => "{$this->prefix}-form-setting-supplier-manually",
 					'default_value' => '1',
 					'tooltip'       => '<h6>' . __( 'Leverancier instellingen', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Kies hoe de leverancier instellingen geconfigureerd moeten worden.', 'owc-gravityforms-zgw' ),
@@ -62,13 +68,7 @@ class FormSettings
 							'value' => '1',
 						),
 					),
-				),
-				array(
-					'name'    => "{$this->prefix}-form-setting-overwrite-bsn",
-					'type'    => 'text',
-					'label'   => esc_html__( 'Dummy BSN', 'owc-gravityforms-zgw' ),
-					'tooltip' => '<h6>' . __( 'BSN vervangen door dummywaarde (BSN)', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Vul hier een 9 cijferig BSN in die gebruikt wordt bij het aanmaken van een zaak. Handig voor zaken waarbij er geen BSN vereist is van een burger.', 'owc-gravityforms-zgw' ),
-				),
+				)
 			),
 		);
 
@@ -214,7 +214,7 @@ class FormSettings
 							),
 							array(
 								'field'  => "{$this->prefix}-form-setting-supplier-manually",
-								'values' => array( true, 'on' ),
+								'values' => array( true, '1' ),
 							),
 						),
 					),
@@ -232,7 +232,7 @@ class FormSettings
 							),
 							array(
 								'field'  => "{$this->prefix}-form-setting-supplier-manually",
-								'values' => array( true, 'on' ),
+								'values' => array( true, '1' ),
 							),
 						),
 					),
