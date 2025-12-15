@@ -34,12 +34,14 @@ abstract class Adapter
 	protected Client $client;
 	protected string $supplier_name;
 	protected LoggerZGW $logger;
+	protected bool $is_cron;
 
-	public function __construct( Client $client, string $supplier_name )
+	public function __construct( Client $client, string $supplier_name, bool $is_cron = false )
 	{
 		$this->client        = $client;
 		$this->logger        = ContainerResolver::make()->get( 'logger.zgw' );
 		$this->supplier_name = $supplier_name;
+		$this->is_cron       = $is_cron;
 	}
 
 	protected function transient_key_prefix(): string
@@ -53,7 +55,7 @@ abstract class Adapter
 	{
 		$types = get_transient( $transient_key );
 
-		if ( is_array( $types ) && $types ) {
+		if ( is_array( $types ) && array() !== $types && false === $this->is_cron ) {
 			return $types;
 		}
 
