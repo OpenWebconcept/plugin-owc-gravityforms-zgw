@@ -4,7 +4,7 @@
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.1.0
  */
 
 namespace OWCGravityFormsZGW\WPCron\Events;
@@ -26,6 +26,8 @@ use function OWC\ZGW\apiClient;
 
 /**
  * Event used to populate form settings of all configured suppliers.
+ *
+ * @since 1.1.0
  */
 class PopulateFormSettings
 {

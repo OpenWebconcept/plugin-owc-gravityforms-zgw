@@ -72,7 +72,7 @@ class TransactionsServiceProvider extends ServiceProvider
 	/**
 	 * Add or remove capabilities for roles conditionally.
 	 *
-	 * @since NEXT
+	 * @since 1.1.0
 	 */
 	public function handle_role_capabilities(): void
 	{
@@ -169,7 +169,7 @@ class TransactionsServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.1.0
 	 */
 	public function enqueue_scripts(): void
 	{
@@ -204,7 +204,7 @@ class TransactionsServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.1.0
 	 */
 	public function register_ajax_handlers(): void
 	{

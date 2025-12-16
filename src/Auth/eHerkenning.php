@@ -4,7 +4,7 @@
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.1.0
  */
 
 namespace OWCGravityFormsZGW\Auth;
@@ -18,20 +18,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Retrieve the Chamber of Commerce number (KVK) by integrating with eHerkenning authentication.
+ *
+ * @since 1.1.0
  */
 class eHerkenning
 {
-	/**
-	 * @since NEXT
-	 */
 	public static function make(): self
 	{
 		return new static();
 	}
 
-	/**
-	 * @since NEXT
-	 */
 	public function kvk(): string
 	{
 		if ( ! class_exists( '\OWC\IdpUserData\eHerkenningSession' ) ) {

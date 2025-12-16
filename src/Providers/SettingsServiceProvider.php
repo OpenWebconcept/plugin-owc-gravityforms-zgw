@@ -51,7 +51,7 @@ class SettingsServiceProvider extends ServiceProvider
 	/**
 	 * Add a settings page to the wp-admin.
 	 *
-	 * @since NEXT
+	 * @since 1.1.0
 	 */
 	public function register_settings_page(): void
 	{
@@ -67,7 +67,7 @@ class SettingsServiceProvider extends ServiceProvider
 	/**
 	 * Initialize the options for the settings page.
 	 *
-	 * @since NEXT
+	 * @since 1.1.0
 	 */
 	public function register_settings_options(): void
 	{

@@ -4,7 +4,7 @@
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.1.0
  */
 
 namespace OWCGravityFormsZGW\Transactions\Controllers;
@@ -23,7 +23,7 @@ use WP_Error;
 /**
  * Transaction Controller.
  *
- * @since NEXT
+ * @since 1.1.0
  */
 class RetryController
 {

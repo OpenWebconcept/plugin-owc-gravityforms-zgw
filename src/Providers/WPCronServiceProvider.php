@@ -4,7 +4,7 @@
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.1.0
  */
 
 namespace OWCGravityFormsZGW\Providers;
@@ -21,7 +21,7 @@ use OWCGravityFormsZGW\WPCron\Events\PopulateFormSettings;
 /**
  * Register transactions service provider.
  *
- * @since NEXT
+ * @since 1.1.0
  */
 class WPCronServiceProvider extends ServiceProvider
 {

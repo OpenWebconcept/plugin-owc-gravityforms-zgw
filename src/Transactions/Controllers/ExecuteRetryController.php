@@ -4,7 +4,7 @@
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.1.0
  */
 
 namespace OWCGravityFormsZGW\Transactions\Controllers;
@@ -25,7 +25,7 @@ use OWC\ZGW\Entities\Zaak;
 /**
  * Execute Retry Controller.
  *
- * @since NEXT
+ * @since 1.1.0
  */
 class ExecuteRetryController
 {
