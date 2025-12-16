@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.1] - 2025-12-16
+
+- Fix: missing class method time_to_execute in WPCronServiceProvider
+
 ## [v1.1.0] - 2025-12-16
 
 - Added: retry mechanism

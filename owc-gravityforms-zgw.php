@@ -12,7 +12,7 @@
  * Plugin Name:       OWC | GravityForms ZGW
  * Plugin URI:        https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw
  * Description:       Koppelt GravityForms met ZGW.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Author:            Yard | Digital Agency
  * Author URI:        https://www.yard.nl
  * License:           EUPL
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const OWC_GRAVITYFORMS_ZGW_VERSION             = '1.1.0';
+const OWC_GRAVITYFORMS_ZGW_VERSION             = '1.1.1';
 const OWC_GRAVITYFORMS_ZGW_REQUIRED_WP_VERSION = '6.7';
 const OWC_GRAVITYFORMS_ZGW_FILE                = __FILE__;
 
