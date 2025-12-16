@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 use DateTime;
 use Exception;
 use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\LoggerZGW;
-use OWCGravityFormsZGW\Traits\FormSetting;
 use OWCGravityFormsZGW\Traits\MergeTagTranslator;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\RoltypenFilter;
@@ -38,7 +38,6 @@ use function OWC\ZGW\apiClient;
  */
 abstract class AbstractCreateZaakAction
 {
-	use FormSetting;
 	use MergeTagTranslator;
 
 	protected array $entry;
@@ -69,7 +68,7 @@ abstract class AbstractCreateZaakAction
 			'registratiedatum'             => date( 'Y-m-d' ),
 			'startdatum'                   => date( 'Y-m-d' ),
 			'verantwoordelijkeOrganisatie' => ContainerResolver::make()->get( 'zgw.rsin' ),
-			'zaaktype'                     => $this->zaaktype_identifier_form_setting( $this->form, $this->supplier_name ),
+			'zaaktype'                     => FormUtils::zaaktype_identifier_form_setting( $this->form, $this->supplier_name ),
 		);
 
 		return $this->map_required_zaak_creation_args( $args );
@@ -117,7 +116,7 @@ abstract class AbstractCreateZaakAction
 		$current_bsn = ContainerResolver::make()->get( 'digid.current_user_bsn' );
 
 		if ( ! is_string( $current_bsn ) || '' === $current_bsn ) {
-			$current_bsn = $this->overwrite_bsn_form_setting( $this->form );
+			$current_bsn = FormUtils::overwrite_bsn_form_setting( $this->form );
 		}
 
 		if ( ! is_string( $current_bsn ) || '' === $current_bsn ) {
@@ -159,7 +158,7 @@ abstract class AbstractCreateZaakAction
 	public function get_rol_types(): PagedCollection
 	{
 		$filter = new RoltypenFilter();
-		$filter->add( 'zaaktype', $this->zaaktype_identifier_form_setting( $this->form, $this->supplier_name ) );
+		$filter->add( 'zaaktype', FormUtils::zaaktype_identifier_form_setting( $this->form, $this->supplier_name ) );
 
 		return $this->client->roltypen()->filter( $filter );
 	}

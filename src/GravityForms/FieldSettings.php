@@ -18,14 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Exception;
 use GFAPI;
+use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWC\ZGW\Endpoints\Filter\EigenschappenFilter;
 use OWC\ZGW\Entities\Attributes\Confidentiality;
 use OWC\ZGW\Entities\Informatieobjecttype;
 use OWC\ZGW\Entities\Zaaktype;
 use OWC\ZGW\Support\Collection;
-use OWCGravityFormsZGW\ContainerResolver;
-use OWCGravityFormsZGW\Traits\FormSetting;
-
 use function OWC\ZGW\apiClient;
 
 /**
@@ -35,8 +34,6 @@ use function OWC\ZGW\apiClient;
  */
 class FieldSettings
 {
-	use FormSetting;
-
 	protected const TRANSIENT_LIFETIME_IN_SECONDS = 64800; // 18 hours.
 
 	/**
@@ -61,7 +58,7 @@ class FieldSettings
 			return;
 		}
 
-		$zaak_type_identifier = $this->zaaktype_identifier_form_setting( $form, $supplier_config['name'] );
+		$zaak_type_identifier = FormUtils::zaaktype_identifier_form_setting( $form, $supplier_config['name'] );
 		$zaak_type            = $this->get_zaak_type( $supplier_config['name'], $zaak_type_identifier );
 
 		if ( ! $zaak_type ) {

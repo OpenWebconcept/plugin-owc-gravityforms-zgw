@@ -41,9 +41,9 @@ class FormUtils
 		$clients = (array) get_option( 'zgw_api_settings' );
 		$clients = $clients['zgw-api-configured-clients'] ?? array();
 
-		foreach ( $clients as $clientConfig ) {
-			if ( strtolower( $clientConfig['name'] ) === $supplier ) {
-				return $clientConfig;
+		foreach ( $clients as $client_config ) {
+			if ( strtolower( $client_config['name'] ) === $supplier ) {
+				return $client_config;
 			}
 		}
 
@@ -92,5 +92,49 @@ class FormUtils
 		}
 
 		return '';
+	}
+
+	/**
+	 * Checks if the form setting is selected or configured manually.
+	 * Returns the selected zaaktype identifier.
+	 */
+	public static function zaaktype_identifier_form_setting(array $form, string $supplier_name ): string
+	{
+		$supplier_name = strtolower( $supplier_name );
+
+		if ( '1' === ( $form[ sprintf( '%s-form-setting-supplier-manually', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '0' ) ) {
+			$zaaktype_identifier = $form[ sprintf( '%s-form-setting-%s-identifier-manual', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $supplier_name ) ] ?? null;
+		} else {
+			$zaaktype_identifier = $form[ sprintf( '%s-form-setting-%s-identifier', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $supplier_name ) ] ?? null;
+		}
+
+		return ! empty( $zaaktype_identifier ) ? $zaaktype_identifier : '';
+	}
+
+	/**
+	 * Checks if the form setting is selected or configured manually.
+	 * Returns the selected information object type identifier.
+	 */
+	public static function information_object_type_form_setting(array $form, string $supplier_name ): string
+	{
+		$supplier_name = strtolower( $supplier_name );
+
+		if ( '1' === ( $form[ sprintf( '%s-form-setting-supplier-manually', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '0' ) ) {
+			$zaaktype_identifier = $form[ sprintf( '%s-form-setting-%s-information-object-type-manual', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $supplier_name ) ] ?? null;
+		} else {
+			$zaaktype_identifier = $form[ sprintf( '%s-form-setting-%s-information-object-type', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $supplier_name ) ] ?? null;
+		}
+
+		return ! empty( $zaaktype_identifier ) ? $zaaktype_identifier : '';
+	}
+
+	/**
+	 * Return the value of the overwrite bsn form setting.
+	 */
+	public static function overwrite_bsn_form_setting(array $form ): ?string
+	{
+		$bsn = $form[ sprintf( '%s-form-setting-overwrite-bsn', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? null;
+
+		return is_string( $bsn ) && '' !== $bsn ? $bsn : null;
 	}
 }

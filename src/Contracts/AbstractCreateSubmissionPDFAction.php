@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Exception;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormSettingsPDF;
+use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\Traits\CheckURL;
-use OWCGravityFormsZGW\Traits\FormSetting;
 use OWCGravityFormsZGW\Traits\InformationObject;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
@@ -36,7 +36,6 @@ use function OWC\ZGW\apiClient;
 abstract class AbstractCreateSubmissionPDFAction
 {
 	use CheckURL;
-	use FormSetting;
 	use InformationObject;
 
 	protected array $entry;
@@ -88,7 +87,7 @@ abstract class AbstractCreateSubmissionPDFAction
 
 	public function prepare_args_pdf(string $file_name, string $object_url ): array
 	{
-		$information_object_type = $this->information_object_type_form_setting( $this->form, $this->supplier_name );
+		$information_object_type = FormUtils::information_object_type_form_setting( $this->form, $this->supplier_name );
 
 		if ( empty( $information_object_type ) ) {
 			return array();

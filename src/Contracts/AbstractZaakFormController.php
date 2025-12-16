@@ -19,7 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 use GFFormsModel;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\LoggerZGW;
-use OWCGravityFormsZGW\Traits\FormSetting;
 use OWC\ZGW\Entities\Zaak;
 use Throwable;
 
@@ -30,12 +29,8 @@ use Throwable;
  */
 abstract class AbstractZaakFormController
 {
-	use FormSetting;
-
 	protected array $entry;
-
 	protected array $form;
-
 	protected LoggerZGW $logger;
 
 	public function __construct()

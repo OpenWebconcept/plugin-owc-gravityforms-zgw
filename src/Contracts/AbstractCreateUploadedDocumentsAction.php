@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use GF_Field;
 use OWCGravityFormsZGW\ContainerResolver;
-use OWCGravityFormsZGW\Traits\FormSetting;
 use OWCGravityFormsZGW\Traits\InformationObject;
 use OWCGravityFormsZGW\Traits\MergeTagTranslator;
 use OWC\ZGW\Contracts\Client;
@@ -34,7 +33,6 @@ use function OWC\ZGW\apiClient;
  */
 abstract class AbstractCreateUploadedDocumentsAction
 {
-	use FormSetting;
 	use InformationObject;
 	use MergeTagTranslator;
 
@@ -172,8 +170,8 @@ abstract class AbstractCreateUploadedDocumentsAction
 
 	protected function create_file_name(string $object_url ): string
 	{
-		$pathInfo  = pathinfo( $object_url );
-		$file_name = $pathInfo['filename'];
+		$path_info = pathinfo( $object_url );
+		$file_name = $path_info['filename'];
 
 		return sprintf( '%s_%s', uniqid(), $file_name );
 	}
@@ -184,18 +182,18 @@ abstract class AbstractCreateUploadedDocumentsAction
 			return null;
 		}
 
-		$object = $this->client->enkelvoudiginformatieobjecten()->create( new Enkelvoudiginformatieobject( $args, $this->client ) );
-		$object->setValue( 'zaak', $this->zaak->url ); // Is required for connecting an "informatieobject" to a "zaak".
+		$information_object = $this->client->enkelvoudiginformatieobjecten()->create( new Enkelvoudiginformatieobject( $args, $this->client ) );
+		$information_object->setValue( 'zaak', $this->zaak->url ); // Is required for connecting an "informatieobject" to a "zaak".
 
-		return $object;
+		return $information_object;
 	}
 
-	protected function connect_zaak_to_information_object(?Enkelvoudiginformatieobject $object ): ?Zaakinformatieobject
+	protected function connect_zaak_to_information_object(?Enkelvoudiginformatieobject $information_object ): ?Zaakinformatieobject
 	{
-		if ( empty( $object ) ) {
+		if ( empty( $information_object ) ) {
 			return null;
 		}
 
-		return $this->client->zaakinformatieobjecten()->create( new Zaakinformatieobject( $object->toArray(), $this->client ) );
+		return $this->client->zaakinformatieobjecten()->create( new Zaakinformatieobject( $information_object->toArray(), $this->client ) );
 	}
 }
