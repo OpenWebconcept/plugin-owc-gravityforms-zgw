@@ -16,6 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use DateTime;
+use DateTimeZone;
 use OWCGravityFormsZGW\WPCron\Events\PopulateFormSettings;
 
 /**
@@ -38,7 +40,17 @@ class WPCronServiceProvider extends ServiceProvider
 	protected function register_events(): void
 	{
 		if ( ! wp_next_scheduled( 'owc-gf-zgw-form_settings_cron' ) ) {
-			wp_schedule_event( $this->timeToExecute( 'tomorrow 04:00:00' ), 'daily', 'owc-gf-zgw-form_settings_cron' );
+			wp_schedule_event( $this->time_to_execute( 'tomorrow 04:00:00' ), 'daily', 'owc-gf-zgw-form_settings_cron' );
 		}
 	}
+
+	/**
+	 * @since 1.1.1
+	 */
+	protected function time_to_execute(string $datetime = 'now'): int
+    {
+        $currentDateTime = new DateTime($datetime, new DateTimeZone(wp_timezone_string()));
+
+        return $currentDateTime->getTimestamp();
+    }
 }
