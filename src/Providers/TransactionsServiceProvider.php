@@ -136,7 +136,7 @@ class TransactionsServiceProvider extends ServiceProvider
 	public function handle_transaction_report(): void
 	{
 		$default_email = '__unset__';
-		$to            = apply_filters( 'owc_zgw_transaction_report_recipient_email', $default_email );
+		$to            = ContainerResolver::make()->get( 'zgw.site_options' )->transaction_report_recipient_email();
 
 		$mailer = new TransactionMailer();
 		$mailer->send_report( $default_email, $to );
