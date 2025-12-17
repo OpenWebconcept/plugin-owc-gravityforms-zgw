@@ -50,4 +50,9 @@ class SiteOptionsSingleton
 	{
 		return $this->options['owc_gf_zgw_transaction_user_roles'] ?? array();
 	}
+
+	public function transaction_report_recipient_email(): string
+	{
+		return $this->options['owc_zgw_transactions_report_recipient_email'] ?? '';
+	}
 }

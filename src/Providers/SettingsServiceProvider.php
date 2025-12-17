@@ -56,8 +56,8 @@ class SettingsServiceProvider extends ServiceProvider
 	public function register_settings_page(): void
 	{
 		add_options_page(
-			__( 'ZGW instellingen', 'owc-gravityforms-zgw' ),
-			__( 'ZGW instellingen', 'owc-gravityforms-zgw' ),
+			__( 'OWC | GravityForms ZGW instellingen', 'owc-gravityforms-zgw' ),
+			__( 'OWC | GravityForms ZGW instellingen', 'owc-gravityforms-zgw' ),
 			'manage_options',
 			OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX,
 			$this->controller->render_page( ... )
@@ -75,14 +75,14 @@ class SettingsServiceProvider extends ServiceProvider
 			'owc_gf_zgw_options_group',
 			OWC_GRAVITYFORMS_ZGW_SITE_OPTION_NAME,
 			array(
-				'sanitize_callback' => $this->controller->sanitize_plugin_options_settings( ... ),
+				'sanitize_callback' => $this->controller->sanitize_validate_plugin_options_settings( ... ),
 			)
 		);
 
 		add_settings_section(
-			'owc_gf_zgw_section_general',
-			__( 'Instellingen', 'owc-gravityforms-zgw' ),
-			$this->controller->section_description_general( ... ),
+			'owc_gf_zgw_section_transactions_overview',
+			__( 'Transactie overzicht', 'owc-gravityforms-zgw' ),
+			$this->controller->section_description_transactions_overview( ... ),
 			'owc-gf-zgw'
 		);
 
@@ -91,8 +91,24 @@ class SettingsServiceProvider extends ServiceProvider
 			__( 'Gebruikersrollen', 'owc-gravityforms-zgw' ),
 			$this->controller->section_fields_render( ... ),
 			'owc-gf-zgw',
-			'owc_gf_zgw_section_general',
+			'owc_gf_zgw_section_transactions_overview',
 			array( 'settings_field_id' => 'owc_gf_zgw_transaction_user_roles' )
+		);
+
+		add_settings_section(
+			'owc_gf_zgw_section_transactions_report',
+			__( 'Transactie rapport', 'owc-gravityforms-zgw' ),
+			$this->controller->section_description_transactions_report( ... ),
+			'owc-gf-zgw'
+		);
+
+		add_settings_field(
+			'owc_zgw_transactions_report_recipient_email',
+			__( 'Verzenden naar', 'owc-gravityforms-zgw' ),
+			$this->controller->section_fields_render( ... ),
+			'owc-gf-zgw',
+			'owc_gf_zgw_section_transactions_report',
+			array( 'settings_field_id' => 'owc_zgw_transactions_report_recipient_email' )
 		);
 	}
 }

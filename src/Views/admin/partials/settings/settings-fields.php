@@ -9,9 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit();
 }
 
-$settings_field_id                 = $settings_field_id ?? '';
-$available_user_roles              = is_array( $available_user_roles ?? null ) ? $available_user_roles : array();
-$owc_gf_zgw_transaction_user_roles = is_array( $owc_gf_zgw_transaction_user_roles ?? null ) ? $owc_gf_zgw_transaction_user_roles : array();
+$settings_field_id                           = $settings_field_id ?? '';
+$available_user_roles                        = is_array( $available_user_roles ?? null ) ? $available_user_roles : array();
+$owc_gf_zgw_transaction_user_roles           = is_array( $owc_gf_zgw_transaction_user_roles ?? null ) ? $owc_gf_zgw_transaction_user_roles : array();
+$owc_zgw_transactions_report_recipient_email = $owc_zgw_transactions_report_recipient_email ?? '';
 ?>
 
 <?php if ( 'owc_gf_zgw_transaction_user_roles' === $settings_field_id ) : ?>
@@ -22,4 +23,8 @@ $owc_gf_zgw_transaction_user_roles = is_array( $owc_gf_zgw_transaction_user_role
 	</option>
 	<?php endforeach; ?>
 </select>
+<?php endif; ?>
+
+<?php if ( 'owc_zgw_transactions_report_recipient_email' === $settings_field_id ) : ?>
+	<input type="email" name="owc_gf_zgw_options[owc_zgw_transactions_report_recipient_email]" value="<?php echo esc_attr( $owc_zgw_transactions_report_recipient_email ); ?>" required>
 <?php endif; ?>

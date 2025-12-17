@@ -2,14 +2,14 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | GravityForms ZGW 1.0.0\n"
+"Project-Id-Version: OWC | GravityForms ZGW 1.1.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-gravityforms-zgw\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-12-11T12:57:21+00:00\n"
+"POT-Creation-Date: 2025-12-19T13:00:19+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-gravityforms-zgw\n"
@@ -39,12 +39,16 @@ msgstr ""
 msgid "https://www.yard.nl"
 msgstr ""
 
-#: src/Contracts/AbstractZaakFormController.php:132
+#: src/Contracts/AbstractZaakFormController.php:127
 msgid "Systeem"
 msgstr ""
 
-#: src/Contracts/AbstractZaakFormController.php:133
+#: src/Contracts/AbstractZaakFormController.php:128
 msgid "Er waren problemen bij het succesvol indienen van deze zaak, bekijk de transacties voor meer informatie."
+msgstr ""
+
+#: src/Controllers/SettingsController.php:105
+msgid "Ongeldig e-mailadres voor het verzenden van het transactie rapport."
 msgstr ""
 
 #: src/GravityForms/FormSettings.php:36
@@ -93,14 +97,14 @@ msgstr ""
 msgid "Configureer instellingen handmatig (invoeren van URL's)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:167
-#: src/GravityForms/FormSettings.php:207
+#: src/GravityForms/FormSettings.php:166
+#: src/GravityForms/FormSettings.php:206
 #: src/Views/partials/gf-field-zgw-mapping-options.php:24
 msgid "Zaaktype"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:186
-#: src/GravityForms/FormSettings.php:225
+#: src/GravityForms/FormSettings.php:185
+#: src/GravityForms/FormSettings.php:224
 msgid "Informatie object type"
 msgstr ""
 
@@ -122,15 +126,23 @@ msgstr ""
 
 #: src/Providers/SettingsServiceProvider.php:59
 #: src/Providers/SettingsServiceProvider.php:60
-msgid "ZGW instellingen"
+msgid "OWC | GravityForms ZGW instellingen"
 msgstr ""
 
 #: src/Providers/SettingsServiceProvider.php:84
-msgid "Instellingen"
+msgid "Transactie overzicht"
 msgstr ""
 
 #: src/Providers/SettingsServiceProvider.php:91
 msgid "Gebruikersrollen"
+msgstr ""
+
+#: src/Providers/SettingsServiceProvider.php:100
+msgid "Transactie rapport"
+msgstr ""
+
+#: src/Providers/SettingsServiceProvider.php:107
+msgid "Verzenden naar"
 msgstr ""
 
 #: src/Providers/TransactionsServiceProvider.php:53
@@ -245,12 +257,16 @@ msgstr ""
 msgid "Onbekend"
 msgstr ""
 
-#: src/Views/admin/partials/settings/settings-description-general.php:15
+#: src/Views/admin/partials/settings/description_transactions_overview.php:15
 msgid "De OWC | GravityForms ZGW plugin stelt een transacties overzicht beschikbaar waarmee redacteuren al het verkeer kunnen monitoren en waar nodig opnieuw kunnen uitvoeren."
 msgstr ""
 
-#: src/Views/admin/partials/settings/settings-description-general.php:20
+#: src/Views/admin/partials/settings/description_transactions_overview.php:20
 msgid "Stel hieronder de gebruikersrollen in die toegang hebben tot het transacties overzicht."
+msgstr ""
+
+#: src/Views/admin/partials/settings/description_transactions_report.php:15
+msgid "Stel het e-mailadres in waarnaar het transactierapport wordt gestuurd."
 msgstr ""
 
 #: src/Views/admin/settings-page.php:19
