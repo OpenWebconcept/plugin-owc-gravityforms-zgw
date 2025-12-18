@@ -21,13 +21,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		jQuery(document).on('gform_load_field_settings', function (event, field, form) {
 			const mappedFieldZGW = document.getElementById('mappedFieldZGW');
-			if(mappedFieldZGW) mappedFieldZGW.value = field['mappedFieldValueZGW'];
+			if(mappedFieldZGW) mappedFieldZGW.value = field['mappedFieldValueZGW'] ?? '';
 
 			const mappedFieldDocumentTypeZGW = document.getElementById('mappedFieldDocumentTypeZGW');
-			if(mappedFieldDocumentTypeZGW) mappedFieldDocumentTypeZGW.value = field['mappedFieldDocumentTypeValueZGW'];
+			if(mappedFieldDocumentTypeZGW) mappedFieldDocumentTypeZGW.value = field['mappedFieldDocumentTypeValueZGW'] ?? '';
 
 			const uploadFieldDescriptionZGW = document.getElementById('uploadFieldDescriptionZGW');
-			if(uploadFieldDescriptionZGW) uploadFieldDescriptionZGW.value = field['uploadFieldDescriptionValueZGW'];
+			if(uploadFieldDescriptionZGW) uploadFieldDescriptionZGW.value = field['uploadFieldDescriptionValueZGW'] ?? '';
 		});
 	});
 </script>
