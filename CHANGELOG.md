@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.3] - 2025-12-18
+
+- Fix: restore default ZGW field mapping on field settings load in form editor
+
 ## [v1.1.2] - 2025-12-17
 
 - Change: release github workflow
