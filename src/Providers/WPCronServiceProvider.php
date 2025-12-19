@@ -47,10 +47,10 @@ class WPCronServiceProvider extends ServiceProvider
 	/**
 	 * @since 1.1.1
 	 */
-	protected function time_to_execute(string $datetime = 'now'): int
-    {
-        $currentDateTime = new DateTime($datetime, new DateTimeZone(wp_timezone_string()));
+	protected function time_to_execute(string $datetime = 'now' ): int
+	{
+		$currentDateTime = new DateTime( $datetime, new DateTimeZone( wp_timezone_string() ) );
 
-        return $currentDateTime->getTimestamp();
-    }
+		return $currentDateTime->getTimestamp();
+	}
 }

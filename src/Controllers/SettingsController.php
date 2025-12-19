@@ -64,7 +64,7 @@ class SettingsController
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.1.4
 	 */
 	private function sanitize_plugin_options_settings( $settings ): array
 	{
@@ -84,7 +84,7 @@ class SettingsController
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.1.4
 	 */
 	private function validate_plugin_options_settings( $settings ): array
 	{
@@ -94,7 +94,7 @@ class SettingsController
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.1.4
 	 */
 	private function validate_email( $email ): string
 	{

@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.4] - 2025-12-19
+
+- Change: make transaction report recipient configurable
+
 ## [v1.1.3] - 2025-12-18
 
 - Fix: restore default ZGW field mapping on field settings load in form editor
