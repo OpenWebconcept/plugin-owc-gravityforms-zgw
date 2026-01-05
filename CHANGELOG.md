@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.5] - 2026-01-05
+
+- Fix: fetching 'zaak' properties in form field settings
+
 ## [v1.1.4] - 2025-12-19
 
 - Change: make transaction report recipient configurable
