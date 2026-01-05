@@ -65,7 +65,7 @@ class FieldSettings
 			return;
 		}
 
-		$properties = empty( $zaak_type['url'] ) ? array() : $this->get_zaak_type_properties( $supplier_config['name'], $zaak_type->url );
+		$properties = empty( $zaak_type->url ) ? array() : $this->get_zaak_type_properties( $supplier_config['name'], $zaak_type->url );
 
 		owc_gravityforms_zgw_render_view(
 			'partials/gf-field-zgw-mapping-options',
