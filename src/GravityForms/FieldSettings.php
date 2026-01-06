@@ -71,7 +71,7 @@ class FieldSettings
 			'partials/gf-field-zgw-mapping-options',
 			array(
 				'properties'  => $properties instanceof Collection ? $this->prepare_properties_options( $properties ) : array(),
-				'objecttypes' => $this->prepare_object_types_options( $this->get_information_object_types( $zaak_type, $zaak_type->identificatie ), $zaak_type->identificatie ),
+				'objecttypes' => $this->prepare_object_types_options( $this->get_information_object_types( $zaak_type, $zaak_type->identificatie ) ),
 			)
 		);
 		owc_gravityforms_zgw_render_view( 'partials/gf-field-zgw-upload-field-options' );
@@ -135,6 +135,10 @@ class FieldSettings
 		if ( filter_var( $zaak_type_identifier, FILTER_VALIDATE_URL ) ) {
 			$explode              = explode( '/', $zaak_type_identifier ) ? explode( '/', $zaak_type_identifier ) : array();
 			$zaak_type_identifier = end( $explode );
+		}
+
+		if ( '' === $zaak_type_identifier ) {
+			return null;
 		}
 
 		$zaak_type = $client->zaaktypen()->get( $zaak_type_identifier );

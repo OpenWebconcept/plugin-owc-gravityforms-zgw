@@ -201,7 +201,7 @@ class FormSettings
 			),
 			'manual_setting' => array(
 				array(
-					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-identifier",
+					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-identifier-manual",
 					'type'       => 'text',
 					'label'      => esc_html__( 'Zaaktype', 'owc-gravityforms-zgw' ),
 					'dependency' => array(
@@ -219,7 +219,7 @@ class FormSettings
 					),
 				),
 				array(
-					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-information-object-type",
+					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-information-object-type-manual",
 					'type'       => 'text',
 					'label'      => esc_html__( 'Informatie object type', 'owc-gravityforms-zgw' ),
 					'dependency' => array(
