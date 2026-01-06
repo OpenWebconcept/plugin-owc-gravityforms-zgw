@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.6] - 2026-01-06
+
+- Fix: name attribute of manual supplier form settings
+
 ## [v1.1.5] - 2026-01-05
 
 - Fix: fetching 'zaak' properties in form field settings
