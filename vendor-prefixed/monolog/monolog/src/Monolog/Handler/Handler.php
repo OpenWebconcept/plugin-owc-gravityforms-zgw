@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by plugin on 17-October-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by plugin on 06-January-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */ declare(strict_types=1);
 
 /*
@@ -49,19 +49,10 @@ abstract class Handler implements HandlerInterface
         }
     }
 
-    public function __sleep()
+    public function __serialize(): array
     {
         $this->close();
 
-        $reflClass = new \ReflectionClass($this);
-
-        $keys = [];
-        foreach ($reflClass->getProperties() as $reflProp) {
-            if (!$reflProp->isStatic()) {
-                $keys[] = $reflProp->getName();
-            }
-        }
-
-        return $keys;
+        return (array) $this;
     }
 }

@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by plugin on 17-October-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by plugin on 06-January-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */ declare(strict_types=1);
 
 /*
@@ -283,7 +283,7 @@ class LineFormatter extends NormalizerFormatter
             $file = preg_replace('{^'.preg_quote($this->basePath).'}', '', $file);
         }
 
-        $str .= '): ' . $e->getMessage() . ' at ' . $file . ':' . $e->getLine() . ')';
+        $str .= '): ' . $e->getMessage() . ' at ' . strtr((string) $file, DIRECTORY_SEPARATOR, '/') . ':' . $e->getLine() . ')';
 
         if ($this->includeStacktraces) {
             $str .= $this->stacktracesParser($e);
@@ -308,7 +308,11 @@ class LineFormatter extends NormalizerFormatter
             $trace = str_replace("\n", "\n{$this->indentStacktraces}", $trace);
         }
 
-        return "\n{$this->indentStacktraces}[stacktrace]\n{$this->indentStacktraces}" . $trace . "\n";
+        if (trim($trace) === '') {
+            return '';
+        }
+
+        return "\n{$this->indentStacktraces}[stacktrace]\n{$this->indentStacktraces}" . strtr($trace, DIRECTORY_SEPARATOR, '/') . "\n";
     }
 
     private function stacktracesParserCustom(string $trace): string

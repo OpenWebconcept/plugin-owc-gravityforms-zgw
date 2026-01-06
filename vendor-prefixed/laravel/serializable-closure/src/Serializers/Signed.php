@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by plugin on 17-October-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by plugin on 06-January-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace OWCGravityFormsZGW\Vendor_Prefixed\Laravel\SerializableClosure\Serializers;

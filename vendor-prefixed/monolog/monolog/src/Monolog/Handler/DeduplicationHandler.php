@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by plugin on 17-October-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by plugin on 06-January-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */ declare(strict_types=1);
 
 /*
@@ -153,7 +153,9 @@ class DeduplicationHandler extends BufferHandler
             throw new \RuntimeException('Failed to open file for reading and writing: ' . $this->deduplicationStore);
         }
 
-        flock($handle, LOCK_EX);
+        if (false === flock($handle, LOCK_EX)) {
+            return;
+        }
         $validLogs = [];
 
         $timestampValidity = time() - $this->time;

@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by plugin on 17-October-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by plugin on 06-January-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */ declare(strict_types=1);
 
 /*
@@ -32,6 +32,8 @@ class SlackWebhookHandler extends AbstractProcessingHandler
 {
     /**
      * Slack Webhook token
+     *
+     * @var non-empty-string
      */
     private string $webhookUrl;
 
@@ -41,7 +43,7 @@ class SlackWebhookHandler extends AbstractProcessingHandler
     private SlackRecord $slackRecord;
 
     /**
-     * @param string      $webhookUrl             Slack Webhook URL
+     * @param non-empty-string $webhookUrl             Slack Webhook URL
      * @param string|null $channel                Slack channel (encoded ID or name)
      * @param string|null $username               Name of a bot
      * @param bool        $useAttachment          Whether the message should be added to Slack as attachment (plain text otherwise)

@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by plugin on 17-October-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by plugin on 06-January-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */ declare(strict_types=1);
 
 /*
@@ -88,7 +88,7 @@ class WildfireFormatter extends NormalizerFormatter
             $message = reset($message);
         }
 
-        if (\is_array($message) && isset($message['context']['table'])) {
+        if (is_array($message) && isset($message['context']) && \is_array($message['context']) && isset($message['context']['table'])) {
             $type  = 'TABLE';
             $label = $record->channel .': '. $record->message;
             $message = $message['context']['table'];

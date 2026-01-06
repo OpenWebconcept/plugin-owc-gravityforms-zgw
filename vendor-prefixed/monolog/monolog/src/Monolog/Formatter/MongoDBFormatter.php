@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by plugin on 17-October-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by plugin on 06-January-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */ declare(strict_types=1);
 
 /*
@@ -30,7 +30,6 @@ class MongoDBFormatter implements FormatterInterface
 {
     private bool $exceptionTraceAsString;
     private int $maxNestingLevel;
-    private bool $isLegacyMongoExt;
 
     /**
      * @param int  $maxNestingLevel        0 means infinite nesting, the $record itself is level 1, $record->context is 2
@@ -40,8 +39,6 @@ class MongoDBFormatter implements FormatterInterface
     {
         $this->maxNestingLevel = max($maxNestingLevel, 0);
         $this->exceptionTraceAsString = $exceptionTraceAsString;
-
-        $this->isLegacyMongoExt = \extension_loaded('mongodb') && version_compare((string) phpversion('mongodb'), '1.1.9', '<=');
     }
 
     /**
@@ -132,33 +129,6 @@ class MongoDBFormatter implements FormatterInterface
 
     protected function formatDate(\DateTimeInterface $value, int $nestingLevel): UTCDateTime
     {
-        if ($this->isLegacyMongoExt) {
-            return $this->legacyGetMongoDbDateTime($value);
-        }
-
-        return $this->getMongoDbDateTime($value);
-    }
-
-    private function getMongoDbDateTime(\DateTimeInterface $value): UTCDateTime
-    {
         return new UTCDateTime((int) floor(((float) $value->format('U.u')) * 1000));
-    }
-
-    /**
-     * This is needed to support MongoDB Driver v1.19 and below
-     *
-     * See https://github.com/mongodb/mongo-php-driver/issues/426
-     *
-     * It can probably be removed in 2.1 or later once MongoDB's 1.2 is released and widely adopted
-     */
-    private function legacyGetMongoDbDateTime(\DateTimeInterface $value): UTCDateTime
-    {
-        $milliseconds = floor(((float) $value->format('U.u')) * 1000);
-
-        $milliseconds = (PHP_INT_SIZE === 8) //64-bit OS?
-            ? (int) $milliseconds
-            : (string) $milliseconds;
-
-        return new UTCDateTime($milliseconds);
     }
 }

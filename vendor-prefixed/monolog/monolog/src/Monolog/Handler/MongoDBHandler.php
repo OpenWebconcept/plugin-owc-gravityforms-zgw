@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by plugin on 17-October-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by plugin on 06-January-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */ declare(strict_types=1);
 
 /*
@@ -16,9 +16,10 @@
 
 namespace OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Handler;
 
+use MongoDB\Client;
+use MongoDB\Collection;
 use MongoDB\Driver\BulkWrite;
 use MongoDB\Driver\Manager;
-use MongoDB\Client;
 use OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Level;
 use OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Formatter\FormatterInterface;
 use OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Formatter\MongoDBFormatter;
@@ -39,7 +40,7 @@ use OWCGravityFormsZGW\Vendor_Prefixed\Monolog\LogRecord;
  */
 class MongoDBHandler extends AbstractProcessingHandler
 {
-    private \MongoDB\Collection $collection;
+    private Collection $collection;
 
     private Client|Manager $manager;
 
@@ -55,7 +56,7 @@ class MongoDBHandler extends AbstractProcessingHandler
     public function __construct(Client|Manager $mongodb, string $database, string $collection, int|string|Level $level = Level::Debug, bool $bubble = true)
     {
         if ($mongodb instanceof Client) {
-            $this->collection = $mongodb->selectCollection($database, $collection);
+            $this->collection = method_exists($mongodb, 'getCollection') ? $mongodb->getCollection($database, $collection) : $mongodb->selectCollection($database, $collection);
         } else {
             $this->manager = $mongodb;
             $this->namespace = $database . '.' . $collection;

@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by plugin on 17-October-2025 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by plugin on 06-January-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */ declare(strict_types=1);
 
 /*
@@ -167,6 +167,6 @@ class CubeHandler extends AbstractProcessingHandler
             'Content-Length: ' . \strlen('['.$data.']'),
         ]);
 
-        Curl\Util::execute($this->httpConnection, 5, false);
+        Curl\Util::execute($this->httpConnection, 5);
     }
 }
