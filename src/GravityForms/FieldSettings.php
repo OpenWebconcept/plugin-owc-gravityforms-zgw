@@ -54,7 +54,7 @@ class FieldSettings
 
 		$supplier_config = FormUtils::get_supplier_config( $form );
 
-		if ( empty( $supplier_config['name'] ) || empty( $supplier_config['client_type'] ) ) {
+		if ( ! isset( $supplier_config['name'] ) || ! isset( $supplier_config['client_type'] ) ) {
 			return;
 		}
 
@@ -65,7 +65,7 @@ class FieldSettings
 			return;
 		}
 
-		$properties = empty( $zaak_type->url ) ? array() : $this->get_zaak_type_properties( $supplier_config['name'], $zaak_type->url );
+		$properties = is_null( $zaak_type->url ) ? array() : $this->get_zaak_type_properties( $supplier_config['name'], $zaak_type->url );
 
 		owc_gravityforms_zgw_render_view(
 			'partials/gf-field-zgw-mapping-options',
@@ -183,7 +183,7 @@ class FieldSettings
 	{
 		$options = $properties->map(
 			function ($property ) {
-				if ( empty( $property['naam'] ) || empty( $property['url'] ) ) {
+				if ( ! isset( $property['naam'] ) || ! isset( $property['url'] ) ) {
 					return array();
 				}
 
