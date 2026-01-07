@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.7] - 2026-01-07
+
+- Fix: replace empty() with isset() in FieldSettings
+
 ## [v1.1.6] - 2026-01-06
 
 - Fix: name attribute of manual supplier form settings
