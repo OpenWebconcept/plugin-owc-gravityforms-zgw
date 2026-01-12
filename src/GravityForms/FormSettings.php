@@ -48,7 +48,13 @@ class FormSettings
 					'name'    => "{$this->prefix}-form-setting-overwrite-bsn",
 					'type'    => 'text',
 					'label'   => esc_html__( 'Dummy BSN', 'owc-gravityforms-zgw' ),
-					'tooltip' => '<h6>' . __( 'BSN vervangen door dummywaarde (BSN)', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Vul hier een 9 cijferig BSN in die gebruikt wordt bij het aanmaken van een zaak. Handig voor zaken waarbij er geen BSN vereist is van een burger.', 'owc-gravityforms-zgw' ),
+					'tooltip' => '<h6>' . __( 'BSN vervangen door dummywaarde (BSN)', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Vul hier een 9 cijferig BSN in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen BSN van de burger aanwezig of vereist is.', 'owc-gravityforms-zgw' ),
+				),
+				array(
+					'name'    => "{$this->prefix}-form-setting-overwrite-kvk",
+					'type'    => 'text',
+					'label'   => esc_html__( 'Dummy KVK', 'owc-gravityforms-zgw' ),
+					'tooltip' => '<h6>' . __( 'KVK-nummer vervangen door dummywaarde (KVK)', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Vul hier een 8 cijferig KVK-nummer in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen KVK-nummer van een onderneming aanwezig of vereist is.', 'owc-gravityforms-zgw' ),
 				),
 				array(
 					'name'          => "{$this->prefix}-form-setting-supplier-manually",

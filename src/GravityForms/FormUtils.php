@@ -129,12 +129,35 @@ class FormUtils
 	}
 
 	/**
-	 * Return the value of the overwrite bsn form setting.
+	 * Return the value of the overwrite BSN form setting.
+	 *
+	 * @since 1.1.0
 	 */
 	public static function overwrite_bsn_form_setting(array $form ): ?string
 	{
-		$bsn = $form[ sprintf( '%s-form-setting-overwrite-bsn', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? null;
+		return self::get_overwrite_form_setting( $form, 'form-setting-overwrite-bsn' );
+	}
 
-		return is_string( $bsn ) && '' !== $bsn ? $bsn : null;
+	/**
+	 * Return the value of the overwrite KVK form setting.
+	 *
+	 * @since NEXT
+	 */
+	public static function overwrite_kvk_form_setting(array $form ): ?string
+	{
+		return self::get_overwrite_form_setting( $form, 'form-setting-overwrite-kvk' );
+	}
+
+	/**
+	 * Return the value of an overwrite form setting.
+	 *
+	 * @since NEXT
+	 */
+	private static function get_overwrite_form_setting(array $form, string $setting_key ): ?string
+	{
+		$value = (string) ( $form[ sprintf( '%s-%s', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $setting_key ) ] ?? '' );
+		$value = trim( $value );
+
+		return '' !== $value ? $value : null;
 	}
 }

@@ -20,6 +20,7 @@ use DateTime;
 use Exception;
 use GF_Field;
 use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\Enums\BetrokkeneType;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\LoggerZGW;
 use OWCGravityFormsZGW\Traits\MergeTagTranslator;
@@ -157,14 +158,11 @@ abstract class AbstractCreateZaakAction
 			throw new Exception( 'No role types found for this "zaaktype"', 400 );
 		}
 
-		$current_bsn = ContainerResolver::make()->get( 'digid.current_user_bsn' );
+		$current_bsn = $this->get_bsn_for_zaak_rol();
+		$current_kvk = $this->get_kvk_for_zaak_rol();
 
-		if ( ! is_string( $current_bsn ) || '' === $current_bsn ) {
-			$current_bsn = FormUtils::overwrite_bsn_form_setting( $this->form );
-		}
-
-		if ( ! is_string( $current_bsn ) || '' === $current_bsn ) {
-			throw new Exception( 'This session appears to have no BSN', 400 );
+		if ( ( ! is_string( $current_bsn ) || '' === $current_bsn ) && ( ! is_string( $current_kvk ) || '' === $current_kvk ) ) {
+			throw new Exception( 'This session appears to have no BSN or KVK', 400 );
 		}
 
 		foreach ( $rol_types as $rol_type ) {
@@ -173,14 +171,12 @@ abstract class AbstractCreateZaakAction
 			}
 
 			$args = array(
-				'betrokkeneIdentificatie' => array(
-					'inpBsn' => $current_bsn,
-				),
-				'betrokkeneType'          => 'natuurlijk_persoon',
-				'roltoelichting'          => $rol_type['omschrijvingGeneriek'],
-				'roltype'                 => $rol_type['url'],
-				'zaak'                    => $zaak->url,
+				'roltoelichting' => $rol_type['omschrijvingGeneriek'],
+				'roltype'        => $rol_type['url'],
+				'zaak'           => $zaak->url,
 			);
+
+			$args = $this->add_identification_to_rol_args( $args, $current_bsn, $current_kvk );
 
 			try {
 				$rol = $this->client->rollen()->create( new Rol( $args, $this->client ) );
@@ -205,6 +201,54 @@ abstract class AbstractCreateZaakAction
 		$filter->add( 'zaaktype', FormUtils::zaaktype_identifier_form_setting( $this->form, $this->supplier_name ) );
 
 		return $this->client->roltypen()->filter( $filter );
+	}
+
+	/**
+	 * Retrieve BSN from the current user or from the overwrite form setting.
+	 *
+	 * @since NEXT
+	 */
+	private function get_bsn_for_zaak_rol(): ?string
+	{
+		$bsn_overwrite = FormUtils::overwrite_bsn_form_setting( $this->form );
+
+		if ( is_string( $bsn_overwrite ) && '' !== $bsn_overwrite ) {
+			return $bsn_overwrite;
+		}
+
+		return ContainerResolver::make()->get( 'digid.current_user_bsn' );
+	}
+
+	/**
+	 * Retrieve KVK from the current user or from the overwrite form setting.
+	 *
+	 * @since NEXT
+	 */
+	private function get_kvk_for_zaak_rol(): ?string
+	{
+		$kvk_overwrite = FormUtils::overwrite_kvk_form_setting( $this->form );
+
+		if ( is_string( $kvk_overwrite ) && '' !== $kvk_overwrite ) {
+			return $kvk_overwrite;
+		}
+
+		return ContainerResolver::make()->get( 'eherkenning.current_user_kvk' );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function add_identification_to_rol_args(array $args, ?string $current_bsn, ?string $current_kvk ): array
+	{
+		if ( is_string( $current_bsn ) && '' !== $current_bsn ) {
+			$args['betrokkeneType']                    = BetrokkeneType::NATUURLIJK_PERSOON->value;
+			$args['betrokkeneIdentificatie']['inpBsn'] = $current_bsn;
+		} elseif ( is_string( $current_kvk ) && '' !== $current_kvk ) {
+			$args['betrokkeneType']                       = BetrokkeneType::VESTIGING->value;
+			$args['betrokkeneIdentificatie']['kvkNummer'] = $current_kvk;
+		}
+
+		return $args;
 	}
 
 	public function create_zaak_properties(Zaak $zaak ): void
@@ -250,7 +294,6 @@ abstract class AbstractCreateZaakAction
 			}
 
 			$property_value = rgar( $this->entry, (string) $field->id );
-			dd( $property_value, $field );
 
 			if ( empty( $property_value ) ) {
 				continue;
