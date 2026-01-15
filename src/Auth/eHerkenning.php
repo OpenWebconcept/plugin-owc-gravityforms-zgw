@@ -38,8 +38,6 @@ class eHerkenning
 			return '';
 		}
 
-		$userData = \OWC\IdpUserData\eHerkenningSession::getUserData();
-
-		return ! is_null( $userData ) ? $userData->getKvk() : '';
+		return \OWC\IdpUserData\eHerkenningSession::getUserData()->getKvk();
 	}
 }

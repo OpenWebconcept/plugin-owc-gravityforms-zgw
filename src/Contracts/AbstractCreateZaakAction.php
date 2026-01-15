@@ -242,7 +242,7 @@ abstract class AbstractCreateZaakAction
 	 */
 	protected function map_zaak_properties_args(): array
 	{
-		$mappedFields = array();
+		$mapped_fields = array();
 
 		foreach ( $this->form['fields'] as $field ) {
 			if ( empty( $field->mappedFieldValueZGW ) || strpos( $field->mappedFieldValueZGW, 'https://' ) === false ) {
@@ -259,13 +259,13 @@ abstract class AbstractCreateZaakAction
 				$property_value = $this->handle_zaak_date_property( $property_value );
 			}
 
-			$mappedFields[ $field->id ] = array(
+			$mapped_fields[ $field->id ] = array(
 				'eigenschap' => $field->mappedFieldValueZGW,
 				'waarde'     => $property_value,
 			);
 		}
 
-		return $mappedFields;
+		return $mapped_fields;
 	}
 
 	private function handle_zaak_date_property(string $property_value ): string

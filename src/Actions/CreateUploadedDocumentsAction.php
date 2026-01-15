@@ -53,6 +53,6 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 			}
 		}
 
-		return $count === $success; // true = all succeeded, false = partial failure
+		return $count === $success; // true = all succeeded, false = partial failure.
 	}
 }
