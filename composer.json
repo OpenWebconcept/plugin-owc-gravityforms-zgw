@@ -47,11 +47,16 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/OpenWebconcept/owc-zgw-api.git"
+		},
+		{
+			"type": "vcs",
+			"url": "git@github.com:OpenWebconcept/idp-userdata.git"
 		}
 	],
 	"require": {
 		"monolog/monolog": "^3.0",
 		"owc/zgw-api": "dev-dev",
+		"owc/idp-userdata": "^1.1",
 		"php": ">=8.1",
 		"php-di/php-di": "^7.0"
 	},
