@@ -250,6 +250,7 @@ abstract class AbstractCreateZaakAction
 			}
 
 			$property_value = rgar( $this->entry, (string) $field->id );
+			dd( $property_value, $field );
 
 			if ( empty( $property_value ) ) {
 				continue;
