@@ -4,9 +4,7 @@
  * OWC GravityForms ZGW.
  *
  * @package OWC_GravityForms_ZGW
- *
  * @author  Yard | Digital Agency
- *
  * @since   1.0.0
  *
  * Plugin Name:       OWC | GravityForms ZGW

@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use DateTime;
 use Exception;
+use GF_Field;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\LoggerZGW;
@@ -82,11 +83,11 @@ abstract class AbstractCreateZaakAction
 	protected function map_required_zaak_creation_args(array $args ): array
 	{
 		foreach ( $this->form['fields'] as $field ) {
-			if ( empty( $field->mappedFieldValueZGW ) || ! isset( $args[ $field->mappedFieldValueZGW ] ) ) {
+			if ( ! isset( $field->mappedFieldValueZGW ) || ! is_string( $field->mappedFieldValueZGW ) || '' === $field->mappedFieldValueZGW || ! isset( $args[ $field->mappedFieldValueZGW ] ) ) {
 				continue;
 			}
 
-			$field_value = rgar( $this->entry, (string) $field->id );
+			$field_value = $this->handle_zaak_creation_arg_value( $field );
 
 			if ( empty( $field_value ) ) {
 				continue;
@@ -100,6 +101,49 @@ abstract class AbstractCreateZaakAction
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Handle getting the value for a "zaak" creation argument from multiple form fields and types.
+	 * Checkboxes for example can have multiple inputs.
+	 *
+	 * @since NEXT
+	 */
+	protected function handle_zaak_creation_arg_value(GF_Field $field ): string
+	{
+		if ( isset( $field->inputs ) && is_array( $field->inputs ) ) {
+			$field_value  = '';
+			$input_values = array();
+
+			foreach ( $field->inputs as $input ) {
+				$input_id = (string) ( $input['id'] ?? '' );
+
+				if ( '' === $input_id ) {
+					continue;
+				}
+
+				$input_value = rgar( $this->entry, $input_id );
+
+				if ( ! is_string( $input_value ) || '' === $input_value ) {
+					continue;
+				}
+
+				$input_values[] = trim( $input_value );
+			}
+
+			$count = count( $input_values );
+
+			$field_value = match ( true ) {
+				0 === $count => '',
+				1 === $count => $input_values[0],
+				2 === $count => implode( ' en ', $input_values ),
+				2 < $count => implode( ', ', array_slice( $input_values, 0, -1 ) ) . ' en ' . end( $input_values ),
+			};
+		} else {
+			$field_value = rgar( $this->entry, (string) $field->id );
+		}
+
+		return is_string( $field_value ) && '' !== $field_value ? $field_value : '';
 	}
 
 	/**
