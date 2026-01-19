@@ -50,6 +50,7 @@ return array(
 		return Settings::make( 'gravityformsaddon_owc-gravityforms-zgw_settings' )->get( $name );
 	},
 	'zgw.site_options'             => OWCGravityFormsZGW\Singletons\SiteOptionsSingleton::get_instance( get_option( OWC_GRAVITYFORMS_ZGW_SITE_OPTION_NAME, array() ) ),
+	'zgw.site_options_cmb2'        => OWCGravityFormsZGW\Singletons\SiteOptionsSingletonCMB2::get_instance( get_option( OWC_GRAVITYFORMS_ZGW_SITE_OPTION_NAME_CMB2, array() ) ),
 	'digid.current_user_bsn'       => DigiD::make()->bsn(),
 	'eherkenning.current_user_kvk' => eHerkenning::make()->kvk(),
 
