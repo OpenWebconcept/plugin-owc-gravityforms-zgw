@@ -160,4 +160,33 @@ class FormUtils
 
 		return '' !== $value ? $value : null;
 	}
+
+	public static function is_verzoek_form(array $form ): bool
+	{
+		$request_type = $form[ sprintf( '%s-form-setting-zgw-component', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '';
+
+		return '' !== $request_type && 'verzoek' === $request_type;
+	}
+
+	/**
+	 * Checks if the form setting is selected or configured manually.
+	 * Returns the selected zaaktype identifier.
+	 */
+	public static function object_type_identifier_verzoeken_form_setting(array $form ): string
+	{
+		$object_type = $form[ sprintf( '%s-form-setting-verzoeken-object-type', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '';
+
+		return '' !== $object_type ? $object_type : '';
+	}
+
+	/**
+	 * Checks if the form setting is selected or configured manually.
+	 * Returns the selected information object type identifier.
+	 */
+	public static function information_object_type_verzoeken_form_setting(array $form ): string
+	{
+		$information_object_type = $form[ sprintf( '%s-form-setting-verzoeken-information-object-type', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '';
+
+		return '' !== $information_object_type ? $information_object_type : '';
+	}
 }

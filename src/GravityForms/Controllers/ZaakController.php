@@ -52,7 +52,7 @@ class ZaakController extends AbstractZaakFormController
 	public function handle( array $entry, array $form ): ?Zaak
 	{
 		// Only handle zaak creation for ZGW enabled forms.
-		if ( ! FormUtils::is_form_zgw( $form ) ) {
+		if ( ! FormUtils::is_form_zgw( $form ) || FormUtils::is_verzoek_form( $form ) ) {
 			return null;
 		}
 
@@ -92,9 +92,7 @@ class ZaakController extends AbstractZaakFormController
 	}
 
 	/**
-	 * Create the Zaak using the supplier-specific Action class.
-	 *
-	 * @throws ZaakException
+	 * Create the 'verzoek' using the supplier-specific Action class.
 	 */
 	protected function create_zaak( array $supplier_config ): Zaak
 	{
