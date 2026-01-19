@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.2.0] - 2026-01-19
+
+- Feat: implement kvk usage
+- Fix: multi-input field handling for zaak creation arguments
+
 ## [v1.1.7] - 2026-01-07
 
 - Fix: replace empty() with isset() in FieldSettings
