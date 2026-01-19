@@ -149,6 +149,26 @@ class FormUtils
 	}
 
 	/**
+	 * Return the value of the overwrite BSN form setting for verzoeken.
+	 *
+	 * @since NEXT
+	 */
+	public static function overwrite_bsn_form_setting_verzoeken(array $form ): ?string
+	{
+		return self::get_overwrite_form_setting( $form, 'form-setting-verzoeken-overwrite-bsn' );
+	}
+
+	/**
+	 * Return the value of the overwrite KVK form setting for verzoeken.
+	 *
+	 * @since NEXT
+	 */
+	public static function overwrite_kvk_form_setting_verzoeken(array $form ): ?string
+	{
+		return self::get_overwrite_form_setting( $form, 'form-setting-verzoeken-overwrite-kvk' );
+	}
+
+	/**
 	 * Return the value of an overwrite form setting.
 	 *
 	 * @since 1.2.0
@@ -159,5 +179,34 @@ class FormUtils
 		$value = trim( $value );
 
 		return '' !== $value ? $value : null;
+	}
+
+	public static function is_verzoek_form(array $form ): bool
+	{
+		$request_type = $form[ sprintf( '%s-form-setting-zgw-component', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '';
+
+		return '' !== $request_type && 'verzoek' === $request_type;
+	}
+
+	/**
+	 * Checks if the form setting is selected or configured manually.
+	 * Returns the selected zaaktype identifier.
+	 */
+	public static function object_type_identifier_verzoeken_form_setting(array $form ): string
+	{
+		$object_type = $form[ sprintf( '%s-form-setting-verzoeken-object-type', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '';
+
+		return '' !== $object_type ? $object_type : '';
+	}
+
+	/**
+	 * Checks if the form setting is selected or configured manually.
+	 * Returns the selected information object type identifier.
+	 */
+	public static function information_object_type_verzoeken_form_setting(array $form ): string
+	{
+		$information_object_type = $form[ sprintf( '%s-form-setting-verzoeken-information-object-type', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '';
+
+		return '' !== $information_object_type ? $information_object_type : '';
 	}
 }

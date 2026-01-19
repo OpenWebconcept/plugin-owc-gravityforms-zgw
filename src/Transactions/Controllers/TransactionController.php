@@ -51,7 +51,7 @@ class TransactionController
 	public function create( array $entry, array $form ): void
 	{
 		// Only create transaction for ZGW enabled forms.
-		if ( ! FormUtils::is_form_zgw( $form ) ) {
+		if ( ! FormUtils::is_form_zgw( $form ) && ! FormUtils::is_verzoek_form( $form ) ) {
 			return;
 		}
 

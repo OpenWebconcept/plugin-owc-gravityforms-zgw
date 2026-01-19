@@ -27,6 +27,7 @@ use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
 use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
+use OWCGravityFormsZGW\Verzoeken\VerzoekController;
 
 /**
  * Register settings service provider.
@@ -58,6 +59,7 @@ class GravityFormsServiceProvider extends ServiceProvider
 		// After submission hooks.
 		add_action( 'gform_after_submission', ( new TransactionController() )->create( ... ), 10, 2 );
 		add_action( 'gform_after_submission', ( new ZaakController() )->handle( ... ), 20, 2 );
+		add_action( 'gform_after_submission', ( new VerzoekController() )->handle( ... ), 20, 2 );
 	}
 
 	/**
