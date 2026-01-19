@@ -47,8 +47,140 @@ class SettingsServiceProvider extends ServiceProvider
 		$manager->container()->get( SettingsProvider::class )->register();
 		$manager->container()->get( ClientProvider::class )->register();
 
+		add_action( 'cmb2_admin_init', $this->register_settings_page_cmb2( ... ) );
 		add_action( 'admin_menu', $this->register_settings_page( ... ) );
 		add_action( 'admin_init', $this->register_settings_options( ... ) );
+	}
+
+	public function register_settings_page_cmb2(): void
+	{
+		$options = new_cmb2_box(
+			array(
+				'id'           => 'zgw-verzoeken-settings',
+				'title'        => 'ZGW Verzoeken instellingen',
+				'object_types' => array( 'options-page' ),
+
+				'option_key'   => 'zgw_verzoeken_settings',
+				'parent_slug'  => 'options-general.php',
+				'capability'   => 'manage_options',
+			)
+		);
+
+		$clients = $options->add_field(
+			array(
+				'id'          => 'zgw-verzoeken-configured-clients',
+				'type'        => 'group',
+				'description' => 'Configureer Verzoeken registers',
+				'options'     => array(
+					'group_title'   => 'Verzoeken Register {#}',
+					'add_button'    => 'Voeg nog een register toe',
+					'remove_button' => 'Verwijder register',
+				),
+			)
+		);
+
+		$options->add_group_field(
+			$clients,
+			array(
+				'name'       => 'Objecttypen endpoint',
+				'attributes' => array( 'placeholder' => 'https://website.nl' ),
+				'protocols'  => array( 'https', 'http' ),
+				'id'         => 'zgw_objecttypes_endpoint',
+				'type'       => 'text_url',
+			)
+		);
+
+		$options->add_group_field(
+			$clients,
+			array(
+				'name'       => 'Objecten endpoint',
+				'attributes' => array( 'placeholder' => 'https://website.nl' ),
+				'protocols'  => array( 'https', 'http' ),
+				'id'         => 'zgw_objects_endpoint',
+				'type'       => 'text_url',
+			)
+		);
+
+		$options->add_group_field(
+			$clients,
+			array(
+				'name'       => 'Token',
+				'id'         => 'zgw_verzoeken_token',
+				'type'       => 'text',
+				'attributes' => array( 'type' => 'password' ),
+			)
+		);
+
+		$options->add_group_field(
+			$clients,
+			array(
+				'name'       => 'Informatieobjecttypen endpoint',
+				'attributes' => array( 'placeholder' => 'https://website.nl' ),
+				'protocols'  => array( 'https', 'http' ),
+				'id'         => 'zgw_informationobjecttypes_endpoint',
+				'type'       => 'text_url',
+			)
+		);
+
+		$options->add_group_field(
+			$clients,
+			array(
+				'name'       => 'Object informatieobjecten endpoint',
+				'attributes' => array( 'placeholder' => 'https://website.nl' ),
+				'protocols'  => array( 'https', 'http' ),
+				'id'         => 'zgw_object_information_objects_endpoint',
+				'type'       => 'text_url',
+			)
+		);
+
+		$options->add_group_field(
+			$clients,
+			array(
+				'name' => 'Client identifier',
+				'id'   => 'zgw_catalog_client_id',
+				'type' => 'text',
+			)
+		);
+
+		$options->add_group_field(
+			$clients,
+			array(
+				'name'       => 'Client secret',
+				'id'         => 'zgw_catalog_client_secret',
+				'type'       => 'text',
+				'attributes' => array( 'type' => 'password' ),
+			)
+		);
+
+		$options->add_group_field(
+			$clients,
+			array(
+				'name'       => 'Informatieobjecten endpoint',
+				'attributes' => array( 'placeholder' => 'https://website.nl' ),
+				'protocols'  => array( 'https', 'http' ),
+				'id'         => 'zgw_informationobject_endpoint',
+				'type'       => 'text_url',
+			)
+		);
+
+		$options->add_group_field(
+			$clients,
+			array(
+				'name' => 'Client identifier',
+				'id'   => 'zgw_documents_client_id',
+				'type' => 'text',
+			)
+		);
+
+		$options->add_group_field(
+			$clients,
+			array(
+				'name'       => 'Client secret',
+				'id'         => 'zgw_documents_client_secret',
+				'type'       => 'text',
+				'attributes' => array( 'type' => 'password' ),
+			)
+		);
 	}
 
 	/**

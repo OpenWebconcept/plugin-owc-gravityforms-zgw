@@ -50,6 +50,25 @@ class FieldSettings
 			return;
 		}
 
+		if ( FormUtils::is_verzoek_form( $form ) ) {
+			owc_gravityforms_zgw_render_view(
+				'partials/gf-field-zgw-verzoeken-mapping-options',
+				array(
+					'objecttypes' => array_map(
+						function ($type ) {
+							return array(
+								'label' => $type['omschrijving'],
+								'value' => $type['url'],
+							);
+						},
+						( new \OWCGravityFormsZGW\Verzoeken\Client() )->informationobject_types()['results'] ?? array()
+					),
+				)
+			);
+
+			return;
+		}
+
 		$supplier_config = FormUtils::get_supplier_config( $form );
 
 		if ( ! isset( $supplier_config['name'] ) || ! isset( $supplier_config['client_type'] ) ) {

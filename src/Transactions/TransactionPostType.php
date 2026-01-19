@@ -67,7 +67,7 @@ class TransactionPostType
 	{
 		$screen = get_current_screen();
 
-		if ( ! isset( $screen->id ) || $screen->id !== 'edit-' . self::POST_TYPE ) {
+		if ( ! isset( $screen->id ) || 'edit-' . self::POST_TYPE !== $screen->id ) {
 			return;
 		}
 
@@ -228,7 +228,7 @@ class TransactionPostType
 				break;
 			case 'transaction_entry_id':
 				$entry_id = get_post_meta( $post_id, 'transaction_entry_id', true );
-				echo FormUtils::get_link_to_form_entry( $entry_id );
+				echo FormUtils::get_link_to_form_entry( (int) $entry_id );
 
 				break;
 			case 'transaction_zaak_id':
@@ -249,7 +249,7 @@ class TransactionPostType
 				$action_content = get_post_meta( $post_id, 'transaction_actions', true );
 				$entry_id       = get_post_meta( $post_id, 'transaction_entry_id', true );
 
-				if ( $post_status === 'transaction_failed' && $action_content ) {
+				if ( 'transaction_failed' === $post_status && $action_content ) {
 					printf(
 						'<button type="button" class="owc-gravityforms-zgw-btn-retry" data-entry-id="%d" data-spinner-icon="%s"><img src="%s" alt="Retry" /></button>',
 						esc_attr( $entry_id ),
