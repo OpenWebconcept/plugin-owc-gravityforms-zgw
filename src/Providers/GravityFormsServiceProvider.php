@@ -30,6 +30,7 @@ use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
 use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
+use OWCGravityFormsZGW\Verzoeken\VerzoekController;
 
 /**
  * Register settings service provider.
@@ -69,6 +70,7 @@ class GravityFormsServiceProvider extends ServiceProvider
 		add_action( 'gform_after_submission', ( new TransactionController() )->capture_identification_for_pending_payment( ... ), 10, 2 );
 		add_action( 'gform_after_submission', ( new ActionSchedulerController() )->schedule_single_actions( ... ), 10, 2 );
 		add_action( 'gform_after_submission', ( new TransactionController() )->create( ... ), 10, 2 );
+		add_action( 'gform_after_submission', ( new VerzoekController() )->handle( ... ), 20, 2 );
 
 		// Post payment hooks.
 		add_action( 'gform_post_payment_action', ( new PaymentController() )->post_payment_failed( ... ), 10, 2 );

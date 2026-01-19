@@ -53,6 +53,7 @@
 		}
 	],
 	"require": {
+		"firebase/php-jwt": "^6.1",
 		"monolog/monolog": "^3.0",
 		"owc/zgw-api": "^2.5",
 		"owc/idp-userdata": "^1.1",
