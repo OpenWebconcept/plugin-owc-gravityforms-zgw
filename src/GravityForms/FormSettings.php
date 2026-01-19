@@ -32,36 +32,123 @@ class FormSettings
 
 	public function add_form_settings(array $fields, array $form ): array
 	{
+		$fields['owc-gravityforms-aanvraagtype'] = array(
+			'title'       => esc_html__( 'Type verzoek', 'owc-gravityforms-zgw' ),
+			'description' => esc_html__(
+				'Kies hier of het formulier een verzoek of zaak moet maken.',
+				'owc-gravityforms-zgw'
+			),
+			'fields'      => array(
+				array(
+					'name'          => "{$this->prefix}-form-setting-aanvraagtype",
+					'default_value' => "{$this->prefix}-form-setting-aanvraagtype-none",
+					'tooltip'       => '<h6>' . __(
+						'Selecteer het type aanvraag',
+						'owc-gravityforms-zgw'
+					) . '</h6>' . __(
+						'Selecteer hier wat voor type aanvraag dit formulier is.',
+						'owc-gravityforms-zgw'
+					),
+					'type'          => 'select',
+					'label'         => esc_html__( 'Selecteer het type aanvraag', 'owc-gravityforms-zgw' ),
+					'choices'       => $this->handle_aanvraag_type_choices(),
+				),
+			),
+		);
+
 		$fields['owc-gravityforms-zaaksysteem'] = array(
-			'title'       => esc_html__( 'Zaaksysteem', 'owc-gravityforms-zgw' ),
-			'description' => esc_html__( 'Om de snelheid te verhogen worden de instellingen van leveranciers pas opgehaald na het kiezen van een leverancier. Dit betekent dat de pagina herladen moet worden na het selecteren van een leverancier.', 'owc-gravityforms-zgw' ),
+			'title'       => esc_html__( 'ZGW', 'owc-gravityforms-zgw' ),
+			'description' => esc_html__(
+				'Om de snelheid te verhogen worden de instellingen van leveranciers pas opgehaald na het kiezen van een leverancier. Dit betekent dat de pagina herladen moet worden na het selecteren van een leverancier.',
+				'owc-gravityforms-zgw'
+			),
 			'fields'      => array(
 				array(
 					'name'          => "{$this->prefix}-form-setting-supplier",
 					'default_value' => "{$this->prefix}-form-setting-supplier-none",
-					'tooltip'       => '<h6>' . __( 'Selecteer een leverancier', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Kies een Zaaksysteem leverancier. Let op dat je ook de instellingen van de leverancier moet configureren in de hoofdinstellingen van Gravity Forms.', 'owc-gravityforms-zgw' ),
+					'tooltip'       => '<h6>' . __(
+						'Selecteer een leverancier',
+						'owc-gravityforms-zgw'
+					) . '</h6>' . __(
+						'Kies een Zaaksysteem leverancier. Let op dat je ook de instellingen van de leverancier moet configureren in de hoofdinstellingen van Gravity Forms.',
+						'owc-gravityforms-zgw'
+					),
 					'type'          => 'select',
 					'label'         => esc_html__( 'Selecteer een leverancier', 'owc-gravityforms-zgw' ),
+					'dependency'    => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => "{$this->prefix}-form-setting-aanvraagtype",
+								'values' => array( 'zaak' ),
+							),
+						),
+					),
 					'choices'       => $this->handle_supplier_choices(),
 				),
 				array(
-					'name'    => "{$this->prefix}-form-setting-overwrite-bsn",
-					'type'    => 'text',
-					'label'   => esc_html__( 'Dummy BSN', 'owc-gravityforms-zgw' ),
-					'tooltip' => '<h6>' . __( 'BSN vervangen door dummywaarde (BSN)', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Vul hier een 9 cijferig BSN in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen BSN van de burger aanwezig of vereist is.', 'owc-gravityforms-zgw' ),
+					'name'       => "{$this->prefix}-form-setting-overwrite-bsn",
+					'type'       => 'text',
+					'label'      => esc_html__( 'Dummy BSN', 'owc-gravityforms-zgw' ),
+					'dependency' => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => "{$this->prefix}-form-setting-aanvraagtype",
+								'values' => array( 'zaak' ),
+							),
+						),
+					),
+					'tooltip'    => '<h6>' . __(
+						'BSN vervangen door dummywaarde (BSN)',
+						'owc-gravityforms-zgw'
+					) . '</h6>' . __(
+						'Vul hier een 9 cijferig BSN in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen BSN van de burger aanwezig of vereist is.',
+						'owc-gravityforms-zgw'
+					),
 				),
 				array(
-					'name'    => "{$this->prefix}-form-setting-overwrite-kvk",
-					'type'    => 'text',
-					'label'   => esc_html__( 'Dummy KVK', 'owc-gravityforms-zgw' ),
-					'tooltip' => '<h6>' . __( 'KVK-nummer vervangen door dummywaarde (KVK)', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Vul hier een 8 cijferig KVK-nummer in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen KVK-nummer van een onderneming aanwezig of vereist is.', 'owc-gravityforms-zgw' ),
+					'name'       => "{$this->prefix}-form-setting-overwrite-kvk",
+					'type'       => 'text',
+					'label'      => esc_html__( 'Dummy KVK', 'owc-gravityforms-zgw' ),
+					'dependency' => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => "{$this->prefix}-form-setting-aanvraagtype",
+								'values' => array( 'zaak' ),
+							),
+						),
+					),
+					'tooltip'    => '<h6>' . __(
+						'KVK-nummer vervangen door dummywaarde (KVK)',
+						'owc-gravityforms-zgw'
+					) . '</h6>' . __(
+						'Vul hier een 8 cijferig KVK-nummer in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen KVK-nummer van een onderneming aanwezig of vereist is.',
+						'owc-gravityforms-zgw'
+					),
 				),
 				array(
 					'name'          => "{$this->prefix}-form-setting-supplier-manually",
 					'default_value' => '1',
-					'tooltip'       => '<h6>' . __( 'Leverancier instellingen', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Kies hoe de leverancier instellingen geconfigureerd moeten worden.', 'owc-gravityforms-zgw' ),
+					'tooltip'       => '<h6>' . __(
+						'Leverancier instellingen',
+						'owc-gravityforms-zgw'
+					) . '</h6>' . __(
+						'Kies hoe de leverancier instellingen geconfigureerd moeten worden.',
+						'owc-gravityforms-zgw'
+					),
 					'type'          => 'radio',
 					'label'         => esc_html__( 'Leverancier instellingen', 'owc-gravityforms-zgw' ),
+					'dependency'    => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => "{$this->prefix}-form-setting-aanvraagtype",
+								'values' => array( 'zaak' ),
+							),
+						),
+					),
 					'choices'       => array(
 						array(
 							'name'  => "{$this->prefix}-form-setting-supplier-manually-disabled",
@@ -74,6 +161,29 @@ class FormSettings
 							'value' => '1',
 						),
 					),
+				),
+				array(
+					'name'          => "{$this->prefix}-form-setting-objectsysteem",
+					'default_value' => "{$this->prefix}-form-setting-objectsysteem-none",
+					'tooltip'       => '<h6>' . __(
+						'Selecteer een objectsysteem leverancier',
+						'owc-gravityforms-zgw'
+					) . '</h6>' . __(
+						'Kies een Objectsyteem leverancier.',
+						'owc-gravityforms-zgw'
+					),
+					'type'          => 'select',
+					'label'         => esc_html__( 'Selecteer een objectsyteem leverancier', 'owc-gravityforms-zgw' ),
+					'dependency'    => array(
+						'live'   => true,
+						'fields' => array(
+							array(
+								'field'  => "{$this->prefix}-form-setting-aanvraagtype",
+								'values' => array( 'verzoek' ),
+							),
+						),
+					),
+					'choices'       => $this->handle_objectsysteem_supplier_choices(),
 				),
 			),
 		);
@@ -97,6 +207,38 @@ class FormSettings
 		}
 
 		return $supplier_choices;
+	}
+
+	protected function handle_objectsysteem_supplier_choices(): array
+	{
+		return array(
+			array(
+				'name'  => "{$this->prefix}-form-setting-objectsysteem",
+				'label' => "Objectsysteem leverancier",
+				'value' => 'objectsysteem',
+			),
+		);
+	}
+
+	protected function handle_aanvraag_type_choices(): array
+	{
+		return array(
+			array(
+				'name'  => "{$this->prefix}-form-aanvraagtype-none",
+				'label' => __( 'Selecteer het type aanvraag' ),
+				'value' => 'none',
+			),
+			array(
+				'name'  => "{$this->prefix}-form-aanvraagtype-verzoek",
+				'label' => __( 'Verzoek' ),
+				'value' => 'verzoek',
+			),
+			array(
+				'name'  => "{$this->prefix}-form-aanvraagtype-zaak",
+				'label' => __( 'Zaak' ),
+				'value' => 'zaak',
+			),
+		);
 	}
 
 	protected function prepare_supplier_choice(string $label, string $value ): array
