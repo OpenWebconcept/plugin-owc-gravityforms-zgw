@@ -108,7 +108,7 @@ abstract class AbstractCreateZaakAction
 	 * Handle getting the value for a "zaak" creation argument from multiple form fields and types.
 	 * Checkboxes for example can have multiple inputs.
 	 *
-	 * @since NEXT
+	 * @since 1.2.0
 	 */
 	protected function handle_zaak_creation_arg_value(GF_Field $field ): string
 	{
@@ -206,7 +206,7 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * Retrieve BSN from the current user or from the overwrite form setting.
 	 *
-	 * @since NEXT
+	 * @since 1.2.0
 	 */
 	private function get_bsn_for_zaak_rol(): ?string
 	{
@@ -222,7 +222,7 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * Retrieve KVK from the current user or from the overwrite form setting.
 	 *
-	 * @since NEXT
+	 * @since 1.2.0
 	 */
 	private function get_kvk_for_zaak_rol(): ?string
 	{
@@ -236,7 +236,7 @@ abstract class AbstractCreateZaakAction
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.2.0
 	 */
 	private function add_identification_to_rol_args(array $args, ?string $current_bsn, ?string $current_kvk ): array
 	{

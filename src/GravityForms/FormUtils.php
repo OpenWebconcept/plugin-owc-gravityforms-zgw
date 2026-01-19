@@ -141,7 +141,7 @@ class FormUtils
 	/**
 	 * Return the value of the overwrite KVK form setting.
 	 *
-	 * @since NEXT
+	 * @since 1.2.0
 	 */
 	public static function overwrite_kvk_form_setting(array $form ): ?string
 	{
@@ -151,7 +151,7 @@ class FormUtils
 	/**
 	 * Return the value of an overwrite form setting.
 	 *
-	 * @since NEXT
+	 * @since 1.2.0
 	 */
 	private static function get_overwrite_form_setting(array $form, string $setting_key ): ?string
 	{

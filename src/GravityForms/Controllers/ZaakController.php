@@ -110,10 +110,10 @@ class ZaakController extends AbstractZaakFormController
 
 			return $zaak;
 		} catch ( Throwable $e ) {
-			$reasonMessage = $this->extractApiErrorMessage( $e );
+			$reason_message = $this->extract_api_error_message( $e );
 
 			throw new ZaakException(
-				$reasonMessage,
+				$reason_message,
 				400,
 				$e
 			);
@@ -127,7 +127,7 @@ class ZaakController extends AbstractZaakFormController
 	 */
 	protected function handle_uploads(Zaak $zaak, array $supplier_config ): void
 	{
-		$caughtException = null;
+		$caught_exception = null;
 
 		// Handle user submitted file uploads.
 		try {
@@ -135,7 +135,7 @@ class ZaakController extends AbstractZaakFormController
 			$this->uploads_controller->handle( $zaak, $supplier_config );
 		} catch ( Throwable $e ) {
 			$this->logger->error( 'File uploads failed: ' . $e->getMessage() );
-			$caughtException = $e;
+			$caught_exception = $e;
 		}
 
 		// Handle adding the generated PDF upload.
@@ -144,12 +144,12 @@ class ZaakController extends AbstractZaakFormController
 			$this->upload_pdf_controller->handle( $zaak, $supplier_config );
 		} catch ( Throwable $e ) {
 			$this->logger->error( 'PDF generation failed: ' . $e->getMessage() );
-			$caughtException = $e;
+			$caught_exception = $e;
 		}
 
-		if ( $caughtException ) {
+		if ( $caught_exception ) {
 			throw new ZaakUploadException(
-				$caughtException->getMessage(),
+				$caught_exception->getMessage(),
 				400
 			);
 		}

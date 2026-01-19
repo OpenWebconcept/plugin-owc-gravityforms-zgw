@@ -140,7 +140,7 @@ abstract class AbstractZaakFormController
 	/**
 	 * Extracts a readable error message from an API exception.
 	 */
-	protected function extractApiErrorMessage(Throwable $e ): string
+	protected function extract_api_error_message(Throwable $e ): string
 	{
 		if ( ! method_exists( $e, 'getResponse' ) ) {
 			return $e->getMessage() ?: 'Unknown error occurred.';

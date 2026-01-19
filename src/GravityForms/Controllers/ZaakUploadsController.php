@@ -19,10 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use OWC\ZGW\Entities\Zaak;
 use OWCGravityFormsZGW\Actions\CreateUploadedDocumentsAction;
 use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
 use OWCGravityFormsZGW\Exceptions\ZaakUploadException;
+use OWC\ZGW\Entities\Zaak;
 use Throwable;
 
 /**
@@ -83,10 +83,10 @@ class ZaakUploadsController extends AbstractZaakFormController
 			// $result === null → no uploads mapped, skip silently
 			// $result === true → all uploads succeeded
 		} catch ( Throwable $e ) {
-			$reasonMessage = $this->extractApiErrorMessage( $e );
+			$reason_message = $this->extract_api_error_message( $e );
 
 			throw new ZaakUploadException(
-				$reasonMessage,
+				$reason_message,
 				400,
 				$e
 			);
