@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f723902eda03ee6ca3c93332033adea",
+    "content-hash": "c2357a6d52c6a3cadef3d338ff9e742a",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -348,7 +348,7 @@
                 "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/dev",
                 "issues": "https://github.com/OpenWebconcept/owc-zgw-api/issues"
             },
-            "time": "2026-01-06T12:20:28+00:00"
+            "time": "2026-01-26T13:06:43+00:00"
         },
         {
             "name": "php-di/invoker",
