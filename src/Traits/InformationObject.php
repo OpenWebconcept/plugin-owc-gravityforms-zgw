@@ -52,16 +52,18 @@ trait InformationObject
 	{
 		$type    = $this->get_content_type( $url );
 		$mimeMap = array(
-			'application/pdf'          => 'pdf',
 			'application/msword'       => 'doc',
+			'application/json'         => 'json',
+			'application/pdf'          => 'pdf',
 			'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
 			'application/vnd.ms-excel' => 'xls',
 			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'xlsx',
+			'application/xml'          => 'xml',
+			'image/jpeg'               => 'jpg',
+			'image/png'                => 'png',
 			'text/plain'               => 'txt',
 			'text/csv'                 => 'csv',
 			'text/html'                => 'html',
-			'application/json'         => 'json',
-			'application/xml'          => 'xml',
 		);
 
 		return $mimeMap[ $type ] ?? '';
