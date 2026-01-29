@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.1] - 2026-01-29
+
+- Chore: support .png/.jpeg uploads
+
 ## [v1.2.0] - 2026-01-19
 
 - Feat: implement kvk usage
