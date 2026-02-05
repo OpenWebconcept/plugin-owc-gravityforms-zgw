@@ -16,9 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use GFAPI;
-use GFForms;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
+use OWCGravityFormsZGW\Services\DateTimeFormatService;
 
 /**
  * Transaction Post Type.
@@ -231,12 +230,16 @@ class TransactionPostType
 				break;
 			case 'transaction_zaak_id':
 				echo esc_html( get_post_meta( $post_id, 'transaction_zaak_id', true ) );
+
 				break;
 			case 'transaction_message':
 				echo esc_html( get_post_meta( $post_id, 'transaction_message', true ) );
+
 				break;
 			case 'transaction_datetime':
-				echo esc_html( get_post_meta( $post_id, 'transaction_datetime', true ) );
+				$date_time = get_post_meta( $post_id, 'transaction_datetime', true ) ?: '';
+				echo esc_html( DateTimeFormatService::utc_localized_date_time( $date_time ) ?: '-' );
+
 				break;
 			case 'transaction_actions':
 				$post_status    = get_post_status( $post_id );
@@ -251,6 +254,7 @@ class TransactionPostType
 						esc_url( (string) $action_content )
 					);
 				}
+
 				break;
 		}
 	}
