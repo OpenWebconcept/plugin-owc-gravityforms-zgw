@@ -244,11 +244,32 @@ abstract class AbstractCreateZaakAction
 			$args['betrokkeneType']                    = BetrokkeneType::NATUURLIJK_PERSOON->value;
 			$args['betrokkeneIdentificatie']['inpBsn'] = $current_bsn;
 		} elseif ( is_string( $current_kvk ) && '' !== $current_kvk ) {
-			$args['betrokkeneType']                       = BetrokkeneType::VESTIGING->value;
-			$args['betrokkeneIdentificatie']['kvkNummer'] = $current_kvk;
+			$args['betrokkeneType']                              = BetrokkeneType::VESTIGING->value;
+			$args['betrokkeneIdentificatie']['kvkNummer']        = $current_kvk;
+			$args['betrokkeneIdentificatie']['vestigingsNummer'] = $this->possible_branch_number_kvk();
 		}
 
 		return $args;
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function possible_branch_number_kvk(): string
+	{
+		foreach ( $this->form['fields'] as $field ) {
+			if ( ! isset( $field->linkedFieldValueKvKBranchNumber ) || '1' !== $field->linkedFieldValueKvKBranchNumber ) {
+				continue;
+			}
+
+			$field_value = rgar( $this->entry, (string) $field->id );
+
+			if ( is_string( $field_value ) || '' !== $field_value ) {
+				return $field_value;
+			}
+		}
+
+		return '';
 	}
 
 	public function create_zaak_properties(Zaak $zaak ): void

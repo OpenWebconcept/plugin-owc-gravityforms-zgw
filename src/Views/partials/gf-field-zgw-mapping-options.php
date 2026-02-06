@@ -49,3 +49,10 @@ $objecttypes = $objecttypes ?? array();
 		<?php endforeach; ?>
 	</select>
 </li>
+<li class="label_setting field_setting">
+	<input type="checkbox" id="linkedFieldKvKBranchNumber" name="linkedFieldKvKBranchNumber" onchange="SetFieldProperty('linkedFieldValueKvKBranchNumber', this.checked ? '1' : '0');">
+	<label for="linkedFieldKvKBranchNumber" class="section_label">
+		<?php esc_html_e( 'KVK vestigingsnummer', 'owc-gravityforms-zgw' ); ?>
+	</label>
+	<small><?php esc_html_e( 'Kies dit veld om het KVK vestigingsnummer te koppelen aan de rol van de indiener.', 'owc-gravityforms-zgw' ); ?></small>
+</li>

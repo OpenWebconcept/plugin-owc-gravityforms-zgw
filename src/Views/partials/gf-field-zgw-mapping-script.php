@@ -28,6 +28,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			const uploadFieldDescriptionZGW = document.getElementById('uploadFieldDescriptionZGW');
 			if(uploadFieldDescriptionZGW) uploadFieldDescriptionZGW.value = field['uploadFieldDescriptionValueZGW'] ?? '';
+
+			const linkedFieldKvKBranchNumber = document.getElementById('linkedFieldKvKBranchNumber');
+			if (linkedFieldKvKBranchNumber) {
+				linkedFieldKvKBranchNumber.checked = String(field['linkedFieldValueKvKBranchNumber'] ?? '0') === '1';
+			}
 		});
 	});
 </script>
