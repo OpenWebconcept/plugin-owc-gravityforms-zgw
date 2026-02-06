@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Generic Zaak-related exception.
  *
@@ -22,7 +25,7 @@ use Throwable;
 /**
  * Generic Zaak-related exception.
  *
- * @since   1.0.0
+ * @since 1.0.0
  */
 class ZaakException extends RuntimeException
 {

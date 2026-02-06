@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Field settings.
  *
@@ -66,7 +69,7 @@ class FieldSettings
 			'partials/gf-field-zgw-mapping-options',
 			array(
 				'properties'  => $properties instanceof Collection ? $this->prepare_properties_options( $properties ) : array(),
-				'objecttypes' => $this->prepare_object_types_options( $this->get_information_object_types( $zaak_type, $zaak_type->identificatie ) ),
+				'objecttypes' => $this->prepare_object_types_options( $this->get_information_object_types( $zaak_type, (string) ( $zaak_type->identificatie ?? '' ) ) ),
 			)
 		);
 		owc_gravityforms_zgw_render_view( 'partials/gf-field-zgw-upload-field-options' );
@@ -194,6 +197,10 @@ class FieldSettings
 
 	public function get_information_object_types(Zaaktype $zaak_type, string $zaak_type_identification ): array
 	{
+		if ( '' === $zaak_type_identification ) {
+			return array();
+		}
+
 		$transient_key = sprintf( 'zaaktype-%s-mapping-information-object-types', sanitize_title( $zaak_type_identification ) );
 		$types         = get_transient( $transient_key );
 

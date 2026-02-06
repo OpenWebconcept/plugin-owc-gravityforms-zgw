@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Retrieve the Chamber of Commerce number (KVK) by integrating with eHerkenning authentication.
  *

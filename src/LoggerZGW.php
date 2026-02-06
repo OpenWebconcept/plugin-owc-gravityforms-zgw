@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * A wrapper class for the Monolog Logger.
  * This class integrates with the application's container to check if logging is enabled before processing log entries.

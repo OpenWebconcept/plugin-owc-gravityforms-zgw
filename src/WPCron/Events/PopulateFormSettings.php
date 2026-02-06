@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Event used to populate form settings of all configured suppliers.
  *

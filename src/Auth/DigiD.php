@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Retrieve the social security number (BSN) by integrating with multiple DigiD authentication methods.
  *
