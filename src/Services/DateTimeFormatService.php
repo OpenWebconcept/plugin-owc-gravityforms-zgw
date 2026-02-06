@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.3.0
  */
 
 namespace OWCGravityFormsZGW\Services;
@@ -26,7 +26,7 @@ use Exception;
 /**
  * DateTime Format Service.
  *
- * @since NEXT
+ * @since 1.3.0
  */
 class DateTimeFormatService
 {

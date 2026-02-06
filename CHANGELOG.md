@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.3.0] - 2026-02-06
+
+- Add: ZGW field group and settings tab to form editor
+- Add: branch number kvk to role
+- Add: introduce DateTimeFormatService class
+- Change: display transaction_datetime in localized format
+- Change: enable strict types across the codebase
+
 ## [v1.2.1] - 2026-01-29
 
 - Chore: support .png/.jpeg uploads

@@ -256,7 +256,7 @@ abstract class AbstractCreateZaakAction
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.3.0
 	 */
 	protected function possible_branch_number_kvk(): string
 	{

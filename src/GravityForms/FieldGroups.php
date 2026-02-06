@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.3.0
  */
 
 namespace OWCGravityFormsZGW\GravityForms;
@@ -24,7 +24,7 @@ use OWCGravityFormsZGW\GravityForms\FieldSettings;
 /**
  * Field groups.
  *
- * @since NEXT
+ * @since 1.3.0
  */
 class FieldGroups
 {

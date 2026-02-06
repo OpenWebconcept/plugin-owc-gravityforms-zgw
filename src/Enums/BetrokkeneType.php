@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.3.0
  */
 
 namespace OWCGravityFormsZGW\Enums;
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * BetrokkeneType enum.
  *
- * @since NEXT
+ * @since 1.3.0
  */
 enum BetrokkeneType: string
 {
