@@ -53,8 +53,8 @@ trait InformationObject
 
 	public function get_extension(string $url ): string
 	{
-		$type    = $this->get_content_type( $url );
-		$mimeMap = array(
+		$type     = $this->get_content_type( $url );
+		$mime_map = array(
 			'application/msword'       => 'doc',
 			'application/json'         => 'json',
 			'application/pdf'          => 'pdf',
@@ -69,7 +69,7 @@ trait InformationObject
 			'text/html'                => 'html',
 		);
 
-		return $mimeMap[ $type ] ?? '';
+		return $mime_map[ $type ] ?? '';
 	}
 
 	public function get_content_type(string $url ): string
