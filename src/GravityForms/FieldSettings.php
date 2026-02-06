@@ -37,15 +37,10 @@ class FieldSettings
 	protected const TRANSIENT_LIFETIME_IN_SECONDS = 64800; // 18 hours.
 
 	/**
-	 * Add a select element to form fields inside the editor used for field mapping between
-	 * form field and ZGW properties.
+	 * Adds select elements to the field settings tabs in the editor to map form fields to ZGW properties.
 	 */
-	public function add_select($position, $form_id ): void
+	public function add_select(int $form_id ): void
 	{
-		if ( ! class_exists( 'GFAPI' ) || 0 !== $position ) {
-			return;
-		}
-
 		$form = GFAPI::get_form( $form_id );
 
 		if ( false === $form ) {

@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use GFAddOn;
 use GFForms;
 use OWCGravityFormsZGW\GravityForms\Controllers\ZaakController;
+use OWCGravityFormsZGW\GravityForms\FieldGroups;
 use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
@@ -42,10 +43,16 @@ class GravityFormsServiceProvider extends ServiceProvider
 	 */
 	private function register_hooks(): void
 	{
+		// Form settings.
 		add_filter( 'gform_form_settings_fields', ( new FormSettings() )->add_form_settings( ... ), 10, 2 );
-		add_action( 'gform_field_standard_settings', ( new FieldSettings() )->add_select( ... ), 10, 2 );
-		add_action( 'gform_editor_js', ( new FieldSettings() )->add_select_script( ... ), 10, 0 );
 
+		// Field tab settings.
+		add_action( 'gform_editor_js', ( new FieldSettings() )->add_select_script( ... ), 10, 0 );
+		add_filter( 'gform_field_groups_form_editor', ( new FieldGroups() )->field_groups_form_editor( ... ), 10, 1 );
+		add_filter( 'gform_field_settings_tabs', ( new FieldGroups() )->add_tabs( ... ), 10, 1 );
+		add_action( 'gform_field_settings_tab_content_owc_gf_zgw', ( new FieldGroups() )->add_tab_content( ... ), 10, 1 );
+
+		// After submission hooks.
 		add_action( 'gform_after_submission', ( new TransactionController() )->create( ... ), 10, 2 );
 		add_action( 'gform_after_submission', ( new ZaakController() )->handle( ... ), 20, 2 );
 	}
