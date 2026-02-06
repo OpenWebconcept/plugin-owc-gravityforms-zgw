@@ -2,14 +2,14 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | GravityForms ZGW 1.1.7\n"
+"Project-Id-Version: OWC | GravityForms ZGW 1.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-gravityforms-zgw\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-01-12T15:32:45+00:00\n"
+"POT-Creation-Date: 2026-02-06T07:59:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-gravityforms-zgw\n"
@@ -39,16 +39,21 @@ msgstr ""
 msgid "https://www.yard.nl"
 msgstr ""
 
-#: src/Contracts/AbstractZaakFormController.php:127
+#: src/Contracts/AbstractZaakFormController.php:130
 msgid "Systeem"
 msgstr ""
 
-#: src/Contracts/AbstractZaakFormController.php:128
+#: src/Contracts/AbstractZaakFormController.php:131
 msgid "Er waren problemen bij het succesvol indienen van deze zaak, bekijk de transacties voor meer informatie."
 msgstr ""
 
-#: src/Controllers/SettingsController.php:105
+#: src/Controllers/SettingsController.php:108
 msgid "Ongeldig e-mailadres voor het verzenden van het transactie rapport."
+msgstr ""
+
+#: src/GravityForms/FieldGroups.php:38
+#: src/GravityForms/FieldGroups.php:52
+msgid "Zaaksysteem (ZGW)"
 msgstr ""
 
 #: src/GravityForms/FormSettings.php:36
@@ -120,152 +125,152 @@ msgstr ""
 msgid "Informatie object type"
 msgstr ""
 
-#: src/GravityForms/ZGWAddon.php:86
+#: src/GravityForms/ZGWAddon.php:89
 msgid "Organisatie"
 msgstr ""
 
-#: src/GravityForms/ZGWAddon.php:90
+#: src/GravityForms/ZGWAddon.php:93
 msgid "RSIN"
 msgstr ""
 
-#: src/GravityForms/ZGWAddon.php:100
+#: src/GravityForms/ZGWAddon.php:103
 msgid "Logboekinstellingen"
 msgstr ""
 
-#: src/GravityForms/ZGWAddon.php:109
+#: src/GravityForms/ZGWAddon.php:112
 msgid "Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in."
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:59
-#: src/Providers/SettingsServiceProvider.php:60
+#: src/Providers/SettingsServiceProvider.php:62
+#: src/Providers/SettingsServiceProvider.php:63
 msgid "OWC | GravityForms ZGW instellingen"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:84
+#: src/Providers/SettingsServiceProvider.php:87
 msgid "Transactie overzicht"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:91
+#: src/Providers/SettingsServiceProvider.php:94
 msgid "Gebruikersrollen"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:100
+#: src/Providers/SettingsServiceProvider.php:103
 msgid "Transactie rapport"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:107
+#: src/Providers/SettingsServiceProvider.php:110
 msgid "Verzenden naar"
 msgstr ""
 
-#: src/Providers/TransactionsServiceProvider.php:53
+#: src/Providers/TransactionsServiceProvider.php:56
 msgid "Transacties"
 msgstr ""
 
-#: src/Providers/TransactionsServiceProvider.php:54
+#: src/Providers/TransactionsServiceProvider.php:57
 msgid "Transactie"
 msgstr ""
 
-#: src/Providers/TransactionsServiceProvider.php:55
+#: src/Providers/TransactionsServiceProvider.php:58
 msgid "Geen transacties gevonden"
 msgstr ""
 
-#: src/Providers/TransactionsServiceProvider.php:56
+#: src/Providers/TransactionsServiceProvider.php:59
 msgid "Geen transaction gevonden in de prullenbak."
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:69
+#: src/Transactions/TransactionMailer.php:72
 msgid "Transaction ID"
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:70
-#: src/Transactions/TransactionPostType.php:126
-#: src/Transactions/TransactionPostType.php:127
+#: src/Transactions/TransactionMailer.php:73
+#: src/Transactions/TransactionPostType.php:128
+#: src/Transactions/TransactionPostType.php:129
 msgid "Status"
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:71
+#: src/Transactions/TransactionMailer.php:74
 msgid "Entry ID"
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:72
+#: src/Transactions/TransactionMailer.php:75
 msgid "Datetime"
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:94
+#: src/Transactions/TransactionMailer.php:97
 msgid "Zaaksysteem Failed Transactions Report"
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:95
+#: src/Transactions/TransactionMailer.php:98
 msgid "The following transactions had failures:"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:90
+#: src/Transactions/TransactionPostType.php:92
 msgctxt "Transactie status"
 msgid "Voltooid"
 msgstr ""
 
 #. translators: %s: count value
-#: src/Transactions/TransactionPostType.php:93
+#: src/Transactions/TransactionPostType.php:95
 #, php-format
 msgid "Voltooid <span class=\"count\">(%s)</span>"
 msgid_plural "Voltooid <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Transactions/TransactionPostType.php:100
+#: src/Transactions/TransactionPostType.php:102
 msgctxt "Transactie status"
 msgid "In behandeling"
 msgstr ""
 
 #. translators: %s: count value
-#: src/Transactions/TransactionPostType.php:103
+#: src/Transactions/TransactionPostType.php:105
 #, php-format
 msgid "In behandeling <span class=\"count\">(%s)</span>"
 msgid_plural "In behandeling <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Transactions/TransactionPostType.php:110
+#: src/Transactions/TransactionPostType.php:112
 msgctxt "Transactie status"
 msgid "Mislukt"
 msgstr ""
 
 #. translators: %s: count value
-#: src/Transactions/TransactionPostType.php:113
+#: src/Transactions/TransactionPostType.php:115
 #, php-format
 msgid "Mislukt <span class=\"count\">(%s)</span>"
 msgid_plural "Mislukt <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Transactions/TransactionPostType.php:131
-#: src/Transactions/TransactionPostType.php:132
+#: src/Transactions/TransactionPostType.php:133
+#: src/Transactions/TransactionPostType.php:134
 msgid "Formulier ID"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:136
-#: src/Transactions/TransactionPostType.php:137
+#: src/Transactions/TransactionPostType.php:138
+#: src/Transactions/TransactionPostType.php:139
 msgid "Inzending ID"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:141
-#: src/Transactions/TransactionPostType.php:142
+#: src/Transactions/TransactionPostType.php:143
+#: src/Transactions/TransactionPostType.php:144
 msgid "Zaak ID"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:144
+#: src/Transactions/TransactionPostType.php:146
 msgid "Melding"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:145
+#: src/Transactions/TransactionPostType.php:147
 msgid "Datumtijd"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:146
+#: src/Transactions/TransactionPostType.php:148
 msgid "Acties"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:187
+#: src/Transactions/TransactionPostType.php:189
 msgid "Onbekend"
 msgstr ""
 
@@ -329,8 +334,16 @@ msgstr ""
 msgid "Kies een document type"
 msgstr ""
 
+#: src/Views/partials/gf-field-zgw-mapping-options.php:55
+msgid "KVK vestigingsnummer"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:57
+msgid "Kies dit veld om het KVK vestigingsnummer te koppelen aan de rol van de indiener."
+msgstr ""
+
 #: src/Views/partials/gf-field-zgw-upload-field-options.php:15
-msgid "Document beschrijving"
+msgid "Bestand beschrijving"
 msgstr ""
 
 #: src/Views/partials/gf-field-zgw-upload-field-options.php:18
