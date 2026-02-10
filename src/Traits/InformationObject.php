@@ -91,7 +91,7 @@ trait InformationObject
 		}
 
 		try {
-			$response = get_headers( $url, 1, $this->stream_context() );
+			$response = get_headers( $url, true, $this->stream_context() );
 		} catch ( Exception $e ) {
 			return array();
 		}
