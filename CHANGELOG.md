@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.3.1] - 2026-02-13
+
+- Fix: cast param given to FormUtils::get_link_to_form_entry() to int
+
 ## [v1.3.0] - 2026-02-06
 
 - Add: ZGW field group and settings tab to form editor
