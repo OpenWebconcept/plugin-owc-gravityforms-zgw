@@ -228,7 +228,7 @@ class TransactionPostType
 				break;
 			case 'transaction_entry_id':
 				$entry_id = get_post_meta( $post_id, 'transaction_entry_id', true );
-				echo FormUtils::get_link_to_form_entry( $entry_id );
+				echo FormUtils::get_link_to_form_entry( (int) $entry_id );
 
 				break;
 			case 'transaction_zaak_id':

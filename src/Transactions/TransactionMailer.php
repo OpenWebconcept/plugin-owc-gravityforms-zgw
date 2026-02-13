@@ -86,7 +86,7 @@ class TransactionMailer
                     </tr>',
 					esc_html( $post->ID ),
 					esc_html( $post->post_status ),
-					FormUtils::get_link_to_form_entry( $entry_id ) ?: 'N/A',
+					FormUtils::get_link_to_form_entry( (int) $entry_id ) ?: 'N/A',
 					esc_html( get_post_meta( $post->ID, 'transaction_datetime', true ) )
 				);
 			}
