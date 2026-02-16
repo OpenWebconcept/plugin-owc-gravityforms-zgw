@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.4.0] - 2026-02-16
+
+- Added: add timestamp to value of date fields conditionally
+- Change: divide mapping options based on field type instead of all + new setting for date fields
+
 ## [v1.3.1] - 2026-02-13
 
 - Fix: cast param given to FormUtils::get_link_to_form_entry() to int

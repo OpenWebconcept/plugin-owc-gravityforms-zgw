@@ -344,7 +344,7 @@ abstract class AbstractCreateZaakAction
 	 * Also handles the option to include time in the value which is set to 12:00 to avoid timezone issues since the date will be stored in UTC.
 	 * If the date is invalid, return a default value and log an error.
 	 *
-	 * @since NEXT
+	 * @since 1.4.0
 	 */
 	protected function handle_date_field(GF_Field $field ): string
 	{
