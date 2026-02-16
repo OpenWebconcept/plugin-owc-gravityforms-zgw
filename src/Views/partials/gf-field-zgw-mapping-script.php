@@ -17,6 +17,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if (index === 'fileupload') {
 				fieldSettings[index] += ', .zgw_upload_setting';
 			}
+
+			if (index === 'date') {
+				fieldSettings[index] += ', .zgw_date_setting';
+			}
+
+			if (index === 'text') {
+				fieldSettings[index] += ', .zgw_kvk_setting';
+			}
 		});
 
 		jQuery(document).on('gform_load_field_settings', function (event, field, form) {
@@ -32,6 +40,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			const linkedFieldKvKBranchNumber = document.getElementById('linkedFieldKvKBranchNumber');
 			if (linkedFieldKvKBranchNumber) {
 				linkedFieldKvKBranchNumber.checked = String(field['linkedFieldValueKvKBranchNumber'] ?? '0') === '1';
+			}
+
+			const linkedFieldUseTimestamp = document.getElementById('linkedFieldUseTimestamp');
+			if (linkedFieldUseTimestamp) {
+				linkedFieldUseTimestamp.checked = String(field['linkedFieldValueUseTimestamp'] ?? '0') === '1';
 			}
 		});
 	});
