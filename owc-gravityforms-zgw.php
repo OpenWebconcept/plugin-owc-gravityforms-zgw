@@ -16,7 +16,7 @@
  * License URI:       https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw/LICENSE.txt
  * Text Domain:       owc-gravityforms-zgw
  * Domain Path:       /languages
- * Requires Plugins:  gravityforms, cmb2
+ * Requires Plugins:  action-scheduler, gravityforms, cmb2
  */
 
 declare (strict_types = 1);
@@ -34,11 +34,14 @@ const OWC_GRAVITYFORMS_ZGW_FILE                = __FILE__;
 
 define( 'OWC_GRAVITYFORMS_ZGW_DIR_PATH', plugin_dir_path( OWC_GRAVITYFORMS_ZGW_FILE ) );
 define( 'OWC_GRAVITYFORMS_ZGW_PLUGIN_URL', plugins_url( '/', OWC_GRAVITYFORMS_ZGW_FILE ) );
-const OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX          = 'owc-gf-zgw';
-const OWC_GRAVITYFORMS_ZGW_ADD_ON_SETTINGS_PREFIX   = 'owc-gf-zgw-add-on';
-const OWC_GRAVITYFORMS_ZGW_PLUGIN_SLUG              = 'owc-gravityforms-zgw';
-const OWC_GRAVITYFORMS_ZGW_LOGGER_DEFAULT_MAX_FILES = 7;
-const OWC_GRAVITYFORMS_ZGW_SITE_OPTION_NAME         = 'owc_gf_zgw_options';
+const OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX                   = 'owc-gf-zgw';
+const OWC_GRAVITYFORMS_ZGW_ADD_ON_SETTINGS_PREFIX            = 'owc-gf-zgw-add-on';
+const OWC_GRAVITYFORMS_ZGW_PLUGIN_SLUG                       = 'owc-gravityforms-zgw';
+const OWC_GRAVITYFORMS_ZGW_LOGGER_DEFAULT_MAX_FILES          = 7;
+const OWC_GRAVITYFORMS_ZGW_SITE_OPTION_NAME                  = 'owc_gf_zgw_options';
+const OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_ZAAK        = 'owc_gf_zgw_process_zaak_creation';
+const OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_TRANSACTION = 'owc_gf_zgw_process_transaction';
+const OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_GROUP            = 'owc-gravityforms-zgw';
 
 // Require autoload if they exist.
 foreach ( array( 'vendor/autoload.php', 'vendor-prefixed/autoload.php' ) as $autoload ) {
