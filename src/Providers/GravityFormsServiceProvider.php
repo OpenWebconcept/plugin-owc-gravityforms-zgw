@@ -21,12 +21,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use GFAddOn;
 use GFForms;
-use OWCGravityFormsZGW\GravityForms\Controllers\ZaakController;
 use OWCGravityFormsZGW\GravityForms\FieldGroups;
 use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
-use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
+use OWCGravityFormsZGW\Controllers\ActionSchedulerController;
 
 /**
  * Register settings service provider.
@@ -56,8 +55,11 @@ class GravityFormsServiceProvider extends ServiceProvider
 		add_action( 'gform_field_settings_tab_content_owc_gf_zgw', ( new FieldGroups() )->add_tab_content( ... ), 10, 1 );
 
 		// After submission hooks.
-		add_action( 'gform_after_submission', ( new TransactionController() )->create( ... ), 10, 2 );
-		add_action( 'gform_after_submission', ( new ZaakController() )->handle( ... ), 20, 2 );
+		add_action( 'gform_after_submission', ( new ActionSchedulerController() )->schedule_single_actions( ... ), 10, 2 );
+
+		// Action scheduler hooks.
+		add_action( OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_TRANSACTION, ( new ActionSchedulerController() )->handle_transaction( ... ), 20, 2 );
+		add_action( OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_ZAAK, ( new ActionSchedulerController() )->handle_zaak_creation( ... ), 30, 2 );
 	}
 
 	/**
