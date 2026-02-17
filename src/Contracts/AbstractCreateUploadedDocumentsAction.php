@@ -165,7 +165,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		$args['status']                      = 'gearchiveerd';
 		$args['taal']                        = 'nld';
 		$args['bronorganisatie']             = ContainerResolver::make()->get( 'zgw.rsin' );
-		$args['creatiedatum']                = date( 'Y-m-d' );
+		$args['creatiedatum']                = $this->format_creation_date_informtion_object( $this->form );
 		$args['informatieobjecttype']        = $information_object_type;
 
 		return $args;

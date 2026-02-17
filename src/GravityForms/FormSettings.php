@@ -57,6 +57,25 @@ class FormSettings
 					'tooltip' => '<h6>' . __( 'KVK-nummer vervangen door dummywaarde (KVK)', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Vul hier een 8 cijferig KVK-nummer in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen KVK-nummer van een onderneming aanwezig of vereist is.', 'owc-gravityforms-zgw' ),
 				),
 				array(
+					'name'          => "{$this->prefix}-form-setting-enrich-creation-date-informationobjects-with-timestamp",
+					'default_value' => '0',
+					'type'          => 'radio',
+					'label'         => esc_html__( 'Creatiedatum informatieobjecten', 'owc-gravityforms-zgw' ),
+					'tooltip'       => '<h6>' . __( 'Creatiedatum informatieobjecten met timestamp', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'De creatiedatum wordt verrrijkt met een standaard timestamp van 12:00.', 'owc-gravityforms-zgw' ),
+					'choices'       => array(
+						array(
+							'name'  => "{$this->prefix}-form-setting-enrich-creation-date-informationobjects-with-timestamp-disabled",
+							'label' => __( 'Niet verrijken', 'owc-gravityforms-zgw' ),
+							'value' => '0',
+						),
+						array(
+							'name'  => "{$this->prefix}-form-setting-enrich-creation-date-informationobjects-with-timestamp-enabled",
+							'label' => __( 'Verrijken met een standaardtijd (12:00)', 'owc-gravityforms-zgw' ),
+							'value' => '1',
+						),
+					),
+				),
+				array(
 					'name'          => "{$this->prefix}-form-setting-supplier-manually",
 					'default_value' => '1',
 					'tooltip'       => '<h6>' . __( 'Leverancier instellingen', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Kies hoe de leverancier instellingen geconfigureerd moeten worden.', 'owc-gravityforms-zgw' ),

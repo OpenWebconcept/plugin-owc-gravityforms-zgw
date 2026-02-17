@@ -160,4 +160,16 @@ class FormUtils
 
 		return '' !== $value ? $value : null;
 	}
+
+	/**
+	 * Checks if the form setting to enrich creation date information objects with a timestamp is enabled.
+	 *
+	 * @since NEXT
+	 */
+	public static function enrich_creation_date_information_objects(array $form ): bool
+	{
+		$value = (string) ( $form[ sprintf( '%s-form-setting-enrich-creation-date-informationobjects-with-timestamp', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '0' );
+
+		return '1' === $value;
+	}
 }

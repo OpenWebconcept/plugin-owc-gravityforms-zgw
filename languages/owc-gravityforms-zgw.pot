@@ -2,14 +2,14 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | GravityForms ZGW 1.3.0\n"
+"Project-Id-Version: OWC | GravityForms ZGW 1.4.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-gravityforms-zgw\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-02-06T07:59:44+00:00\n"
+"POT-Creation-Date: 2026-02-17T10:26:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-gravityforms-zgw\n"
@@ -97,31 +97,51 @@ msgstr ""
 msgid "Vul hier een 8 cijferig KVK-nummer in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen KVK-nummer van een onderneming aanwezig of vereist is."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:62
-#: src/GravityForms/FormSettings.php:64
-msgid "Leverancier instellingen"
+#: src/GravityForms/FormSettings.php:63
+msgid "Creatiedatum informatieobjecten"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:62
-msgid "Kies hoe de leverancier instellingen geconfigureerd moeten worden."
+#: src/GravityForms/FormSettings.php:64
+msgid "Creatiedatum informatieobjecten met timestamp"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:64
+msgid "De creatiedatum wordt verrrijkt met een standaard timestamp van 12:00."
 msgstr ""
 
 #: src/GravityForms/FormSettings.php:68
-msgid "Selecteer instellingen (opgehaald vanuit zaaksysteem)"
+msgid "Niet verrijken"
 msgstr ""
 
 #: src/GravityForms/FormSettings.php:73
+msgid "Verrijken met een standaardtijd (12:00)"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:81
+#: src/GravityForms/FormSettings.php:83
+msgid "Leverancier instellingen"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:81
+msgid "Kies hoe de leverancier instellingen geconfigureerd moeten worden."
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:87
+msgid "Selecteer instellingen (opgehaald vanuit zaaksysteem)"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:92
 msgid "Configureer instellingen handmatig (invoeren van URL's)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:172
-#: src/GravityForms/FormSettings.php:212
+#: src/GravityForms/FormSettings.php:191
+#: src/GravityForms/FormSettings.php:231
 #: src/Views/partials/gf-field-zgw-mapping-options.php:24
 msgid "Zaaktype"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:191
-#: src/GravityForms/FormSettings.php:230
+#: src/GravityForms/FormSettings.php:210
+#: src/GravityForms/FormSettings.php:249
 msgid "Informatie object type"
 msgstr ""
 
@@ -340,6 +360,14 @@ msgstr ""
 
 #: src/Views/partials/gf-field-zgw-mapping-options.php:57
 msgid "Kies dit veld om het KVK vestigingsnummer te koppelen aan de rol van de indiener."
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:62
+msgid "Gebruik timestamp"
+msgstr ""
+
+#: src/Views/partials/gf-field-zgw-mapping-options.php:64
+msgid "Voeg een standaardtijd (12:00) toe aan dit datumveld zodat het als volledig datetime-veld kan worden opgeslagen. Datum en tijd worden altijd in UTC opgeslagen om verschuivingen door tijdzones te voorkomen."
 msgstr ""
 
 #: src/Views/partials/gf-field-zgw-upload-field-options.php:15
