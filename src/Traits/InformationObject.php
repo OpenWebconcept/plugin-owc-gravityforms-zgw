@@ -128,7 +128,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.4.1
 	 */
 	protected function format_creation_date_informtion_object(array $form ): string
 	{

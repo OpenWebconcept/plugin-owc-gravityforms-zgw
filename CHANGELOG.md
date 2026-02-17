@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.4.1] - 2026-02-17
+
+- Added: enrich creation date argument of informationobject with timestamp by setting
+
 ## [v1.4.0] - 2026-02-16
 
 - Added: add timestamp to value of date fields conditionally
