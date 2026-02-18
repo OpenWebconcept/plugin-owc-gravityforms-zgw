@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.4.3] - 2026-02-18
+
+- Fix: avoid caching request state (DigiD BSN) in container
+- Fix: strict typing error
+
 ## [v1.4.2] - 2026-02-18
 
 - Change: use 'now' when adding timestamps to date arguments
