@@ -88,7 +88,7 @@ class RetryController
 			return new WP_Error( 'missing_form', 'No linked form found for this entry.' );
 		}
 
-		$mapped_zgw_fields = $this->get_mapped_zgw_form_fields( $transaction_form_id );
+		$mapped_zgw_fields = $this->get_mapped_zgw_form_fields( (int) $transaction_form_id );
 
 		if ( array() === $mapped_zgw_fields ) {
 			return new WP_Error( 'missing_zgw_fields', 'No valid linked ZGW fields found in the form.' );
