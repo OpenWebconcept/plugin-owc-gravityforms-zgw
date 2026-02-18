@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.4.2] - 2026-02-18
+
+- Change: use 'now' when adding timestamps to date arguments
+
 ## [v1.4.1] - 2026-02-17
 
 - Added: enrich creation date argument of informationobject with timestamp by setting
