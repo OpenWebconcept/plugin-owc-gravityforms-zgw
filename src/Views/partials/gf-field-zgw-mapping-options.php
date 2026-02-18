@@ -59,7 +59,7 @@ $objecttypes = $objecttypes ?? array();
 <li class="zgw_date_setting field_setting">
 	<input type="checkbox" id="linkedFieldUseTimestamp" name="linkedFieldUseTimestamp" onchange="SetFieldProperty('linkedFieldValueUseTimestamp', this.checked ? '1' : '0');">
 	<label for="linkedFieldUseTimestamp" class="section_label">
-		<?php esc_html_e( 'Gebruik timestamp', 'owc-gravityforms-zgw' ); ?>
+		<?php esc_html_e( 'Gebruik tijdstempel', 'owc-gravityforms-zgw' ); ?>
 	</label>
-	<small><?php esc_html_e( 'Voeg een standaardtijd (12:00) toe aan dit datumveld zodat het als volledig datetime-veld kan worden opgeslagen. Datum en tijd worden altijd in UTC opgeslagen om verschuivingen door tijdzones te voorkomen.', 'owc-gravityforms-zgw' ); ?></small>
+	<small><?php esc_html_e( 'Voeg de huidige tijdstempel toe aan dit datumveld zodat het als volledig datetime-veld kan worden opgeslagen. Datum en tijd worden altijd in UTC opgeslagen om verschuivingen door tijdzones te voorkomen.', 'owc-gravityforms-zgw' ); ?></small>
 </li>

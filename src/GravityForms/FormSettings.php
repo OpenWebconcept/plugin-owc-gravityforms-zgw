@@ -61,7 +61,7 @@ class FormSettings
 					'default_value' => '0',
 					'type'          => 'radio',
 					'label'         => esc_html__( 'Creatiedatum informatieobjecten', 'owc-gravityforms-zgw' ),
-					'tooltip'       => '<h6>' . __( 'Creatiedatum informatieobjecten met timestamp', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'De creatiedatum wordt verrrijkt met een standaard timestamp van 12:00.', 'owc-gravityforms-zgw' ),
+					'tooltip'       => '<h6>' . __( 'Creatiedatum informatieobjecten met tijdstempel', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'De creatiedatum wordt verrrijkt met de huidige tijdstempel.', 'owc-gravityforms-zgw' ),
 					'choices'       => array(
 						array(
 							'name'  => "{$this->prefix}-form-setting-enrich-creation-date-informationobjects-with-timestamp-disabled",
@@ -70,7 +70,7 @@ class FormSettings
 						),
 						array(
 							'name'  => "{$this->prefix}-form-setting-enrich-creation-date-informationobjects-with-timestamp-enabled",
-							'label' => __( 'Verrijken met een standaardtijd (12:00)', 'owc-gravityforms-zgw' ),
+							'label' => __( 'Verrijken met huidige tijdstempel', 'owc-gravityforms-zgw' ),
 							'value' => '1',
 						),
 					),

@@ -382,7 +382,8 @@ abstract class AbstractCreateZaakAction
 		}
 
 		if ( $wants_time ) {
-			$date = $date->setTime( 12, 0, 0 ); // Set time to 12:00 to avoid timezone issues since the date will be stored in UTC
+			$now  = new DateTimeImmutable( 'now', new DateTimeZone( 'UTC' ) );
+			$date = $date->setTime( (int) $now->format( 'H' ), (int) $now->format( 'i' ), 0 );
 		}
 
 		return $date->format( $return_format );

@@ -136,7 +136,7 @@ trait InformationObject
 		$wants_time = FormUtils::enrich_creation_date_information_objects( $form );
 
 		if ( $wants_time ) {
-			$now = $now->setTime( 12, 0, 0 );
+			$now = $now->setTime( (int) $now->format( 'H' ), (int) $now->format( 'i' ), 0 );
 
 			return $now->format( 'Y-m-d H:i' );
 		}
