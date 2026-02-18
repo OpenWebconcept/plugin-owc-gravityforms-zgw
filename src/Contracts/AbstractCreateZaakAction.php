@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use OWCGravityFormsZGW\Auth\DigiD;
+use OWCGravityFormsZGW\Auth\eHerkenning;
 use DateTimeImmutable;
 use DatetimeZone;
 use Exception;
@@ -220,7 +222,7 @@ abstract class AbstractCreateZaakAction
 			return $bsn_overwrite;
 		}
 
-		return ContainerResolver::make()->get( 'digid.current_user_bsn' );
+		return DigiD::make()->bsn();
 	}
 
 	/**
@@ -236,7 +238,7 @@ abstract class AbstractCreateZaakAction
 			return $kvk_overwrite;
 		}
 
-		return ContainerResolver::make()->get( 'eherkenning.current_user_kvk' );
+		return eHerkenning::make()->kvk();
 	}
 
 	/**

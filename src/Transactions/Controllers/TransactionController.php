@@ -24,6 +24,8 @@ use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\Services\EncryptionService;
 use OWCGravityFormsZGW\Transactions\TransactionStatus;
+use OWCGravityFormsZGW\Auth\DigiD;
+use OWCGravityFormsZGW\Auth\eHerkenning;
 
 /**
  * Transaction Controller.
@@ -80,8 +82,8 @@ class TransactionController
 
 		try {
 			$sensitive = array(
-				'transaction_user_bsn' => EncryptionService::encrypt( ContainerResolver::make()->get( 'digid.current_user_bsn' ) ),
-				'transaction_user_kvk' => EncryptionService::encrypt( ContainerResolver::make()->get( 'eherkenning.current_user_kvk' ) ),
+				'transaction_user_bsn' => EncryptionService::encrypt( DigiD::make()->bsn() ),
+				'transaction_user_kvk' => EncryptionService::encrypt( eHerkenning::make()->kvk() ),
 			);
 		} catch ( Exception $e ) {
 			ContainerResolver::make()->get( 'logger.zgw' )->error( 'Error encrypting sensitive transaction metadata: ' . $e->getMessage() );
