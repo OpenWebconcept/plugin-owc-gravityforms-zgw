@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.5.0
  */
 
 namespace OWCGravityFormsZGW\Controllers;
@@ -32,7 +32,7 @@ use RuntimeException;
 /**
  * Action Scheduler Controller.
  *
- * @since NEXT
+ * @since 1.5.0
  */
 class ActionSchedulerController
 {

@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.5.0] - 2026-02-24
+
+- Added: implement action scheduler
+
 ## [v1.4.3] - 2026-02-18
 
 - Fix: avoid caching request state (DigiD BSN) in container
