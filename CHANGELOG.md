@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.5.1] - 2026-02-24
+
+- Chore: remove addition of timestamp to value of date fields conditionally
+
 ## [v1.5.0] - 2026-02-24
 
 - Added: implement action scheduler
