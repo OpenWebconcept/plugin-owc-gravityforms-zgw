@@ -19,10 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use DateTimeImmutable;
-use DateTimeZone;
 use Exception;
-use OWCGravityFormsZGW\GravityForms\FormUtils;
 
 /**
  * Information object trait.
@@ -125,22 +122,5 @@ trait InformationObject
 				),
 			)
 		);
-	}
-
-	/**
-	 * @since 1.4.1
-	 */
-	protected function format_creation_date_informtion_object(array $form ): string
-	{
-		$now        = new DateTimeImmutable( 'now', new DateTimeZone( 'UTC' ) );
-		$wants_time = FormUtils::enrich_creation_date_information_objects( $form );
-
-		if ( $wants_time ) {
-			$now = $now->setTime( (int) $now->format( 'H' ), (int) $now->format( 'i' ), 0 );
-
-			return $now->format( 'Y-m-d H:i' );
-		}
-
-		return $now->format( 'Y-m-d' );
 	}
 }

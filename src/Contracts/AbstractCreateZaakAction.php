@@ -19,10 +19,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use DateTime;
 use OWCGravityFormsZGW\Auth\DigiD;
 use OWCGravityFormsZGW\Auth\eHerkenning;
-use DateTimeImmutable;
-use DatetimeZone;
 use Exception;
 use GF_Field;
 use OWCGravityFormsZGW\ContainerResolver;
@@ -101,7 +100,7 @@ abstract class AbstractCreateZaakAction
 			}
 
 			if ( 'date' === $field->type ) {
-				$field_value = $this->handle_date_field( $field );
+				$field_value = ( new DateTime( $field_value ) )->format( 'Y-m-d' );
 			}
 
 			$args[ $field->mappedFieldValueZGW ] = $this->translate_merge_tags( $this->entry, $this->form, $field_value );
@@ -329,7 +328,7 @@ abstract class AbstractCreateZaakAction
 			}
 
 			if ( 'date' === $field->type ) {
-				$property_value = $this->handle_date_field( $field );
+				$property_value = $this->handle_zaak_date_property( $property_value );
 			}
 
 			$mapped_fields[ $field->id ] = array(
@@ -341,54 +340,15 @@ abstract class AbstractCreateZaakAction
 		return $mapped_fields;
 	}
 
-	/**
-	 * Handle date fields by validating and formatting the date according to the expected format.
-	 * Also handles the option to include time in the value which is set to 12:00 to avoid timezone issues since the date will be stored in UTC.
-	 * If the date is invalid, return a default value and log an error.
-	 *
-	 * @since 1.4.0
-	 */
-	protected function handle_date_field(GF_Field $field ): string
+	private function handle_zaak_date_property(string $property_value ): string
 	{
-		$input         = trim( (string) rgar( $this->entry, (string) $field->id ) );
-		$wants_time    = ( '1' === ( $field->linkedFieldValueUseTimestamp ?? '0' ) );
-		$return_format = $wants_time ? 'Y-m-d H:i' : 'Y-m-d';
-
-		// Include the '!' character in the format to ensure that missing date parts are set to their default values instead of being filled with current date values.
-		$date       = DateTimeImmutable::createFromFormat( '!Y-m-d', $input, new DateTimeZone( 'UTC' ) );
-		$errors     = DateTimeImmutable::getLastErrors();
-		$has_errors = is_array( $errors ) && ( ( $errors['warning_count'] ?? 0 ) > 0 || ( $errors['error_count'] ?? 0 ) > 0 );
-
-		if ( ! $date instanceof DateTimeImmutable || $has_errors ) {
-			$details = '';
-
-			if ( is_array( $errors ) ) {
-				$all = array_merge( $errors['warnings'] ?? array(), $errors['errors'] ?? array() );
-				if ( $all ) {
-					$details = ' Details: ' . implode( ' | ', array_map( 'strval', $all ) );
-				}
-			}
-
-			$this->logger->error(
-				sprintf(
-					'Invalid date for field "%s" (id %s): "%s". Expected format: "%s".%s',
-					$field->label ?? '(no label)',
-					(string) $field->id,
-					$input,
-					$field->dateFormat,
-					$details
-				)
-			);
-
-			return $wants_time ? '0000-00-00 00:00' : '0000-00-00';
+		try {
+			$property_value = ( new DateTime( $property_value ) )->format( 'Y-m-d' );
+		} catch ( Exception $e ) {
+			$property_value = '0000-00-00';
 		}
 
-		if ( $wants_time ) {
-			$now  = new DateTimeImmutable( 'now', new DateTimeZone( 'UTC' ) );
-			$date = $date->setTime( (int) $now->format( 'H' ), (int) $now->format( 'i' ), 0 );
-		}
-
-		return $date->format( $return_format );
+		return $property_value;
 	}
 
 	/**
