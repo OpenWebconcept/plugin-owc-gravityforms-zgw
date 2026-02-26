@@ -36,7 +36,10 @@ use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Zaakeigenschap;
 use OWC\ZGW\Http\Errors\BadRequestError;
 use OWC\ZGW\Support\PagedCollection;
+use OWCGravityFormsZGW\Services\EncryptionService;
+use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
 use function OWC\ZGW\apiClient;
+use WP_Post;
 
 /**
  * Abstract create "zaak" action.
@@ -221,7 +224,7 @@ abstract class AbstractCreateZaakAction
 			return $bsn_overwrite;
 		}
 
-		return DigiD::make()->bsn();
+		return $this->get_identification_from_transaction( meta_field: 'transaction_user_bsn' );
 	}
 
 	/**
@@ -237,7 +240,55 @@ abstract class AbstractCreateZaakAction
 			return $kvk_overwrite;
 		}
 
-		return eHerkenning::make()->kvk();
+		return $this->get_identification_from_transaction( meta_field: 'transaction_user_kvk' );
+	}
+
+	/**
+	 * Retrieve the decrypted identification value from the related transaction post.
+	 *
+	 * A transaction post is created immediately upon form submission, outside of the
+	 * Action Scheduler process. When executed within the Action Scheduler, the current
+	 * user context is not available because it runs in a separate background process.
+	 * Therefore, the identification must be retrieved from the associated transaction post.
+	 *
+	 * @since NEXT
+	 */
+	private function get_identification_from_transaction(string $meta_field )
+	{
+		$args = array(
+			'post_type'   => TransactionController::POST_TYPE,
+			'post_status' => 'any',
+			'meta_query'  => array(
+				array(
+					'key'     => 'transaction_entry_id',
+					'value'   => $this->entry['id'],
+					'compare' => '=',
+				),
+			),
+		);
+
+		$transaction_posts = get_posts( $args );
+
+		if ( ! ( $transaction_posts[0] ?? null ) instanceof WP_Post ) {
+			return null;
+		}
+
+		$transaction_post         = $transaction_posts[0];
+		$encrypted_identification = get_post_meta( $transaction_post->ID, $meta_field, true );
+
+		try {
+			$decrypted_identification = EncryptionService::decrypt( $encrypted_identification );
+
+			if ( ! is_string( $decrypted_identification ) || '' === $decrypted_identification ) {
+				throw new Exception( 'Decrypted identification is empty or not a string' );
+			}
+
+			return $decrypted_identification;
+		} catch ( Exception $e ) {
+			$this->logger->error( sprintf( 'Failed to decrypt identification for entry "%s": %s', $this->entry['id'], $e->getMessage() ) );
+
+			return null;
+		}
 	}
 
 	/**

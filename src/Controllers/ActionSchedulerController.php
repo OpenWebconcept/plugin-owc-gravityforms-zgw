@@ -59,10 +59,6 @@ class ActionSchedulerController
 		// Use form-specific group to prevent conflicts when multiple forms are used.
 		$group = sprintf( '%s-%d', OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_GROUP, $args['form_id'] );
 
-		if ( ! as_has_scheduled_action( OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_TRANSACTION, $args, $group ) ) {
-			as_schedule_single_action( time(), OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_TRANSACTION, $args, $group );
-		}
-
 		if ( ! as_has_scheduled_action( OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_ZAAK, $args, $group ) ) {
 			as_schedule_single_action( time() + self::DELAY_ZAAK_CREATION_SECONDS, OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_ZAAK, $args, $group );
 		}
@@ -86,26 +82,6 @@ class ActionSchedulerController
 		}
 
 		( new ZaakController() )->handle( $entry, $form );
-	}
-
-	public function handle_transaction( int $entry_id, int $form_id ): void
-	{
-		try {
-			[$entry, $form] = $this->get_entry_and_form( $entry_id, $form_id );
-		} catch ( Throwable $e ) {
-			$this->logger->error(
-				'Error fetching entry/form for transaction processing',
-				array(
-					'entry_id' => $entry_id,
-					'form_id'  => $form_id,
-					'error'    => $e->getMessage(),
-				)
-			);
-
-			return;
-		}
-
-		( new TransactionController() )->create( $entry, $form );
 	}
 
 	private function get_entry_and_form(int $entry_id, int $form_id ): array
