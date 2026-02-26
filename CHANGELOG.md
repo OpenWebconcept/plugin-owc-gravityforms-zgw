@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.5.2] - 2026-02-26
+
+- Change: retrieve identification from transaction post to support Action Scheduler context
+
 ## [v1.5.1] - 2026-02-24
 
 - Chore: remove addition of timestamp to value of date fields conditionally

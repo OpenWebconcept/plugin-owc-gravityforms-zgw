@@ -251,7 +251,7 @@ abstract class AbstractCreateZaakAction
 	 * user context is not available because it runs in a separate background process.
 	 * Therefore, the identification must be retrieved from the associated transaction post.
 	 *
-	 * @since NEXT
+	 * @since 1.5.2
 	 */
 	private function get_identification_from_transaction(string $meta_field )
 	{
