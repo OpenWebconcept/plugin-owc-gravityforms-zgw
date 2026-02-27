@@ -13,6 +13,8 @@ return array(
 	 * https://github.com/OpenWebconcept/owc-zgw-api/blob/main/src/WordPress/SettingsProvider.php#L50
 	 */
 	'suppliers'                  => array(
+		'mozart'    => 'Mozart',
+		'openwave'  => 'OpenWave',
 		'openzaak'  => 'OpenZaak',
 		'xxllnc'    => 'XXLLNC',
 		'rxmission' => 'RxMission',
