@@ -36,16 +36,14 @@ class CreateUploadedDocumentsVerzoekAction
 
 	protected array $entry;
 	protected array $form;
-	protected array $verzoek;
 
-	public function __construct(array $entry, array $form, array $verzoek )
+	public function __construct(array $entry, array $form )
 	{
 		$this->entry   = $entry;
 		$this->form    = $form;
-		$this->verzoek = $verzoek;
 	}
 
-	public function add_uploaded_documents(): ?bool
+	public function add_uploaded_documents(): ?array
 	{
 		$mapped_args = $this->get_mapped_required_information_object_creation_args();
 
@@ -55,6 +53,7 @@ class CreateUploadedDocumentsVerzoekAction
 
 		$count   = count( $mapped_args['informatieobject'] );
 		$success = 0;
+		$uploaded_objects = array();
 
 		foreach ( $mapped_args['informatieobject'] as $object ) {
 			$args = $this->prepare_information_object_args(
@@ -69,10 +68,14 @@ class CreateUploadedDocumentsVerzoekAction
 
 			if ( isset( $connection_result['uuid'] ) && '' !== $connection_result['uuid'] ) {
 				++$success;
+				$uploaded_objects[] = $connection_result;
 			}
 		}
 
-		return $count === $success; // true = all succeeded, false = partial failure.
+		return [
+			'result' => $count === $success, 'uploaded_objects' => $uploaded_objects,
+			'uploaded_objects' => $uploaded_objects,
+		];
 	}
 
 	/**
@@ -204,8 +207,7 @@ class CreateUploadedDocumentsVerzoekAction
 			return null;
 		}
 
-		$information_object               = ( new Client() )->create_information_object( $args );
-		$information_object['object_url'] = $this->verzoek['url']; // Is required for connecting an "informatieobject" to a "zaak".
+		$information_object = ( new Client() )->create_information_object( $args );
 
 		return $information_object;
 	}
@@ -217,7 +219,6 @@ class CreateUploadedDocumentsVerzoekAction
 		}
 
 		$data['informatieobject'] = $information_object['url'];
-		$data['object']           = $information_object['object_url'];
 		$data['objectType']       = 'besluit';
 
 		return ( new Client() )->connect_object_to_information_object( $data );

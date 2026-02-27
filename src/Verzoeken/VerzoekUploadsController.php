@@ -43,10 +43,10 @@ class VerzoekUploadsController
 	/**
 	 * Initialize Zaak uploads and handle accordingly.
 	 */
-	public function handle( array $verzoek ): void
+	public function handle(): ?array
 	{
 		try {
-			$this->handle_verzoek_uploads( $verzoek );
+			return $this->handle_verzoek_uploads();
 		} catch ( Throwable $e ) {
 			$message = sprintf(
 				'Error processing uploads: %s',
@@ -62,23 +62,19 @@ class VerzoekUploadsController
 	/**
 	 * Add uploads to Zaak using the supplier-specific Action class.
 	 */
-	public function handle_verzoek_uploads( array $verzoek ): void
+	public function handle_verzoek_uploads(): ?array
 	{
 		try {
 			$action = new CreateUploadedDocumentsVerzoekAction(
 				$this->entry,
-				$this->form,
-				$verzoek
+				$this->form
 			);
 
-			$result = $action->add_uploaded_documents();
+			['result' => $result, 'uploaded_objects' => $uploaded_objects] = $action->add_uploaded_documents();
 
 			if ( false === $result ) {
 				throw new Exception(
-					sprintf(
-						'Not all uploads were successfully added to verzoek %s.',
-						$verzoek['uuid']
-					),
+					"Not all uploads were successful, so the 'verzoek' could not be fully created.",
 					400
 				);
 			}
@@ -94,6 +90,8 @@ class VerzoekUploadsController
 				$e
 			);
 		}
+
+		return isset( $uploaded_objects ) ? $uploaded_objects : null;
 	}
 
 	/**
@@ -105,9 +103,9 @@ class VerzoekUploadsController
 		$this->form  = $form;
 	}
 
-		/**
-		 * Extracts a readable error message from an API exception.
-		 */
+	/**
+	 * Extracts a readable error message from an API exception.
+	 */
 	protected function extract_api_error_message(Throwable $e ): string
 	{
 		if ( ! method_exists( $e, 'getResponse' ) ) {

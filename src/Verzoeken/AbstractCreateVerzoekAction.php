@@ -51,7 +51,7 @@ abstract class AbstractCreateVerzoekAction
 	/**
 	 * Merge mapped arguments with defaults.
 	 */
-	protected function get_mapped_required_zaak_creation_args(): array
+	protected function get_mapped_required_zaak_creation_args(?array $uploads = null): array
 	{
 		$mapped_args = array(
 			'start_at'       => array(
@@ -88,6 +88,7 @@ abstract class AbstractCreateVerzoekAction
 						'omschrijving'   => '',
 						'telefoonnummer' => '',
 					),
+					'attachments'   => array(),
 				),
 			),
 		);
@@ -107,6 +108,10 @@ abstract class AbstractCreateVerzoekAction
 
 			$ref = $arg['value'];
 			unset( $ref );
+		}
+
+		if (is_array($uploads) && array() !== $uploads) {
+			$payload['record']['data']['attachments'] = array_column($uploads, 'informatieobject');
 		}
 
 		return $payload;

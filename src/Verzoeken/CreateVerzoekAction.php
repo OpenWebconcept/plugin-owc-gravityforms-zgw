@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Exception;
-use OWCGravityFormsZGW\GravityForms\FormUtils;
 
 /**
  * Action to create a ZGW Verzoek upon Gravity Forms submission.
@@ -26,9 +25,9 @@ use OWCGravityFormsZGW\GravityForms\FormUtils;
  */
 class CreateVerzoekAction extends AbstractCreateVerzoekAction
 {
-	public function create(): array
+	public function create(?array $uploads = null): array
 	{
-		$args    = $this->get_mapped_required_zaak_creation_args();
+		$args    = $this->get_mapped_required_zaak_creation_args($uploads);
 		$verzoek = $this->create_object( $args );
 
 		$this->add_created_verzoek_as_entry_meta( $verzoek );

@@ -47,8 +47,8 @@ class VerzoekController
 		}
 
 		try {
-			$verzoek = $this->create_verzoek();
-			$this->handle_uploads( $verzoek );
+			$uploads = $this->handle_uploads();
+			$verzoek = $this->create_verzoek($uploads);
 
 			$this->mark_transaction_success();
 		} catch ( Throwable $e ) {
@@ -60,22 +60,23 @@ class VerzoekController
 		return $verzoek;
 	}
 
-	protected function create_verzoek(): array
+	protected function create_verzoek(?array $uploads = null): array
 	{
 		$action  = new CreateVerzoekAction( $this->entry, $this->form );
-		$verzoek = $action->create();
+		$verzoek = $action->create($uploads);
 
 		$this->add_verzoek_reference_to_post( $verzoek );
 
 		return $verzoek;
 	}
 
-	protected function handle_uploads( array $verzoek ): void
+	protected function handle_uploads(): ?array
 	{
 		$uploads_controller = new VerzoekUploadsController();
-
 		$uploads_controller->set_form_data( $this->entry, $this->form );
-		$uploads_controller->handle( $verzoek );
+
+		return $uploads_controller->handle();
+
 	}
 
 	/**
