@@ -167,6 +167,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		$args['bronorganisatie']             = ContainerResolver::make()->get( 'zgw.rsin' );
 		$args['creatiedatum']                = date( 'Y-m-d' );
 		$args['informatieobjecttype']        = $information_object_type;
+		$args['locked']                      = true;
 
 		return $args;
 	}

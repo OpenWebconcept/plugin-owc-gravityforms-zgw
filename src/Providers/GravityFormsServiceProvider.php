@@ -30,7 +30,7 @@ use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
 use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
-use OWCGravityFormsZGW\Verzoeken\VerzoekController;
+use OWCGravityFormsZGW\GravityForms\Controllers\VerzoekController;
 
 /**
  * Register settings service provider.

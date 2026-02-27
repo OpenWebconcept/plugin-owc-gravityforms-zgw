@@ -19,9 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use OWCGravityFormsZGW\Verzoeken\Client;
 use GF_Field;
-use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
-use OWC\ZGW\Entities\Zaakinformatieobject;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\Traits\InformationObject;
 use OWCGravityFormsZGW\Traits\MergeTagTranslator;
@@ -47,7 +46,7 @@ abstract class AbstractCreateUploadedDocumentsVerzoekAction
 		$this->verzoek = $verzoek;
 	}
 
-	abstract public function add_uploaded_documents(): ?bool;
+	abstract public function add_uploaded_documents(): ?array;
 
 	/**
 	 * Adds form field values from fields linked to the "informatieobject" mapping key
@@ -76,7 +75,7 @@ abstract class AbstractCreateUploadedDocumentsVerzoekAction
 		return $args;
 	}
 
-	/**
+		/**
 	 * Fields mapped to 'informatieobject' can contain a simple url but also an array of urls in JSON format.
 	 */
 	protected function map_information_object_arg(array $args, GF_Field $field, $field_value ): array
@@ -160,6 +159,7 @@ abstract class AbstractCreateUploadedDocumentsVerzoekAction
 		$args['bronorganisatie']             = ContainerResolver::make()->get( 'zgw.rsin' );
 		$args['creatiedatum']                = date( 'Y-m-d' );
 		$args['informatieobjecttype']        = $information_object_type;
+		$args['locked']                      = true;
 
 		return $args;
 	}
@@ -172,24 +172,26 @@ abstract class AbstractCreateUploadedDocumentsVerzoekAction
 		return sprintf( '%s_%s', uniqid(), $file_name );
 	}
 
-	protected function create_information_object(array $args ): ?Enkelvoudiginformatieobject
+	protected function create_information_object(array $args ): ?array
 	{
 		if ( empty( $args ) ) {
 			return null;
 		}
 
-		$information_object = $this->client->enkelvoudiginformatieobjecten()->create( new Enkelvoudiginformatieobject( $args, $this->client ) );
-		$information_object->setValue( 'verzoek', $this->verzoek['url'] ); // Is required for connecting an "informatieobject" to a "verzoek".
+		$information_object = ( new Client() )->create_information_object( $args );
 
 		return $information_object;
 	}
 
-	protected function connect_zaak_to_information_object(?Enkelvoudiginformatieobject $information_object ): ?Zaakinformatieobject
+	protected function connect_object_to_information_object(?array $information_object ): ?array
 	{
 		if ( empty( $information_object ) ) {
 			return null;
 		}
 
-		return $this->client->zaakinformatieobjecten()->create( new Zaakinformatieobject( $information_object->toArray(), $this->client ) );
+		$data['informatieobject'] = $information_object['url'];
+		$data['objectType']       = 'besluit';
+
+		return ( new Client() )->connect_object_to_information_object( $data );
 	}
 }
