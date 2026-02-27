@@ -41,6 +41,14 @@ class SettingsController
 		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description_transactions_report' );
 	}
 
+	/**
+	 * @since NEXT
+	 */
+	public function section_description_delay_after_zaak_creation(): void
+	{
+		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description_delay_after_zaak_creation' );
+	}
+
 	public function section_fields_render( array $args ): void
 	{
 		owc_gravityforms_zgw_render_view(
@@ -48,8 +56,11 @@ class SettingsController
 			array(
 				'settings_field_id'                 => $args['settings_field_id'] ?? '',
 				'available_user_roles'              => get_editable_roles(),
+				'selectable_suppliers'              => ContainerResolver::make()->get( 'suppliers' ),
 				'owc_gf_zgw_transaction_user_roles' => ContainerResolver::make()->get( 'zgw.site_options' )->transaction_user_roles(),
 				'owc_zgw_transactions_report_recipient_email' => ContainerResolver::make()->get( 'zgw.site_options' )->transaction_report_recipient_email(),
+				'owc_zgw_delay_after_zaak_creation_seconds' => ContainerResolver::make()->get( 'zgw.site_options' )->delay_after_zaak_creation_seconds(),
+				'owc_zgw_delay_after_zaak_creation_suppliers' => ContainerResolver::make()->get( 'zgw.site_options' )->delay_after_zaak_creation_suppliers(),
 			)
 		);
 	}

@@ -21,7 +21,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\GravityForms\Controllers\ZaakController;
-use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
 use GFAPI;
 use OWCGravityFormsZGW\LoggerZGW;
 use Throwable;

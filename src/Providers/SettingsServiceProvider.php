@@ -113,5 +113,39 @@ class SettingsServiceProvider extends ServiceProvider
 			'owc_gf_zgw_section_transactions_report',
 			array( 'settings_field_id' => 'owc_zgw_transactions_report_recipient_email' )
 		);
+
+		/**
+		 * @since NEXT
+		 */
+		add_settings_section(
+			'owc_gf_zgw_section_delay_after_zaak_creation',
+			__( 'Vertraging na zaakcreatie', 'owc-gravityforms-zgw' ),
+			$this->controller->section_description_delay_after_zaak_creation( ... ),
+			'owc-gf-zgw'
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		add_settings_field(
+			'owc_zgw_delay_after_zaak_creation_seconds',
+			__( 'Vertraging na zaakcreatie (seconden)', 'owc-gravityforms-zgw' ),
+			$this->controller->section_fields_render( ... ),
+			'owc-gf-zgw',
+			'owc_gf_zgw_section_delay_after_zaak_creation',
+			array( 'settings_field_id' => 'owc_zgw_delay_after_zaak_creation_seconds' )
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		add_settings_field(
+			'owc_zgw_delay_after_zaak_creation_suppliers',
+			__( 'Pas vertraging toe op leverancier(s)', 'owc-gravityforms-zgw' ),
+			$this->controller->section_fields_render( ... ),
+			'owc-gf-zgw',
+			'owc_gf_zgw_section_delay_after_zaak_creation',
+			array( 'settings_field_id' => 'owc_zgw_delay_after_zaak_creation_suppliers' )
+		);
 	}
 }

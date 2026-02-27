@@ -29,6 +29,7 @@ use OWCGravityFormsZGW\Exceptions\ZaakUploadException;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWC\ZGW\Entities\Zaak;
 use Throwable;
+use OWCGravityFormsZGW\ContainerResolver;
 
 /**
  * Zaak controller.
@@ -111,6 +112,8 @@ class ZaakController extends AbstractZaakFormController
 			$zaak = $action->create();
 			$this->add_zaak_reference_to_post( $zaak );
 
+			$this->delegate_delay( $supplier_config );
+
 			return $zaak;
 		} catch ( Throwable $e ) {
 			$reason_message = $this->extract_api_error_message( $e );
@@ -121,6 +124,38 @@ class ZaakController extends AbstractZaakFormController
 				$e
 			);
 		}
+	}
+
+	/**
+	 * Delegates a delay after zaak creation to allow supplier-side post-processing
+	 * to complete before attempting to upload documents.
+	 *
+	 * After a zaak is created, certain suppliers execute additional asynchronous
+	 * processes (e.g. registration, synchronization, authorization propagation or
+	 * internal indexing). During this short window, follow-up operations such as
+	 * document uploads may fail because the zaak is not yet fully ready for mutation.
+	 *
+	 * The delay duration is determined by the
+	 * 'owc_zgw_delay_after_zaak_creation_seconds' site option and defaults to 0
+	 * seconds if not set or if an invalid value is provided.
+	 *
+	 * NOTE:
+	 * This delay is a pragmatic mitigation for supplier-specific timing constraints.
+	 * Ideally, the supplier API should expose a reliable readiness signal or guarantee
+	 * synchronous consistency. This workaround can be removed once such guarantees
+	 * are in place.
+	 */
+	private function delegate_delay(array $supplier_config ): void
+	{
+		$selected_suppliers = ContainerResolver::make()->get( 'zgw.site_options' )->delay_after_zaak_creation_suppliers();
+
+		if ( ! in_array( $supplier_config['client_type'], $selected_suppliers, true ) ) {
+			return;
+		}
+
+		$delay = ContainerResolver::make()->get( 'zgw.site_options' )->delay_after_zaak_creation_seconds();
+
+		sleep( $delay );
 	}
 
 	/**

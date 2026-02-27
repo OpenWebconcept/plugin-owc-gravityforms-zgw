@@ -58,4 +58,23 @@ class SiteOptionsSingleton
 	{
 		return $this->options['owc_zgw_transactions_report_recipient_email'] ?? '';
 	}
+
+	/**
+	 * @since NEXT
+	 */
+	public function delay_after_zaak_creation_seconds(): int
+	{
+		$delay = (int) ( $this->options['owc_zgw_delay_after_zaak_creation_seconds'] ?? 0 );
+
+		if ( $delay < 0 || $delay > 10 ) {
+			return 0;
+		}
+
+		return $delay;
+	}
+
+	public function delay_after_zaak_creation_suppliers(): array
+	{
+		return $this->options['owc_zgw_delay_after_zaak_creation_suppliers'] ?? array();
+	}
 }
