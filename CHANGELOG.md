@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.5.3] - 2026-02-27
+
+- Added: add clients Mozart & OpenWave
+
 ## [v1.5.2] - 2026-02-26
 
 - Change: retrieve identification from transaction post to support Action Scheduler context
