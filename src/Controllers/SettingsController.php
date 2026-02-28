@@ -42,7 +42,7 @@ class SettingsController
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.6.0
 	 */
 	public function section_description_delay_after_zaak_creation(): void
 	{

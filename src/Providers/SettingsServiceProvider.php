@@ -115,7 +115,7 @@ class SettingsServiceProvider extends ServiceProvider
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 1.6.0
 		 */
 		add_settings_section(
 			'owc_gf_zgw_section_delay_after_zaak_creation',
@@ -125,7 +125,7 @@ class SettingsServiceProvider extends ServiceProvider
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 1.6.0
 		 */
 		add_settings_field(
 			'owc_zgw_delay_after_zaak_creation_seconds',
@@ -137,7 +137,7 @@ class SettingsServiceProvider extends ServiceProvider
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 1.6.0
 		 */
 		add_settings_field(
 			'owc_zgw_delay_after_zaak_creation_suppliers',

@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.6.0] - 2026-02-28
+
+- Added: add configurable delay after zaak creation for supplier-specific post-processing
+
 ## [v1.5.3] - 2026-02-27
 
 - Added: add clients Mozart & OpenWave

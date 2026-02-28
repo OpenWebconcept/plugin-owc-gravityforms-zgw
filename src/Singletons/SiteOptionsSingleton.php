@@ -60,7 +60,7 @@ class SiteOptionsSingleton
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.6.0
 	 */
 	public function delay_after_zaak_creation_seconds(): int
 	{
