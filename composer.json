@@ -55,7 +55,7 @@
 	],
 	"require": {
 		"monolog/monolog": "^3.0",
-		"owc/zgw-api": "dev-dev",
+		"owc/zgw-api": "^2.4",
 		"owc/idp-userdata": "^1.1",
 		"php": ">=8.1",
 		"php-di/php-di": "^7.0",
