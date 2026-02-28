@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.6.1] - 2026-02-28
+
+- Chore: use tagged version of zgw-api package + update deps
+
 ## [v1.6.0] - 2026-02-28
 
 - Added: add configurable delay after zaak creation for supplier-specific post-processing
