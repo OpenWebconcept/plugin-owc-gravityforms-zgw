@@ -12,6 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <p style="margin: 0;">
 	<?php
-	esc_html_e( 'Selecteer één of meerdere leverancier(s) waarbij een vertraging na zaakcreatie gewenst is.', 'owc-gravityforms-zgw' );
+	esc_html_e( 'Selecteer één of meerdere leverancier(s) waarbij een aangepaste timeout gewenst is en stel de gewenste timeout in.', 'owc-gravityforms-zgw' );
 	?>
 </p>

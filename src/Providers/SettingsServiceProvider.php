@@ -23,6 +23,9 @@ use OWCGravityFormsZGW\Controllers\SettingsController;
 use OWC\ZGW\ApiClientManager;
 use OWC\ZGW\WordPress\ClientProvider;
 use OWC\ZGW\WordPress\SettingsProvider;
+use OWCGravityFormsZGW\ContainerResolver;
+use DI\NotFoundException;
+use OWCGravityFormsZGW\LoggerZGW;
 
 /**
  * Register settings service provider.
@@ -32,10 +35,14 @@ use OWC\ZGW\WordPress\SettingsProvider;
 class SettingsServiceProvider extends ServiceProvider
 {
 	private SettingsController $controller;
+	protected ContainerResolver $container;
+	protected LoggerZGW $logger;
 
 	public function __construct()
 	{
 		$this->controller = new SettingsController();
+		$this->container  = ContainerResolver::make();
+		$this->logger     = $this->container->get( 'logger.zgw' );
 	}
 
 	/**
@@ -47,8 +54,53 @@ class SettingsServiceProvider extends ServiceProvider
 		$manager->container()->get( SettingsProvider::class )->register();
 		$manager->container()->get( ClientProvider::class )->register();
 
+		$this->overwrite_client_http_options_in_container( $manager );
+
 		add_action( 'admin_menu', $this->register_settings_page( ... ) );
 		add_action( 'admin_init', $this->register_settings_options( ... ) );
+	}
+
+	/**
+	 * Overwrite client HTTP options in the container based on the ZGW configuration settings.
+	 *
+	 * @since NEXT
+	 */
+	private function overwrite_client_http_options_in_container(ApiClientManager $manager ): void
+	{
+		$selected_suppliers = $this->container->get( 'zgw.site_options' )->delay_after_zaak_creation_suppliers();
+		$suppliers          = $this->container->get( 'suppliers' );
+
+		if ( ! is_array( $selected_suppliers ) || ! is_array( $suppliers ) ) {
+			return;
+		}
+
+		foreach ( $selected_suppliers as $supplier ) {
+			$found_supplier = $suppliers[ $supplier ] ?? null;
+
+			if ( ! is_string( $found_supplier ) || '' === trim( $found_supplier ) ) {
+				continue;
+			}
+
+			$client_supplier_class = sprintf( 'OWC\\ZGW\\Clients\\%s\\Client', trim( $found_supplier ) );
+
+			if ( ! class_exists( $client_supplier_class ) ) {
+				$this->logger->error( sprintf( 'Could not find client class %s for supplier %s', $client_supplier_class, $supplier ) );
+
+				continue;
+			}
+
+			try {
+				$manager
+					->container()->get( $client_supplier_class )
+					->getRequestClient()
+					->getRequestOptions()
+					->set( 'timeout', $this->container->get( 'zgw.site_options' )->client_request_timeout_option() );
+			} catch ( NotFoundException $e ) {
+				$this->logger->error( sprintf( 'Could not overwrite client request options for supplier %s: %s', $supplier, $e->getMessage() ) );
+
+				continue;
+			}
+		}
 	}
 
 	/**
@@ -146,6 +198,40 @@ class SettingsServiceProvider extends ServiceProvider
 			'owc-gf-zgw',
 			'owc_gf_zgw_section_delay_after_zaak_creation',
 			array( 'settings_field_id' => 'owc_zgw_delay_after_zaak_creation_suppliers' )
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		add_settings_section(
+			'owc_gf_zgw_section_client_request_timeout',
+			__( 'Client request timeout', 'owc-gravityforms-zgw' ),
+			$this->controller->description_client_request_timeout_option( ... ),
+			'owc-gf-zgw'
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		add_settings_field(
+			'owc_zgw_client_request_timeout_option',
+			__( 'Request timeout (seconden)', 'owc-gravityforms-zgw' ),
+			$this->controller->section_fields_render( ... ),
+			'owc-gf-zgw',
+			'owc_gf_zgw_section_client_request_timeout',
+			array( 'settings_field_id' => 'owc_zgw_client_request_timeout_option' )
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		add_settings_field(
+			'owc_zgw_client_request_timeout_option_suppliers',
+			__( 'Pas aangepaste timeout toe op leverancier(s)', 'owc-gravityforms-zgw' ),
+			$this->controller->section_fields_render( ... ),
+			'owc-gf-zgw',
+			'owc_gf_zgw_section_client_request_timeout',
+			array( 'settings_field_id' => 'owc_zgw_client_request_timeout_option_suppliers' )
 		);
 	}
 }

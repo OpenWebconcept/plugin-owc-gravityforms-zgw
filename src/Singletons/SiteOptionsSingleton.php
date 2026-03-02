@@ -73,8 +73,33 @@ class SiteOptionsSingleton
 		return $delay;
 	}
 
+	/**
+	 * @since 1.6.0
+	 */
 	public function delay_after_zaak_creation_suppliers(): array
 	{
 		return $this->options['owc_zgw_delay_after_zaak_creation_suppliers'] ?? array();
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	public function client_request_timeout_option(): int
+	{
+		$timeout = (int) ( $this->options['owc_zgw_client_request_timeout_option'] ?? 15 );
+
+		if ( $timeout < 15 || $timeout > 60 ) {
+			return 15;
+		}
+
+		return $timeout;
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	public function client_request_timeout_option_suppliers(): array
+	{
+		return $this->options['owc_zgw_client_request_timeout_option_suppliers'] ?? array();
 	}
 }

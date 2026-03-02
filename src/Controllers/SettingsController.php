@@ -33,12 +33,12 @@ class SettingsController
 
 	public function section_description_transactions_overview(): void
 	{
-		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description_transactions_overview' );
+		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description-transactions-overview' );
 	}
 
 	public function section_description_transactions_report(): void
 	{
-		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description_transactions_report' );
+		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description-transactions-report' );
 	}
 
 	/**
@@ -46,7 +46,15 @@ class SettingsController
 	 */
 	public function section_description_delay_after_zaak_creation(): void
 	{
-		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description_delay_after_zaak_creation' );
+		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description-delay-after-zaak-creation' );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	public function description_client_request_timeout_option(): void
+	{
+		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description-client-request-timeout-option' );
 	}
 
 	public function section_fields_render( array $args ): void
@@ -54,13 +62,15 @@ class SettingsController
 		owc_gravityforms_zgw_render_view(
 			'admin/partials/settings/settings-fields',
 			array(
-				'settings_field_id'                 => $args['settings_field_id'] ?? '',
-				'available_user_roles'              => get_editable_roles(),
-				'selectable_suppliers'              => ContainerResolver::make()->get( 'suppliers' ),
-				'owc_gf_zgw_transaction_user_roles' => ContainerResolver::make()->get( 'zgw.site_options' )->transaction_user_roles(),
+				'settings_field_id'                     => $args['settings_field_id'] ?? '',
+				'available_user_roles'                  => get_editable_roles(),
+				'selectable_suppliers'                  => ContainerResolver::make()->get( 'suppliers' ),
+				'owc_gf_zgw_transaction_user_roles'     => ContainerResolver::make()->get( 'zgw.site_options' )->transaction_user_roles(),
 				'owc_zgw_transactions_report_recipient_email' => ContainerResolver::make()->get( 'zgw.site_options' )->transaction_report_recipient_email(),
 				'owc_zgw_delay_after_zaak_creation_seconds' => ContainerResolver::make()->get( 'zgw.site_options' )->delay_after_zaak_creation_seconds(),
 				'owc_zgw_delay_after_zaak_creation_suppliers' => ContainerResolver::make()->get( 'zgw.site_options' )->delay_after_zaak_creation_suppliers(),
+				'owc_zgw_client_request_timeout_option' => ContainerResolver::make()->get( 'zgw.site_options' )->client_request_timeout_option(),
+				'owc_zgw_client_request_timeout_option_suppliers' => ContainerResolver::make()->get( 'zgw.site_options' )->client_request_timeout_option_suppliers(),
 			)
 		);
 	}

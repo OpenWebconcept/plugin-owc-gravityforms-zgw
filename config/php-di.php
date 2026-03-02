@@ -16,9 +16,9 @@ return array(
 		'mozart'    => 'Mozart',
 		'openwave'  => 'OpenWave',
 		'openzaak'  => 'OpenZaak',
-		'xxllnc'    => 'XXLLNC',
+		'xxllnc'    => 'Xxllnc',
 		'rxmission' => 'RxMission',
-		'decosjoin' => 'Decos JOIN',
+		'decosjoin' => 'DecosJOIN',
 		'procura'   => 'Procura',
 	),
 
