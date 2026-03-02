@@ -63,7 +63,7 @@ class SettingsServiceProvider extends ServiceProvider
 	/**
 	 * Overwrite client HTTP options in the container based on the ZGW configuration settings.
 	 *
-	 * @since NEXT
+	 * @since 1.7.0
 	 */
 	private function overwrite_client_http_options_in_container(ApiClientManager $manager ): void
 	{
@@ -201,7 +201,7 @@ class SettingsServiceProvider extends ServiceProvider
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 1.7.0
 		 */
 		add_settings_section(
 			'owc_gf_zgw_section_client_request_timeout',
@@ -211,7 +211,7 @@ class SettingsServiceProvider extends ServiceProvider
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 1.7.0
 		 */
 		add_settings_field(
 			'owc_zgw_client_request_timeout_option',
@@ -223,7 +223,7 @@ class SettingsServiceProvider extends ServiceProvider
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 1.7.0
 		 */
 		add_settings_field(
 			'owc_zgw_client_request_timeout_option_suppliers',

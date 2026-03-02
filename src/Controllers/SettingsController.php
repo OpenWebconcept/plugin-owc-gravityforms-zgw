@@ -50,7 +50,7 @@ class SettingsController
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.7.0
 	 */
 	public function description_client_request_timeout_option(): void
 	{

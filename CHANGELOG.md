@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.7.0] - 2026-03-02
+
+- Added: make HTTP client options configurable via DI container
+
 ## [v1.6.1] - 2026-02-28
 
 - Chore: use tagged version of zgw-api package + update deps
