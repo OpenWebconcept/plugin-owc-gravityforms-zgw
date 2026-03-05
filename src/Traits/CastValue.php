@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.8.0
  */
 
 namespace OWCGravityFormsZGW\Traits;
@@ -22,12 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Check URL trait.
  *
- * @since NEXT
+ * @since 1.8.0
  */
 trait CastValue
 {
 	/**
-	 * @since NEXT
+	 * @since 1.8.0
 	 */
 	public function cast_value(string $type, $value ): int|string
 	{

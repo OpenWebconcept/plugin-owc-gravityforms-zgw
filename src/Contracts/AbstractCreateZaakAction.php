@@ -340,7 +340,7 @@ abstract class AbstractCreateZaakAction
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.8.0
 	 */
 	private function add_contact_person_rol_to_rol_args(array $args ): array
 	{
@@ -368,7 +368,7 @@ abstract class AbstractCreateZaakAction
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.8.0
 	 */
 	private function add_involved_identification_to_rol_args(array $args ): array
 	{
@@ -415,7 +415,7 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * Set a value in a multi-dimensional array using "dot" notation for the keys.
 	 *
-	 * @since NEXT
+	 * @since 1.8.0
 	 */
 	private function array_set_by_dot_notated_path( array &$array, string $path, $value ): void
 	{
@@ -454,7 +454,7 @@ abstract class AbstractCreateZaakAction
 	 *
 	 * A field is considered "mapped" when the given property is set to '1' on the field.
 	 *
-	 * @since NEXT
+	 * @since 1.8.0
 	 */
 	private function get_value_of_mapped_field(string $property ): string
 	{

@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.8.0] - 2026-03-05
+
+- Added: map extra Rol creation args and reorganize ZGW tab content
+
 ## [v1.7.0] - 2026-03-02
 
 - Added: make HTTP client options configurable via DI container

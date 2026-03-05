@@ -82,7 +82,7 @@ class SiteOptionsSingleton
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.7.0
 	 */
 	public function client_request_timeout_option(): int
 	{
@@ -96,7 +96,7 @@ class SiteOptionsSingleton
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.7.0
 	 */
 	public function client_request_timeout_option_suppliers(): array
 	{
