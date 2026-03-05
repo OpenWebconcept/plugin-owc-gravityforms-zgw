@@ -19,7 +19,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			if (index === 'text') {
-				fieldSettings[index] += ', .zgw_kvk_setting';
+				fieldSettings[index] += ', .zgw_kvk_setting, .zgw_involved_identification_mapping_setting, .zgw_contact_person_role_mapping_setting';
+			}
+
+			if (index === 'date') {
+				fieldSettings[index] += ', .zgw_involved_identification_mapping_setting';
+			}
+
+			if (index === 'email') {
+				fieldSettings[index] += ', .zgw_involved_identification_mapping_setting, .zgw_contact_person_role_mapping_setting';
+			}
+
+			if (index === 'phone') {
+				fieldSettings[index] += ', .zgw_involved_identification_mapping_setting, .zgw_contact_person_role_mapping_setting';
 			}
 		});
 
@@ -37,6 +49,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if (linkedFieldKvKBranchNumber) {
 				linkedFieldKvKBranchNumber.checked = String(field['linkedFieldValueKvKBranchNumber'] ?? '0') === '1';
 			}
+
+			const mappedFieldInvolvedIdentificationZGW = document.getElementById('mappedFieldInvolvedIdentificationZGW');
+			if(mappedFieldInvolvedIdentificationZGW) mappedFieldInvolvedIdentificationZGW.value = field['mappedFieldValueInvolvedIdentificationZGW'] ?? '';
+
+			const mappedFieldContactPersonRoleZGW = document.getElementById('mappedFieldContactPersonRoleZGW');
+			if(mappedFieldContactPersonRoleZGW) mappedFieldContactPersonRoleZGW.value = field['mappedFieldValueContactPersonRoleZGW'] ?? '';
 		});
 	});
 </script>

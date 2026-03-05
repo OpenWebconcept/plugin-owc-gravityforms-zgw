@@ -20,8 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use DateTime;
-use OWCGravityFormsZGW\Auth\DigiD;
-use OWCGravityFormsZGW\Auth\eHerkenning;
+use OWCGravityFormsZGW\Traits\CastValue;
 use Exception;
 use GF_Field;
 use OWCGravityFormsZGW\ContainerResolver;
@@ -48,7 +47,33 @@ use WP_Post;
  */
 abstract class AbstractCreateZaakAction
 {
+	use CastValue;
 	use MergeTagTranslator;
+
+	private const INVOLVED_IDENTIFICATION_KEYS_TO_TYPE = array(
+		'inpBsn'                   => 'string',
+		'anpIdentificatie'         => 'string',
+		'inpA_nummer'              => 'string',
+		'geslachtsnaam'            => 'string',
+		'voorvoegselGeslachtsnaam' => 'string',
+		'voorletters'              => 'string',
+		'voornamen'                => 'string',
+		'geslachtsaanduiding'      => 'string',
+		'geboortedatum'            => 'string',
+		'aoaIdentificatie'         => 'string',
+		'wplWoonplaatsNaam'        => 'string',
+		'gorOpenbareRuimteNaam'    => 'string',
+		'aoaPostcode'              => 'string',
+		'aoaHuisnummer'            => 'int',
+		'aoaHuisletter'            => 'string',
+		'aoaHuisnummertoevoeging'  => 'string',
+		'inpLocatiebeschrijving'   => 'string',
+		'lndLandcode'              => 'string',
+		'lndLandnaam'              => 'string',
+		'subAdresBuitenland_1'     => 'string',
+		'subAdresBuitenland_2'     => 'string',
+		'subAdresBuitenland_3'     => 'string',
+	);
 
 	protected array $entry;
 	protected array $form;
@@ -98,12 +123,16 @@ abstract class AbstractCreateZaakAction
 
 			$field_value = $this->handle_zaak_creation_arg_value( $field );
 
-			if ( empty( $field_value ) ) {
+			if ( '' === $field_value ) {
 				continue;
 			}
 
 			if ( 'date' === $field->type ) {
-				$field_value = ( new DateTime( $field_value ) )->format( 'Y-m-d' );
+				try {
+					$field_value = ( new DateTime( $field_value ) )->format( 'Y-m-d' );
+				} catch ( Exception $e ) {
+					continue;
+				}
 			}
 
 			$args[ $field->mappedFieldValueZGW ] = $this->translate_merge_tags( $this->entry, $this->form, $field_value );
@@ -185,6 +214,8 @@ abstract class AbstractCreateZaakAction
 			);
 
 			$args = $this->add_identification_to_rol_args( $args, $current_bsn, $current_kvk );
+			$args = $this->add_contact_person_rol_to_rol_args( $args );
+			$args = $this->add_involved_identification_to_rol_args( $args );
 
 			try {
 				$rol = $this->client->rollen()->create( new Rol( $args, $this->client ) );
@@ -309,20 +340,136 @@ abstract class AbstractCreateZaakAction
 	}
 
 	/**
-	 * @since 1.3.0
-	 *
-	 * Checks if any form field is mapped to the KVK branch number and return its value.
+	 * @since NEXT
 	 */
-	protected function possible_branch_number_kvk(): string
+	private function add_contact_person_rol_to_rol_args(array $args ): array
 	{
+		$mapped_args = array();
+
 		foreach ( $this->form['fields'] as $field ) {
-			if ( ! isset( $field->linkedFieldValueKvKBranchNumber ) || '1' !== $field->linkedFieldValueKvKBranchNumber ) {
+			if ( ! isset( $field->mappedFieldValueContactPersonRoleZGW ) || ! is_string( $field->mappedFieldValueContactPersonRoleZGW ) || '' === $field->mappedFieldValueContactPersonRoleZGW ) {
 				continue;
 			}
 
 			$field_value = rgar( $this->entry, (string) $field->id );
 
-			if ( is_string( $field_value ) || '' !== $field_value ) {
+			if ( '' === $field_value ) {
+				continue;
+			}
+
+			$mapped_args[ $field->mappedFieldValueContactPersonRoleZGW ] = $field_value;
+		}
+
+		if ( 0 < count( $mapped_args ) ) {
+			$args['contactpersoonRol'] = $mapped_args;
+		}
+
+		return $args;
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function add_involved_identification_to_rol_args(array $args ): array
+	{
+		$mapped_args = array();
+
+		foreach ( $this->form['fields'] as $field ) {
+			if ( ! isset( $field->mappedFieldValueInvolvedIdentificationZGW ) || ! is_string( $field->mappedFieldValueInvolvedIdentificationZGW ) || '' === $field->mappedFieldValueInvolvedIdentificationZGW ) {
+				continue;
+			}
+
+			$field_value = rgar( $this->entry, (string) $field->id );
+
+			if ( '' === $field_value ) {
+				continue;
+			}
+
+			if ( 'date' === $field->type ) {
+				try {
+					$field_value = ( new DateTime( $field_value ) )->format( 'Y-m-d' );
+				} catch ( Exception $e ) {
+					continue;
+				}
+			}
+
+			$is_nested = str_contains( $field->mappedFieldValueInvolvedIdentificationZGW, '.' );
+
+			if ( $is_nested ) {
+				$this->array_set_by_dot_notated_path( $mapped_args, $field->mappedFieldValueInvolvedIdentificationZGW, $field_value );
+
+				continue;
+			}
+
+			$type = self::INVOLVED_IDENTIFICATION_KEYS_TO_TYPE[ $field->mappedFieldValueInvolvedIdentificationZGW ] ?? 'string';
+			$mapped_args[ $field->mappedFieldValueInvolvedIdentificationZGW ] = $this->cast_value( $type, $field_value );
+		}
+
+		if ( 0 < count( $mapped_args ) ) {
+			$args['betrokkeneIdentificatie'] = array_merge( $args['betrokkeneIdentificatie'] ?? array(), $mapped_args );
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Set a value in a multi-dimensional array using "dot" notation for the keys.
+	 *
+	 * @since NEXT
+	 */
+	private function array_set_by_dot_notated_path( array &$array, string $path, $value ): void
+	{
+		$keys     = explode( '.', $path );
+		$current  = &$array;
+		$last_key = array_pop( $keys );
+
+		if ( ! is_string( $last_key ) || $last_key === '' ) {
+			return;
+		}
+
+		foreach ( $keys as $key ) {
+			if ( ! isset( $current[ $key ] ) || ! is_array( $current[ $key ] ) ) {
+				$current[ $key ] = array();
+			}
+
+			$current = &$current[ $key ];
+		}
+
+		$type                 = self::INVOLVED_IDENTIFICATION_KEYS_TO_TYPE[ $last_key ] ?? 'string';
+		$current[ $last_key ] = $this->cast_value( $type, $value );
+	}
+
+	/**
+	 * Checks if any form field is mapped to the KVK branch number and returns its value.
+	 *
+	 * @since 1.3.0
+	 */
+	protected function possible_branch_number_kvk(): string
+	{
+		return $this->get_value_of_mapped_field( 'linkedFieldValueKvKBranchNumber' );
+	}
+
+	/**
+	 * Checks if any form field is mapped to the given ZGW property and returns its value.
+	 *
+	 * A field is considered "mapped" when the given property is set to '1' on the field.
+	 *
+	 * @since NEXT
+	 */
+	private function get_value_of_mapped_field(string $property ): string
+	{
+		if ( ! isset( $this->form['fields'] ) || ! is_array( $this->form['fields'] ) ) {
+			return '';
+		}
+
+		foreach ( $this->form['fields'] as $field ) {
+			if ( ! isset( $field->$property ) || '1' !== $field->$property ) {
+				continue;
+			}
+
+			$field_value = rgar( $this->entry, (string) $field->id );
+
+			if ( is_string( $field_value ) && '' !== $field_value ) {
 				return $field_value;
 			}
 		}

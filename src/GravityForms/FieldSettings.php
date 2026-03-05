@@ -68,11 +68,15 @@ class FieldSettings
 		owc_gravityforms_zgw_render_view(
 			'partials/gf-field-zgw-mapping-options',
 			array(
-				'properties'  => $properties instanceof Collection ? $this->prepare_properties_options( $properties ) : array(),
+				'properties' => $properties instanceof Collection ? $this->prepare_properties_options( $properties ) : array(),
+			)
+		);
+		owc_gravityforms_zgw_render_view(
+			'partials/gf-field-zgw-upload-field-options',
+			array(
 				'objecttypes' => $this->prepare_object_types_options( $this->get_information_object_types( $zaak_type, (string) ( $zaak_type->identificatie ?? '' ) ) ),
 			)
 		);
-		owc_gravityforms_zgw_render_view( 'partials/gf-field-zgw-upload-field-options' );
 	}
 
 	/**
