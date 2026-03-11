@@ -203,12 +203,12 @@ abstract class AbstractCreateZaakAction
 		}
 
 		foreach ( $rol_types as $rol_type ) {
-			if ( 'initiator' !== $rol_type['omschrijvingGeneriek'] ) {
+			if ( 'initiator' !== strtolower( $rol_type['omschrijvingGeneriek'] ) ) {
 				continue;
 			}
 
 			$args = array(
-				'roltoelichting' => $rol_type['omschrijvingGeneriek'],
+				'roltoelichting' => strtolower( $rol_type['omschrijvingGeneriek'] ),
 				'roltype'        => $rol_type['url'],
 				'zaak'           => $zaak->url,
 			);
