@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.8.1] - 2026-03-11
+
+- Change: validations of form settings adapters
+- Fix: fallback to default option when mapped ZGW select value is invalid
+
 ## [v1.8.0] - 2026-03-05
 
 - Added: map extra Rol creation args and reorganize ZGW tab content
