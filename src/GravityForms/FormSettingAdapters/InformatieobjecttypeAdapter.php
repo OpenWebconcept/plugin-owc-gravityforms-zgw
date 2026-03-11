@@ -50,10 +50,17 @@ class InformatieobjecttypeAdapter extends Adapter
 						$designation = 'Aanduiding onbekend';
 					}
 
+					$description = $objecttype->omschrijving ?? '';
+					$url         = $objecttype->url ?? '';
+
+					if ( empty( $description ) || empty( $url ) ) {
+						return array();
+					}
+
 					return array(
-						'name'  => $objecttype->url,
-						'label' => "{$objecttype->omschrijving} ({$designation})",
-						'value' => $objecttype->url,
+						'name'  => $url,
+						'label' => "{$description} ({$designation})",
+						'value' => $url,
 					);
 				},
 				'No information object types found.'

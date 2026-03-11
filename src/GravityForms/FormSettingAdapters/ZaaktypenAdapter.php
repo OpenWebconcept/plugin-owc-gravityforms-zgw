@@ -39,10 +39,18 @@ class ZaaktypenAdapter extends Adapter
 				sprintf( '%s-form-settings-zaaktypen', $this->transient_key_prefix() ), // Unique transient key.
 				'zaaktypen',
 				function (Zaaktype $zaaktype ) {
+					$identification = $zaaktype->identificatie ?? '';
+					$description    = $zaaktype->omschrijving ?? '';
+					$url            = $zaaktype->url ?? '';
+
+					if ( empty( $identification ) || empty( $description ) || empty( $url ) ) {
+						return array();
+					}
+
 					return array(
-						'name'  => $zaaktype->identificatie,
-						'label' => "{$zaaktype->omschrijving} ({$zaaktype->identificatie})",
-						'value' => $zaaktype->url, // @todo: when the api supports filtering on zaaktype identification this line should be updated to $zaaktype->identificatie.
+						'name'  => $identification,
+						'label' => "{$description} ({$identification})",
+						'value' => $url, // @todo: when the api supports filtering on zaaktype identification this line should be updated to $identification.
 					);
 				},
 				'No zaaktypen found.'

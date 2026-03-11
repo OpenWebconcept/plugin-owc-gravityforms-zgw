@@ -66,7 +66,7 @@ abstract class Adapter
 		$types = $this->prepare_types( $types, $prepare_callback );
 
 		if ( empty( $types ) ) {
-			return array();
+			throw new Exception( sprintf( 'No valid %s types found after preparation.', $endpoint ), 400 );
 		}
 
 		set_transient( $transient_key, $types, self::TRANSIENT_LIFETIME_IN_SECONDS ); // 18 hours.
@@ -100,7 +100,11 @@ abstract class Adapter
 
 	protected function prepare_types(array $types, Closure $prepare_callback ): array
 	{
-		return (array) Collection::collect( $types )->map( $prepare_callback )->all();
+		return (array) Collection::collect( $types )->map( $prepare_callback )->filter(
+			function ($item ) {
+				return isset( $item['name'], $item['label'], $item['value'] ) && is_string( $item['name'] ) && is_string( $item['label'] ) && is_string( $item['value'] );
+			}
+		)->all();
 	}
 
 	/**

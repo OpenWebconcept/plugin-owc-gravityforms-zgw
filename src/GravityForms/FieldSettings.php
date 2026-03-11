@@ -236,10 +236,25 @@ class FieldSettings
 					$designation = $designation->name ?? '';
 				}
 
+				if ( ! is_string( $designation ) || 1 > strlen( $designation ) ) {
+					$designation = 'Aanduiding onbekend';
+				}
+
+				$description = $object_type->omschrijving ?? '';
+				$url         = $object_type->url ?? '';
+
+				if ( empty( $description ) || empty( $url ) ) {
+					return array();
+				}
+
 				return array(
-					'label' => "{$object_type->omschrijving} ({$designation})",
-					'value' => $object_type->url,
+					'label' => "{$description} ({$designation})",
+					'value' => $url,
 				);
+			}
+		)->filter(
+			function (array $item ) {
+				return isset( $item['label'], $item['value'] ) && is_string( $item['label'] ) && is_string( $item['value'] );
 			}
 		)->all();
 	}
