@@ -37,10 +37,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		jQuery(document).on('gform_load_field_settings', function (event, field, form) {
 			const mappedFieldZGW = document.getElementById('mappedFieldZGW');
-			if(mappedFieldZGW) mappedFieldZGW.value = field['mappedFieldValueZGW'] ?? '';
+			if (mappedFieldZGW) {
+				const value = field['mappedFieldValueZGW'] ?? '';
+
+				const optionExists = [...mappedFieldZGW.options]
+					.some(option => option.value === value);
+
+				mappedFieldZGW.value = optionExists ? value : '';
+			}
 
 			const mappedFieldDocumentTypeZGW = document.getElementById('mappedFieldDocumentTypeZGW');
-			if(mappedFieldDocumentTypeZGW) mappedFieldDocumentTypeZGW.value = field['mappedFieldDocumentTypeValueZGW'] ?? '';
+			if (mappedFieldDocumentTypeZGW) {
+				const value = field['mappedFieldDocumentTypeValueZGW'] ?? '';
+
+				const optionExists = [...mappedFieldDocumentTypeZGW.options]
+					.some(option => option.value === value);
+
+				mappedFieldDocumentTypeZGW.value = optionExists ? value : '';
+			}
 
 			const uploadFieldDescriptionZGW = document.getElementById('uploadFieldDescriptionZGW');
 			if(uploadFieldDescriptionZGW) uploadFieldDescriptionZGW.value = field['uploadFieldDescriptionValueZGW'] ?? '';
