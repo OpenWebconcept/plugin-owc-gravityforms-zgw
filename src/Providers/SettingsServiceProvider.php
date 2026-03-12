@@ -67,7 +67,7 @@ class SettingsServiceProvider extends ServiceProvider
 	 */
 	private function overwrite_client_http_options_in_container(ApiClientManager $manager ): void
 	{
-		$selected_suppliers = $this->container->get( 'zgw.site_options' )->delay_after_zaak_creation_suppliers();
+		$selected_suppliers = $this->container->get( 'zgw.site_options' )->client_request_timeout_option_suppliers();
 		$suppliers          = $this->container->get( 'suppliers' );
 
 		if ( ! is_array( $selected_suppliers ) || ! is_array( $suppliers ) ) {
@@ -90,11 +90,14 @@ class SettingsServiceProvider extends ServiceProvider
 			}
 
 			try {
-				$manager
-					->container()->get( $client_supplier_class )
-					->getRequestClient()
-					->getRequestOptions()
-					->set( 'timeout', $this->container->get( 'zgw.site_options' )->client_request_timeout_option() );
+				$supplier_client = $manager->container()->get( $client_supplier_class );
+				$shared_client   = $supplier_client->getRequestClient();
+				$cloned_client   = clone $shared_client;
+				$cloned_options  = $shared_client->getRequestOptions()->clone();
+
+				$cloned_options->set( 'timeout', $this->container->get( 'zgw.site_options' )->client_request_timeout_option() );
+				$cloned_client->setRequestOptions( $cloned_options );
+				$supplier_client->setRequestClient( $cloned_client );
 			} catch ( NotFoundException $e ) {
 				$this->logger->error( sprintf( 'Could not overwrite client request options for supplier %s: %s', $supplier, $e->getMessage() ) );
 
