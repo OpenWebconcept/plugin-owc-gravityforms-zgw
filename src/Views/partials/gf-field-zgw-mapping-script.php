@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			if (index === 'text') {
-				fieldSettings[index] += ', .zgw_kvk_setting, .zgw_involved_identification_mapping_setting, .zgw_contact_person_role_mapping_setting';
+				fieldSettings[index] += ', .zgw_kvk_setting, .zgw_involved_identification_mapping_setting, .zgw_contact_person_role_mapping_setting, .zgw_address_object_mapping_setting';
 			}
 
 			if (index === 'date') {
@@ -56,8 +56,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 				mappedFieldDocumentTypeZGW.value = optionExists ? value : '';
 			}
 
+			const mappedFieldAddressObjectZGW = document.getElementById('mappedFieldAddressObjectZGW');
+			if (mappedFieldAddressObjectZGW) {
+				const value = field['mappedFieldValueAddressObjectZGW'] ?? '';
+
+				const optionExists = [...mappedFieldAddressObjectZGW.options]
+					.some(option => option.value === value);
+
+				mappedFieldAddressObjectZGW.value = optionExists ? value : '';
+			}
+
 			const uploadFieldDescriptionZGW = document.getElementById('uploadFieldDescriptionZGW');
-			if(uploadFieldDescriptionZGW) uploadFieldDescriptionZGW.value = field['uploadFieldDescriptionValueZGW'] ?? '';
+			if (uploadFieldDescriptionZGW) uploadFieldDescriptionZGW.value = field['uploadFieldDescriptionValueZGW'] ?? '';
 
 			const linkedFieldKvKBranchNumber = document.getElementById('linkedFieldKvKBranchNumber');
 			if (linkedFieldKvKBranchNumber) {
@@ -65,10 +75,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			const mappedFieldInvolvedIdentificationZGW = document.getElementById('mappedFieldInvolvedIdentificationZGW');
-			if(mappedFieldInvolvedIdentificationZGW) mappedFieldInvolvedIdentificationZGW.value = field['mappedFieldValueInvolvedIdentificationZGW'] ?? '';
+			if (mappedFieldInvolvedIdentificationZGW) {
+				const value = field['mappedFieldValueInvolvedIdentificationZGW'] ?? '';
+
+				const optionExists = [...mappedFieldInvolvedIdentificationZGW.options]
+					.some(option => option.value === value);
+
+				mappedFieldInvolvedIdentificationZGW.value = optionExists ? value : '';
+			}
 
 			const mappedFieldContactPersonRoleZGW = document.getElementById('mappedFieldContactPersonRoleZGW');
-			if(mappedFieldContactPersonRoleZGW) mappedFieldContactPersonRoleZGW.value = field['mappedFieldValueContactPersonRoleZGW'] ?? '';
+			if (mappedFieldContactPersonRoleZGW) {
+				const value = field['mappedFieldValueContactPersonRoleZGW'] ?? '';
+
+				const optionExists = [...mappedFieldContactPersonRoleZGW.options]
+					.some(option => option.value === value);
+
+				mappedFieldContactPersonRoleZGW.value = optionExists ? value : '';
+			}
 		});
 	});
 </script>

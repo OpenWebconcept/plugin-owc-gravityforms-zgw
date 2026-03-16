@@ -33,6 +33,7 @@ use OWC\ZGW\Endpoints\Filter\RoltypenFilter;
 use OWC\ZGW\Entities\Rol;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Zaakeigenschap;
+use OWC\ZGW\Entities\Zaakobject;
 use OWC\ZGW\Http\Errors\BadRequestError;
 use OWC\ZGW\Support\PagedCollection;
 use OWCGravityFormsZGW\Services\EncryptionService;
@@ -52,7 +53,7 @@ abstract class AbstractCreateZaakAction
 	use CastValue;
 	use MergeTagTranslator;
 
-	private const INVOLVED_IDENTIFICATION_KEYS_TO_TYPE = array(
+	private const INVOLVED_IDENTIFICATION_MAPPING_KEYS_TO_TYPE = array(
 		'inpBsn'                   => 'string',
 		'anpIdentificatie'         => 'string',
 		'inpA_nummer'              => 'string',
@@ -75,6 +76,15 @@ abstract class AbstractCreateZaakAction
 		'subAdresBuitenland_1'     => 'string',
 		'subAdresBuitenland_2'     => 'string',
 		'subAdresBuitenland_3'     => 'string',
+	);
+
+	private const ADDRESS_OBJECT_MAPPING_KEYS_TO_TYPE = array(
+		'wplWoonplaatsNaam'     => 'string',
+		'gorOpenbareRuimteNaam' => 'string',
+		'huisnummer'            => 'string',
+		'huisletter'            => 'string',
+		'huisnummertoevoeging'  => 'string',
+		'postcode'              => 'string',
 	);
 
 	protected array $entry;
@@ -184,6 +194,58 @@ abstract class AbstractCreateZaakAction
 		}
 
 		return is_string( $field_value ) && '' !== $field_value ? $field_value : '';
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function add_address_object_to_zaak(Zaak $zaak ): void
+	{
+		$address_object_args = $this->map_address_object_args( $zaak );
+
+		if ( 0 === count( $address_object_args ) ) {
+			return;
+		}
+
+		try {
+			$this->client->zaakobjecten()->create( new Zaakobject( $address_object_args, $this->client ) );
+		} catch ( BadRequestError $e ) {
+			$this->logger->error( sprintf( 'Failed to add address object to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), json_encode( $e->getInvalidParameters() ) ) );
+		} catch ( Exception $e ) {
+			$this->logger->error( sprintf( 'Failed to add address object to zaak "%s": %s', $zaak->getValue( 'identificatie', '' ), $e->getMessage() ) );
+		}
+	}
+
+	private function map_address_object_args(Zaak $zaak ): array
+	{
+		$args = array();
+
+		foreach ( $this->form['fields'] as $field ) {
+			if ( ! isset( $field->mappedFieldValueAddressObjectZGW ) || ! is_string( $field->mappedFieldValueAddressObjectZGW ) || '' === $field->mappedFieldValueAddressObjectZGW || ! isset( self::ADDRESS_OBJECT_MAPPING_KEYS_TO_TYPE[ $field->mappedFieldValueAddressObjectZGW ] ) ) {
+				continue;
+			}
+
+			$field_value = rgar( $this->entry, (string) $field->id );
+
+			if ( is_string( $field_value ) && '' !== $field_value ) {
+				$args[ $field->mappedFieldValueAddressObjectZGW ] = $this->cast_value( self::ADDRESS_OBJECT_MAPPING_KEYS_TO_TYPE[ $field->mappedFieldValueAddressObjectZGW ], $field_value );
+			}
+		}
+
+		if ( 0 === count( $args ) ) {
+			return array();
+		}
+
+		return array(
+			'zaak'                => $zaak->url,
+			'objectType'          => 'adres',
+			'objectIdentificatie' => array_merge(
+				array(
+					'identificatie' => sprintf( 'zgw_adr_obj_%s', $zaak->getValue( 'identificatie', '' ) ),
+				),
+				$args
+			),
+		);
 	}
 
 	/**
@@ -407,7 +469,7 @@ abstract class AbstractCreateZaakAction
 				continue;
 			}
 
-			$type = self::INVOLVED_IDENTIFICATION_KEYS_TO_TYPE[ $field->mappedFieldValueInvolvedIdentificationZGW ] ?? 'string';
+			$type = self::INVOLVED_IDENTIFICATION_MAPPING_KEYS_TO_TYPE[ $field->mappedFieldValueInvolvedIdentificationZGW ] ?? 'string';
 			$mapped_args[ $field->mappedFieldValueInvolvedIdentificationZGW ] = $this->cast_value( $type, $field_value );
 		}
 
@@ -441,7 +503,7 @@ abstract class AbstractCreateZaakAction
 			$current = &$current[ $key ];
 		}
 
-		$type                 = self::INVOLVED_IDENTIFICATION_KEYS_TO_TYPE[ $last_key ] ?? 'string';
+		$type                 = self::INVOLVED_IDENTIFICATION_MAPPING_KEYS_TO_TYPE[ $last_key ] ?? 'string';
 		$current[ $last_key ] = $this->cast_value( $type, $value );
 	}
 

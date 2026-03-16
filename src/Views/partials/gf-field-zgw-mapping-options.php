@@ -105,3 +105,49 @@ $properties = $properties ?? array();
 		<option value="naam"><?php esc_html_e( 'Naam', 'owc-gravityforms-zgw' ); ?></option>
 	</select>
 </li>
+
+<li class="field_setting zgw_address_object_mapping_setting">
+	<h3 style="margin-top: 0px;">Zaakobjecten</h3>
+</li>
+<li class="field_setting zgw_address_object_mapping_setting">
+	<label for="mappedFieldAddressObjectZGW" class="section_label">
+		<?php esc_html_e( 'Mapping adresobject', 'owc-gravityforms-zgw' ); ?>
+	</label>
+
+	<select id="mappedFieldAddressObjectZGW" onchange="SetFieldProperty('mappedFieldValueAddressObjectZGW', this.value);">
+		<option value=""><?php esc_html_e( 'Selecteer een optie', 'owc-gravityforms-zgw' ); ?></option>
+		<option value="wplWoonplaatsNaam"><?php esc_html_e( 'wplWoonplaatsNaam', 'owc-gravityforms-zgw' ); ?> *</option>
+		<option value="gorOpenbareRuimteNaam"><?php esc_html_e( 'Openbare Ruimte Naam', 'owc-gravityforms-zgw' ); ?> **</option>
+		<option value="huisnummer"><?php esc_html_e( 'Huisnummer', 'owc-gravityforms-zgw' ); ?> *</option>
+		<option value="huisletter"><?php esc_html_e( 'Huisletter', 'owc-gravityforms-zgw' ); ?></option>
+		<option value="huisnummertoevoeging"><?php esc_html_e( 'Huisnummertoevoeging', 'owc-gravityforms-zgw' ); ?></option>
+		<option value="postcode"><?php esc_html_e( 'Postcode', 'owc-gravityforms-zgw' ); ?></option>
+	</select>
+		<table class="description" style="margin-top:8px;">
+		<tbody>
+			<tr style="vertical-align:top;">
+				<td style="padding-right:10px;"><strong>*</strong></td>
+				<td><?php esc_html_e( 'Verplicht veld.', 'owc-gravityforms-zgw' ); ?></td>
+			</tr>
+			<tr style="vertical-align:top;">
+				<td><strong>**</strong></td>
+				<td><?php esc_html_e( 'Verplicht veld dat door de gemeente wordt ingevuld. Verberg dit veld en geef een standaardwaarde mee.', 'owc-gravityforms-zgw' ); ?></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table class="description" style="margin-top:8px;">
+		<thead>
+			<tr>
+				<th style="text-align:left;"><?php esc_html_e( 'Veld', 'owc-gravityforms-zgw' ); ?></th>
+				<th style="text-align:left;"><?php esc_html_e( 'Beschrijving', 'owc-gravityforms-zgw' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr style="vertical-align:top;">
+				<td><code>gorOpenbareRuimteNaam</code></td>
+				<td><?php esc_html_e( 'De door het bevoegde gemeentelijke orgaan toegekende naam van de openbare ruimte.', 'owc-gravityforms-zgw' ); ?></td>
+			</tr>
+		</tbody>
+	</table>
+</li>
