@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\InformatieobjecttypeAdapter;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\ZaaktypenAdapter;
 use function OWC\ZGW\apiClient;
+use OWC\ZGW\Contracts\Client;
 
 /**
  * Form settings.
@@ -183,7 +184,7 @@ class FormSettings
 							),
 						),
 					),
-					'choices'    => ( new ZaaktypenAdapter( $api_client, $supplier_name ) )->handle(),
+					'choices'    => $this->format_choices_zaaktypen( $api_client, $supplier_name ),
 				),
 				array(
 					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-information-object-type",
@@ -202,7 +203,7 @@ class FormSettings
 							),
 						),
 					),
-					'choices'    => ( new InformatieobjecttypeAdapter( $api_client, $supplier_name ) )->handle(),
+					'choices'    => $this->format_choices_information_object_types( $api_client, $supplier_name ),
 				),
 			),
 			'manual_setting' => array(
@@ -246,5 +247,37 @@ class FormSettings
 		);
 
 		return $fields;
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function format_choices_zaaktypen(Client $api_client, string $supplier_name ): array
+	{
+		return array_merge(
+			array(
+				array(
+					'label' => esc_html__( 'Selecteer een zaaktype', 'owc-gravityforms-zgw' ),
+					'value' => '',
+				),
+			),
+			( new ZaaktypenAdapter( $api_client, $supplier_name ) )->handle()
+		);
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function format_choices_information_object_types(Client $api_client, string $supplier_name ): array
+	{
+		return array_merge(
+			array(
+				array(
+					'label' => esc_html__( 'Selecteer een informatie object type', 'owc-gravityforms-zgw' ),
+					'value' => '',
+				),
+			),
+			( new InformatieobjecttypeAdapter( $api_client, $supplier_name ) )->handle()
+		);
 	}
 }
