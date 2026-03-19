@@ -20,7 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use OWCGravityFormsZGW\Contracts\AbstractDeleteZaakAction;
-use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Http\Response;
 
 /**

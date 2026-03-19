@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use DateTime;
 use DateTimeZone;
 use OWCGravityFormsZGW\WPCron\Events\PopulateFormSettings;
+use OWCGravityFormsZGW\WPCron\Events\CleanupFailedPaymentZaken;
 
 /**
  * Register transactions service provider.
@@ -38,12 +39,17 @@ class WPCronServiceProvider extends ServiceProvider
 
 	protected function register_hooks(): void {
 		add_action( 'owc-gf-zgw-form_settings_cron', ( new PopulateFormSettings() )->init( ... ) );
+		add_action( 'owc-gf-zgw-cleanup_failed_payment_zaken_cron', ( new CleanupFailedPaymentZaken() )->init( ... ) );
 	}
 
 	protected function register_events(): void
 	{
 		if ( ! wp_next_scheduled( 'owc-gf-zgw-form_settings_cron' ) ) {
 			wp_schedule_event( $this->time_to_execute( 'tomorrow 04:00:00' ), 'daily', 'owc-gf-zgw-form_settings_cron' );
+		}
+
+		if ( ! wp_next_scheduled( 'owc-gf-zgw-cleanup_failed_payment_zaken_cron' ) ) {
+			wp_schedule_event( time(), 'hourly', 'owc-gf-zgw-cleanup_failed_payment_zaken_cron' );
 		}
 	}
 

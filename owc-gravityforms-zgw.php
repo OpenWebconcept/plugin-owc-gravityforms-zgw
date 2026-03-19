@@ -42,6 +42,7 @@ const OWC_GRAVITYFORMS_ZGW_SITE_OPTION_NAME                  = 'owc_gf_zgw_optio
 const OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_ZAAK        = 'owc_gf_zgw_process_zaak_creation';
 const OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_TRANSACTION = 'owc_gf_zgw_process_transaction';
 const OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_GROUP            = 'owc-gravityforms-zgw';
+const OWC_GRAVITYFORMS_ZGW_PLUGIN_NAME                       = 'OWC GravityForms ZGW';
 
 // Require autoload if they exist.
 foreach ( array( 'vendor/autoload.php', 'vendor-prefixed/autoload.php' ) as $autoload ) {

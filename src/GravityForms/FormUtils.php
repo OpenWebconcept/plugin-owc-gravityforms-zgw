@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace OWCGravityFormsZGW\GravityForms;
 
 use GFAPI;
-use OWCGravityFormsZGW\ContainerResolver;
 
 /**
  * Exit when accessed directly.

@@ -62,7 +62,7 @@ class TransactionController
 				'post_type'   => self::POST_TYPE,
 				'post_title'  => sprintf( 'Entry %d (Form %d)', $entry['id'], $entry['form_id'] ),
 				'post_status' => $this->statuses[ TransactionStatus::PENDING ],
-				'meta_input'  => $this->add_metadata( $entry ),
+				'meta_input'  => $this->add_metadata( $entry, $form ),
 			)
 		);
 
@@ -72,7 +72,7 @@ class TransactionController
 		}
 	}
 
-	private static function add_metadata( $entry ): array
+	private static function add_metadata( array $entry, array $form ): array
 	{
 		$standard = array(
 			'transaction_form_id'  => $entry['form_id'],
@@ -81,9 +81,12 @@ class TransactionController
 		);
 
 		try {
+			$bsn = FormUtils::overwrite_bsn_form_setting( $form ) ?: DigiD::make()->bsn();
+			$kvk = FormUtils::overwrite_kvk_form_setting( $form ) ?: eHerkenning::make()->kvk();
+
 			$sensitive = array(
-				'transaction_user_bsn' => EncryptionService::encrypt( DigiD::make()->bsn() ),
-				'transaction_user_kvk' => EncryptionService::encrypt( eHerkenning::make()->kvk() ),
+				'transaction_user_bsn' => $bsn ? EncryptionService::encrypt( $bsn ) : null,
+				'transaction_user_kvk' => $kvk ? EncryptionService::encrypt( $kvk ) : null,
 			);
 		} catch ( Exception $e ) {
 			ContainerResolver::make()->get( 'logger.zgw' )->error( 'Error encrypting sensitive transaction metadata: ' . $e->getMessage() );

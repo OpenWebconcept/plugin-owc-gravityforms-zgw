@@ -27,6 +27,7 @@ use OWCGravityFormsZGW\GravityForms\FormSettings;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
 use OWCGravityFormsZGW\Controllers\ActionSchedulerController;
 use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
+use OWCGravityFormsZGW\GravityForms\Controllers\PaymentController;
 
 /**
  * Register settings service provider.
@@ -58,6 +59,10 @@ class GravityFormsServiceProvider extends ServiceProvider
 		// After submission hooks.
 		add_action( 'gform_after_submission', ( new ActionSchedulerController() )->schedule_single_actions( ... ), 10, 2 );
 		add_action( 'gform_after_submission', ( new TransactionController() )->create( ... ), 10, 2 );
+
+		// Post payment hooks.
+		add_action( 'gform_post_payment_action', ( new PaymentController() )->post_payment_failed( ... ), 10, 2 );
+		add_action( 'gform_post_payment_completed', ( new PaymentController() )->post_payment_completed( ... ), 10, 2 );
 
 		// Action scheduler hooks.
 		add_action( OWC_GRAVITYFORMS_ZGW_ACTION_SCHEDULER_HOOK_ZAAK, ( new ActionSchedulerController() )->handle_zaak_creation( ... ), 30, 2 );

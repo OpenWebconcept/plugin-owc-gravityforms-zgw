@@ -66,7 +66,7 @@ class ExecuteRetryController
 			$this->handle_failure_retried_zaak( $retried_zaak );
 		}
 
-		$this->delete_zaak( $this->zaak_uuid, $this->zaak_reference );
+		$this->delete_zaak( $this->zaak_uuid );
 	}
 
 	/**
@@ -74,7 +74,7 @@ class ExecuteRetryController
 	 */
 	private function handle_failure_retried_zaak(Zaak $retried_zaak ): void
 	{
-		$this->delete_zaak( $retried_zaak->getValue( 'uuid', '' ), $retried_zaak->getValue( 'identificatie', '' ) );
+		$this->delete_zaak( $retried_zaak->getValue( 'uuid', '' ) );
 		$this->restore_original_transaction_meta();
 
 		throw new Exception( sprintf( 'Retry failed for zaak reference: %s', $this->zaak_reference ) );
@@ -83,7 +83,7 @@ class ExecuteRetryController
 	/**
 	 * @throws Exception
 	 */
-	private function delete_zaak( string $zaak_uuid, string $zaak_reference ): void
+	private function delete_zaak( string $zaak_uuid ): void
 	{
 		$is_handling_retried_zaak = $this->zaak_uuid !== $zaak_uuid;
 
@@ -91,11 +91,11 @@ class ExecuteRetryController
 			( new DeleteZaakAction( $this->supplier_config ) )->delete( $zaak_uuid );
 		} catch ( Exception $e ) {
 			if ( $is_handling_retried_zaak ) {
-				$this->supplement_transaction_message( sprintf( 'Failed to delete retried zaak %s after retry failure: %s', $zaak_reference, $e->getMessage() ) );
-				throw new Exception( sprintf( 'failed to delete retried zaak %s after retry failure.', $zaak_reference ) );
+				$this->supplement_transaction_message( sprintf( 'Failed to delete retried zaak %s after retry failure: %s', $this->zaak_reference, $e->getMessage() ) );
+				throw new Exception( sprintf( 'failed to delete retried zaak %s after retry failure.', $this->zaak_reference ) );
 			}
 
-			$this->supplement_transaction_message( sprintf( 'Failed to delete previous failed zaak %s after successful retry: %s', $zaak_reference, $e->getMessage() ) );
+			$this->supplement_transaction_message( sprintf( 'Failed to delete previous failed zaak %s after successful retry: %s', $this->zaak_reference, $e->getMessage() ) );
 			throw new Exception( 'retry succeeded, but failed to delete previous failed zaak.' );
 		}
 	}

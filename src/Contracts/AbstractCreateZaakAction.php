@@ -39,6 +39,7 @@ use OWCGravityFormsZGW\Services\EncryptionService;
 use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
 use function OWC\ZGW\apiClient;
 use WP_Post;
+use OWCGravityFormsZGW\GravityForms\Traits\EntryNote;
 
 /**
  * Abstract create "zaak" action.
@@ -47,6 +48,7 @@ use WP_Post;
  */
 abstract class AbstractCreateZaakAction
 {
+	use EntryNote;
 	use CastValue;
 	use MergeTagTranslator;
 
@@ -307,6 +309,10 @@ abstract class AbstractCreateZaakAction
 		$transaction_post         = $transaction_posts[0];
 		$encrypted_identification = get_post_meta( $transaction_post->ID, $meta_field, true );
 
+		if ( ! is_string( $encrypted_identification ) || '' === $encrypted_identification ) {
+			return null;
+		}
+
 		try {
 			$decrypted_identification = EncryptionService::decrypt( $encrypted_identification );
 
@@ -316,7 +322,7 @@ abstract class AbstractCreateZaakAction
 
 			return $decrypted_identification;
 		} catch ( Exception $e ) {
-			$this->logger->error( sprintf( 'Failed to decrypt identification for entry "%s": %s', $this->entry['id'], $e->getMessage() ) );
+			$this->logger->error( sprintf( 'Failed to decrypt identification for entry "%s": %s (%s)', $this->entry['id'], $e->getMessage(), $encrypted_identification ) );
 
 			return null;
 		}
@@ -555,14 +561,9 @@ abstract class AbstractCreateZaakAction
 	 */
 	protected function add_created_zaak_as_entry_meta(Zaak $zaak ): void
 	{
-		add_action(
-			'gform_after_submission',
-			function (array $entry, array $form ) use ($zaak ) {
-				gform_update_meta( $entry['id'], 'owc_gz_created_zaak_url', $zaak->url ?? null );
-				gform_update_meta( $entry['id'], 'owc_gz_created_zaak_uuid', $zaak->uuid ?? null );
-			},
-			10,
-			2
-		);
+		gform_update_meta( $this->entry['id'], 'owc_gz_created_zaak_url', $zaak->url ?? null );
+		gform_update_meta( $this->entry['id'], 'owc_gz_created_zaak_uuid', $zaak->uuid ?? null );
+
+		$this->add_entry_note( $this->entry['id'], sprintf( __( 'Zaak "%s" aangemaakt.', 'owc-gravityforms-zgw' ), $zaak->uuid ?? __( 'UUID onbekend', 'owc-gravityforms-zgw' ) ), 'success' );
 	}
 }
