@@ -250,7 +250,7 @@ class FormSettings
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.9.0
 	 */
 	private function format_choices_zaaktypen(Client $api_client, string $supplier_name ): array
 	{
@@ -266,7 +266,7 @@ class FormSettings
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.9.0
 	 */
 	private function format_choices_information_object_types(Client $api_client, string $supplier_name ): array
 	{

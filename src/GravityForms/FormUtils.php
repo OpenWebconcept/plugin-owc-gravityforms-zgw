@@ -52,7 +52,7 @@ class FormUtils
 	/**
 	 * Check if the entry has a pending or processing payment.
 	 *
-	 * @since NEXT
+	 * @since 1.9.0
 	 */
 	public static function entry_has_pending_payment( array $entry ): bool
 	{

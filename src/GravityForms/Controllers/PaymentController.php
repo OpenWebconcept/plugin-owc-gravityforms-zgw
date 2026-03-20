@@ -9,7 +9,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.9.0
  */
 
 namespace OWCGravityFormsZGW\GravityForms\Controllers;
@@ -35,7 +35,7 @@ use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
 /**
  * Payment controller.
  *
- * @since NEXT
+ * @since 1.9.0
  */
 class PaymentController
 {

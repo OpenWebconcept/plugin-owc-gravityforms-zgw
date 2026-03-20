@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.9.0] - 2026-03-20
+
+- Added: improve retry flow, partial DOM updates and admin column UX
+- Added: delete zaken after failed payments with cron event
+- Added: add default option to select elements in form settings
+- Fix: set content-type header to text/html in transation overview mail
+
 ## [v1.8.2] - 2026-03-11
 
 - Change: normalize roltype omschrijvingGeneriek to lowercase

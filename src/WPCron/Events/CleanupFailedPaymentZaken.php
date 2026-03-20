@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.9.0
  */
 
 namespace OWCGravityFormsZGW\WPCron\Events;
@@ -27,7 +27,7 @@ use OWCGravityFormsZGW\GravityForms\Controllers\PaymentController;
 /**
  * Event used to clean up created Zaken after a failed payment.
  *
- * @since NEXT
+ * @since 1.9.0
  */
 class CleanupFailedPaymentZaken
 {

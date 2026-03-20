@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.9.0
  */
 
 namespace OWCGravityFormsZGW\GravityForms\Traits;
@@ -24,7 +24,7 @@ use GFAPI;
 /**
  * Entry note trait.
  *
- * @since NEXT
+ * @since 1.9.0
  */
 trait EntryNote
 {
