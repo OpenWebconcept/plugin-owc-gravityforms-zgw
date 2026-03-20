@@ -197,7 +197,7 @@ abstract class AbstractCreateZaakAction
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.9.1
 	 */
 	protected function add_address_object_to_zaak(Zaak $zaak ): void
 	{
@@ -216,6 +216,9 @@ abstract class AbstractCreateZaakAction
 		}
 	}
 
+	/**
+	 * @since 1.9.1
+	 */
 	private function map_address_object_args(Zaak $zaak ): array
 	{
 		$args = array();

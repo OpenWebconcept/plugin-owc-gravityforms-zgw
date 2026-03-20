@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.9.1] - 2026-03-20
+
+- Added: implement creation of address object
+
 ## [v1.9.0] - 2026-03-20
 
 - Added: improve retry flow, partial DOM updates and admin column UX
