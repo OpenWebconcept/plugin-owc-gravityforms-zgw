@@ -96,7 +96,7 @@ class TransactionMailer
 			if ( $to !== $default_email && is_email( $to ) ) {
 				$subject = __( 'Zaaksysteem Failed Transactions Report', 'owc-gravityforms-zgw' );
 				$message = __( 'The following transactions had failures:', 'owc-gravityforms-zgw' ) . "<br><br>" . $table;
-				wp_mail( $to, $subject, $message );
+				wp_mail( $to, $subject, $message, array( 'Content-Type: text/html;' ) );
 			}
 		}
 
