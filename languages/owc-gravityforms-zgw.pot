@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-19T12:03:33+00:00\n"
+"POT-Creation-Date: 2026-03-20T07:07:17+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-gravityforms-zgw\n"
@@ -39,6 +39,17 @@ msgstr ""
 msgid "https://www.yard.nl"
 msgstr ""
 
+#. translators: %s is the UUID of the created zaak.
+#: src/Contracts/AbstractCreateZaakAction.php:568
+#, php-format
+msgid "Zaak \"%s\" aangemaakt."
+msgstr ""
+
+#. translators: %s is the UUID of the created zaak.
+#: src/Contracts/AbstractCreateZaakAction.php:568
+msgid "UUID onbekend"
+msgstr ""
+
 #: src/Contracts/AbstractZaakFormController.php:130
 msgid "Systeem"
 msgstr ""
@@ -49,6 +60,18 @@ msgstr ""
 
 #: src/Controllers/SettingsController.php:129
 msgid "Ongeldig e-mailadres voor het verzenden van het transactie rapport."
+msgstr ""
+
+#: src/GravityForms/Controllers/PaymentController.php:101
+msgid "Fout bij verwijderen van aangemaakte zaak na mislukte betaling. Handmatig verwijderen vereist."
+msgstr ""
+
+#: src/GravityForms/Controllers/PaymentController.php:107
+msgid "Aangemaakte zaak geannuleerd, betaling mislukt."
+msgstr ""
+
+#: src/GravityForms/Controllers/PaymentController.php:136
+msgid "Zaak definitief, betaling succesvol."
 msgstr ""
 
 #: src/GravityForms/FieldGroups.php:38
@@ -210,6 +233,70 @@ msgstr ""
 msgid "Geen transaction gevonden in de prullenbak."
 msgstr ""
 
+#: src/Transactions/Controllers/ExecuteRetryController.php:62
+msgid "Herpoging mislukt."
+msgstr ""
+
+#. translators: %s is the zaak reference number.
+#: src/Transactions/Controllers/ExecuteRetryController.php:81
+#, php-format
+msgid "Herpoging mislukt voor zaak %s."
+msgstr ""
+
+#. translators: %1$s is the zaak UUID, %2$s is the error message.
+#: src/Transactions/Controllers/ExecuteRetryController.php:97
+#, php-format
+msgid "Kon nieuw aangemaakte zaak %1$s niet verwijderen na mislukte herpoging: %2$s"
+msgstr ""
+
+#. translators: %s is the zaak UUID.
+#: src/Transactions/Controllers/ExecuteRetryController.php:100
+#, php-format
+msgid "Kon nieuw aangemaakte zaak %s niet verwijderen na mislukte herpoging."
+msgstr ""
+
+#. translators: %1$s is the zaak reference number, %2$s is the error message.
+#: src/Transactions/Controllers/ExecuteRetryController.php:115
+#, php-format
+msgid "Kon originele zaak %1$s niet verwijderen na geslaagde herpoging: %2$s"
+msgstr ""
+
+#: src/Transactions/Controllers/RetryController.php:37
+msgid "Geen toegang."
+msgstr ""
+
+#: src/Transactions/Controllers/RetryController.php:55
+msgid "Ongeldige inzending of formulier."
+msgstr ""
+
+#: src/Transactions/Controllers/RetryController.php:71
+msgid "Opnieuw uitvoeren gelukt."
+msgstr ""
+
+#: src/Transactions/Controllers/RetryController.php:97
+msgid "Inzending ID ontbreekt."
+msgstr ""
+
+#: src/Transactions/Controllers/RetryController.php:103
+msgid "Geen gekoppelde transactie gevonden voor deze inzending."
+msgstr ""
+
+#: src/Transactions/Controllers/RetryController.php:109
+msgid "Geen gekoppeld formulier gevonden voor deze inzending."
+msgstr ""
+
+#: src/Transactions/Controllers/RetryController.php:115
+msgid "Geen geldige ZGW-velden gevonden in het formulier."
+msgstr ""
+
+#: src/Transactions/Controllers/RetryController.php:121
+msgid "Geen inzendingsmetadata gevonden."
+msgstr ""
+
+#: src/Transactions/Controllers/RetryController.php:128
+msgid "Geen geldige waarden gevonden voor de gekoppelde ZGW-velden."
+msgstr ""
+
 #: src/Transactions/TransactionMailer.php:72
 msgid "Transaction ID"
 msgstr ""
@@ -234,6 +321,10 @@ msgstr ""
 
 #: src/Transactions/TransactionMailer.php:98
 msgid "The following transactions had failures:"
+msgstr ""
+
+#: src/Transactions/TransactionPostType.php:75
+msgid "Overzicht van zaaksysteemtransacties vanuit Gravity Forms formulieren welke gekoppeld zijn met een zaaksysteem."
 msgstr ""
 
 #: src/Transactions/TransactionPostType.php:92
@@ -302,8 +393,32 @@ msgstr ""
 msgid "Acties"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:189
+#: src/Transactions/TransactionPostType.php:199
 msgid "Onbekend"
+msgstr ""
+
+#: src/Transactions/TransactionPostType.php:256
+msgid "Toon melding"
+msgstr ""
+
+#: src/Transactions/TransactionPostType.php:257
+msgid "Verberg melding"
+msgstr ""
+
+#. translators: %d is the number of zaaks waiting to be deleted.
+#: src/Transactions/TransactionPostType.php:264
+#, php-format
+msgid "%d verwijdering in afwachting"
+msgid_plural "%d verwijderingen in afwachting"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Transactions/TransactionPostType.php:265
+msgid "Een herpoging maakt een nieuwe zaak aan. Bij succes wordt de originele zaak verwijderd. Bij mislukking wordt de nieuwe zaak verwijderd. Als die verwijdering mislukt, worden de zaken hier bijgehouden."
+msgstr ""
+
+#: src/Transactions/TransactionPostType.php:266
+msgid "Bij een herpoging wordt een nieuwe zaak aangemaakt. Als de herpoging slaagt, wordt de originele zaak verwijderd. Als de herpoging mislukt, wordt de nieuw aangemaakte zaak verwijderd. De verwijdering van de onderstaande zaken is mislukt — ze zijn niet meer in gebruik maar staan nog in het zaaksysteem. De verwijdering wordt automatisch opnieuw geprobeerd bij de volgende herpoging."
 msgstr ""
 
 #: src/Views/admin/partials/settings/description-client-request-timeout-option.php:15

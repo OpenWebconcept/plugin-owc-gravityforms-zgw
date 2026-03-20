@@ -50,6 +50,10 @@ class ActionSchedulerController
 			return;
 		}
 
+		if ( FormUtils::entry_has_pending_payment( $entry ) ) {
+			return;
+		}
+
 		$args = array(
 			'entry_id' => (int) rgar( $entry, 'id' ),
 			'form_id'  => (int) rgar( $form, 'id' ),

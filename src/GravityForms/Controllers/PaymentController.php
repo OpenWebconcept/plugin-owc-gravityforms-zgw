@@ -29,6 +29,8 @@ use OWCGravityFormsZGW\LoggerZGW;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\Actions\DeleteZaakAction;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
+use OWCGravityFormsZGW\Controllers\ActionSchedulerController;
+use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
 
 /**
  * Payment controller.
@@ -132,6 +134,11 @@ class PaymentController
 		if ( self::SUCCESSFUL_PAYMENT_STATUS !== $action['payment_status'] ) {
 			return;
 		}
+
+		$form = GFAPI::get_form( $entry['form_id'] );
+
+		( new ActionSchedulerController() )->schedule_single_actions( $entry, $form );
+		( new TransactionController() )->create( $entry, $form );
 
 		$this->add_entry_note( $entry['id'], __( 'Zaak definitief, betaling succesvol.', 'owc-gravityforms-zgw' ), 'success' );
 	}

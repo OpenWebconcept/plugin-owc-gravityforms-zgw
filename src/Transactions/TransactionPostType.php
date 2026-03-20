@@ -67,12 +67,12 @@ class TransactionPostType
 	{
 		$screen = get_current_screen();
 
-		if ( ! isset( $screen->id ) || $screen->id !== 'edit-' . self::POST_TYPE ) {
+		if ( ! isset( $screen->id ) || 'edit-' . self::POST_TYPE !== $screen->id ) {
 			return;
 		}
 
 		$class   = 'notice notice-info';
-		$message = __( 'Overzicht van zaaksysteemtransacties vanuit Gravity Forms formulieren welke gekoppeld zijn met een zaaksysteem.', 'Transactie status', 'owc-gravityforms-zgw' );
+		$message = __( 'Overzicht van zaaksysteemtransacties vanuit Gravity Forms formulieren welke gekoppeld zijn met een zaaksysteem.', 'owc-gravityforms-zgw' );
 
 		printf(
 			'<div class="notice notice-%1$s"><p>%2$s</p></div>',
@@ -174,6 +174,16 @@ class TransactionPostType
 	}
 
 	/**
+	 * Renders a single column cell and returns the HTML as a string.
+	 */
+	public static function render_column( string $column, int $post_id ): string
+	{
+		ob_start();
+		( new self() )->custom_columns( $column, $post_id );
+		return (string) ob_get_clean();
+	}
+
+	/**
 	 * Custom columns.
 	 */
 	public function custom_columns(string $column, int $post_id ): void
@@ -236,12 +246,41 @@ class TransactionPostType
 
 				break;
 			case 'transaction_message':
-				echo esc_html( get_post_meta( $post_id, 'transaction_message', true ) );
+				$message           = (string) get_post_meta( $post_id, 'transaction_message', true );
+				$pending_deletions = array_filter( (array) get_post_meta( $post_id, 'transaction_pending_deletions', true ) );
+				$pending_count     = count( $pending_deletions );
+
+				if ( $message ) {
+					printf(
+						'<button type="button" class="owc-btn-toggle-details" data-label-show="%1$s" data-label-hide="%2$s">%1$s</button><div class="owc-transaction-details" hidden>%3$s</div>',
+						esc_attr__( 'Toon melding', 'owc-gravityforms-zgw' ),
+						esc_attr__( 'Verberg melding', 'owc-gravityforms-zgw' ),
+						nl2br( esc_html( $message ) )
+					);
+				}
+
+				if ( $pending_count > 0 ) {
+					/* translators: %d is the number of zaaks waiting to be deleted. */
+					$pending_label       = esc_html( sprintf( _n( '%d verwijdering in afwachting', '%d verwijderingen in afwachting', $pending_count, 'owc-gravityforms-zgw' ), $pending_count ) );
+					$pending_tooltip     = esc_attr__( 'Een herpoging maakt een nieuwe zaak aan. Bij succes wordt de originele zaak verwijderd. Bij mislukking wordt de nieuwe zaak verwijderd. Als die verwijdering mislukt, worden de zaken hier bijgehouden.', 'owc-gravityforms-zgw' );
+					$pending_description = esc_html__( 'Bij een herpoging wordt een nieuwe zaak aangemaakt. Als de herpoging slaagt, wordt de originele zaak verwijderd. Als de herpoging mislukt, wordt de nieuw aangemaakte zaak verwijderd. De verwijdering van de onderstaande zaken is mislukt — ze zijn niet meer in gebruik maar staan nog in het zaaksysteem. De verwijdering wordt automatisch opnieuw geprobeerd bij de volgende herpoging.', 'owc-gravityforms-zgw' );
+					$pending_items       = implode( '', array_map( fn( $uuid ) => sprintf( '<li><code>%s</code></li>', esc_html( $uuid ) ), $pending_deletions ) );
+
+					printf(
+						'<button type="button" class="owc-btn-toggle-details owc-btn-pending-deletions" data-label-show="%1$s" data-label-hide="%1$s" title="%2$s">%3$s</button><div class="owc-transaction-details owc-pending-deletions-details" hidden><p class="owc-pending-deletions-description">%4$s</p><ul class="owc-pending-deletions-list">%5$s</ul></div>',
+						esc_attr( $pending_label ),
+						$pending_tooltip,
+						$pending_label,
+						$pending_description,
+						$pending_items
+					);
+				}
 
 				break;
 			case 'transaction_datetime':
-				$date_time = get_post_meta( $post_id, 'transaction_datetime', true ) ?: '';
-				echo esc_html( DateTimeFormatService::utc_localized_date_time( $date_time ) ?: '-' );
+				$date_time = (string) get_post_meta( $post_id, 'transaction_datetime', true );
+				$formatted = DateTimeFormatService::utc_localized_date_time( $date_time );
+				echo esc_html( false !== $formatted ? $formatted : '-' );
 
 				break;
 			case 'transaction_actions':
@@ -249,11 +288,10 @@ class TransactionPostType
 				$action_content = get_post_meta( $post_id, 'transaction_actions', true );
 				$entry_id       = get_post_meta( $post_id, 'transaction_entry_id', true );
 
-				if ( $post_status === 'transaction_failed' && $action_content ) {
+				if ( 'transaction_failed' === $post_status && $action_content ) {
 					printf(
-						'<button type="button" class="owc-gravityforms-zgw-btn-retry" data-entry-id="%d" data-spinner-icon="%s"><img src="%s" alt="Retry" /></button>',
+						'<button type="button" class="owc-gravityforms-zgw-btn-retry" data-entry-id="%d"><img src="%s" alt="Retry" /></button>',
 						esc_attr( $entry_id ),
-						untrailingslashit( OWC_GRAVITYFORMS_ZGW_PLUGIN_URL ) . '/assets/images/icon-spinner.svg',
 						esc_url( (string) $action_content )
 					);
 				}

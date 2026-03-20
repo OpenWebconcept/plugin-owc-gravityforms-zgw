@@ -23,3 +23,89 @@
 	cursor: pointer;
 	border: none;
 }
+
+.owc-gravityforms-zgw-btn-retry.is-loading {
+	cursor: wait;
+	opacity: 0.6;
+}
+
+@keyframes owc-spin {
+	from { transform: rotate(0deg); }
+	to   { transform: rotate(360deg); }
+}
+
+.owc-gravityforms-zgw-btn-retry.is-loading img {
+	animation: owc-spin 0.8s linear infinite;
+}
+
+.owc-btn-toggle-details {
+	background: #f6f7f7;
+	border: 1px solid #c3c4c7;
+	border-radius: 3px;
+	color: #2c3338;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 11px;
+	line-height: 1;
+	padding: 4px 8px;
+	text-decoration: none;
+}
+
+.owc-btn-toggle-details:hover {
+	background: #ededed;
+	border-color: #999;
+	color: #000;
+}
+
+.owc-btn-pending-deletions {
+	background: #fcf0f1;
+	border-color: #d63638;
+	color: #d63638;
+	display: block;
+	margin-top: 6px;
+	width: fit-content;
+}
+
+.owc-btn-pending-deletions:hover {
+	background: #fce4e4;
+	border-color: #b32d2e;
+	color: #b32d2e;
+}
+
+.owc-pending-deletions-description {
+	color: #646970;
+	font-size: 12px;
+	font-style: italic;
+	margin: 4px 0;
+}
+
+.owc-pending-deletions-list {
+	color: #666;
+	font-size: 12px;
+	list-style: disc;
+	margin: 4px 0 0 1.2em;
+}
+
+.owc-pending-deletions-list code {
+	font-size: 11px;
+}
+
+.owc-transaction-details {
+	color: #666;
+	font-size: 12px;
+	margin-top: 6px;
+	white-space: pre-wrap;
+}
+
+.owc-retry-message {
+	font-size: 12px;
+	margin-top: 8px;
+}
+
+.owc-retry-message--success {
+	color: #1a7a1a;
+}
+
+.owc-retry-message--error {
+	color: #cc0000;
+}

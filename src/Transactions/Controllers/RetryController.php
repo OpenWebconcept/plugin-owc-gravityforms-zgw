@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Exception;
 use GFAPI;
+use OWCGravityFormsZGW\Transactions\TransactionPostType;
 use WP_Error;
 
 /**
@@ -33,13 +34,13 @@ class RetryController
 	public function handle(): mixed
 	{
 		if ( current_user_can( 'edit_owc_zgw_transactions' ) === false ) {
-			return wp_send_json_error( array( 'message' => 'Unauthorized.' ) );
+			return wp_send_json_error( array( 'message' => __( 'Geen toegang.', 'owc-gravityforms-zgw' ) ) );
 		}
 
 		check_ajax_referer( 'retry_submission' );
 
 		$entry_id      = absint( $_POST['entry_id'] ?? 0 );
-		$mapped_values = $this->get_mapped_fields_and_values( $entry_id ); // Is not necessarily needed, but validates the request and could be of use later.
+		$mapped_values = $this->get_mapped_fields_and_values( $entry_id );
 
 		if ( is_wp_error( $mapped_values ) ) {
 			return wp_send_json_error( array( 'message' => $mapped_values->get_error_message() ) );
@@ -51,20 +52,44 @@ class RetryController
 		$form                = GFAPI::get_form( $transaction_form_id );
 
 		if ( ! $entry || ! $form ) {
-			return wp_send_json_error( array( 'message' => 'Invalid entry or form.' ) );
+			return wp_send_json_error( array( 'message' => __( 'Ongeldige inzending of formulier.', 'owc-gravityforms-zgw' ) ) );
 		}
 
-		// Is used for deletion when the retry is successful.
-		$zaak_uuid      = (string) ( get_post_meta( $transaction_post_id, 'transaction_zaak_uuid', true ) ?: '' );
-		$zaak_reference = (string) ( get_post_meta( $transaction_post_id, 'transaction_zaak_id', true ) ?: '' );
+		$original_zaak_uuid      = (string) ( get_post_meta( $transaction_post_id, 'transaction_zaak_uuid', true ) ?: '' );
+		$original_zaak_reference = (string) ( get_post_meta( $transaction_post_id, 'transaction_zaak_id', true ) ?: '' );
 
 		try {
-			( new ExecuteRetryController( $transaction_post_id, $zaak_uuid, $zaak_reference, $entry, $form ) )->retry();
+			( new ExecuteRetryController( $transaction_post_id, $original_zaak_uuid, $original_zaak_reference, $entry, $form ) )->retry();
 		} catch ( Exception $e ) {
-			return wp_send_json_error( array( 'message' => $e->getMessage() ) );
+			return wp_send_json_error(
+				array(
+					'message' => $e->getMessage(),
+					'columns' => $this->get_updated_columns( (int) $transaction_post_id ),
+				)
+			);
 		}
 
-		return wp_send_json_success( array( 'message' => 'Retry succeeded!' ) );
+		return wp_send_json_success(
+			array(
+				'message' => __( 'Opnieuw uitvoeren gelukt.', 'owc-gravityforms-zgw' ),
+				'columns' => $this->get_updated_columns( (int) $transaction_post_id ),
+			)
+		);
+	}
+
+	/**
+	 * Returns rendered HTML for the columns that can change after a retry.
+	 */
+	private function get_updated_columns( int $transaction_post_id ): array
+	{
+		$columns = array( 'transaction_status', 'transaction_zaak_id', 'transaction_message' );
+		$result  = array();
+
+		foreach ( $columns as $column ) {
+			$result[ $column ] = TransactionPostType::render_column( $column, $transaction_post_id );
+		}
+
+		return $result;
 	}
 
 	/**
@@ -73,38 +98,38 @@ class RetryController
 	private function get_mapped_fields_and_values(int $entry_id ): array|WP_Error
 	{
 		if ( ! $entry_id ) {
-			return new WP_Error( 'missing_entry_id', 'Entry ID is missing.' );
+			return new WP_Error( 'missing_entry_id', __( 'Inzending ID ontbreekt.', 'owc-gravityforms-zgw' ) );
 		}
 
 		$transaction_post_id = gform_get_meta( $entry_id, 'transaction_post_id' );
 
 		if ( ! $transaction_post_id ) {
-			return new WP_Error( 'missing_transaction', 'No linked transaction found for this entry.' );
+			return new WP_Error( 'missing_transaction', __( 'Geen gekoppelde transactie gevonden voor deze inzending.', 'owc-gravityforms-zgw' ) );
 		}
 
 		$transaction_form_id = get_post_meta( $transaction_post_id, 'transaction_form_id', true );
 
 		if ( ! $transaction_form_id ) {
-			return new WP_Error( 'missing_form', 'No linked form found for this entry.' );
+			return new WP_Error( 'missing_form', __( 'Geen gekoppeld formulier gevonden voor deze inzending.', 'owc-gravityforms-zgw' ) );
 		}
 
 		$mapped_zgw_fields = $this->get_mapped_zgw_form_fields( (int) $transaction_form_id );
 
 		if ( array() === $mapped_zgw_fields ) {
-			return new WP_Error( 'missing_zgw_fields', 'No valid linked ZGW fields found in the form.' );
+			return new WP_Error( 'missing_zgw_fields', __( 'Geen geldige ZGW-velden gevonden in het formulier.', 'owc-gravityforms-zgw' ) );
 		}
 
 		$meta = $this->get_entry_meta( $entry_id );
 
 		if ( array() === $meta ) {
-			return new WP_Error( 'missing_entry_metadata', 'No entry metadata found.' );
+			return new WP_Error( 'missing_entry_metadata', __( 'Geen inzendingsmetadata gevonden.', 'owc-gravityforms-zgw' ) );
 		}
 
 		$mapped_indexes_to_field_ids = wp_list_pluck( $mapped_zgw_fields, 'id', 'mappedFieldValueZGW' );
 		$mapped_values               = $this->map_indexes_to_values( $mapped_indexes_to_field_ids, $meta );
 
 		if ( array() === $mapped_values ) {
-			return new WP_Error( 'missing_values', 'No valid values found for the linked ZGW fields.' );
+			return new WP_Error( 'missing_values', __( 'Geen geldige waarden gevonden voor de gekoppelde ZGW-velden.', 'owc-gravityforms-zgw' ) );
 		}
 
 		return $mapped_values;
@@ -123,7 +148,7 @@ class RetryController
 
 		return array_filter(
 			$form['fields'],
-			function ($field ) {
+			function ( $field ) {
 				return isset( $field->mappedFieldValueZGW ) && is_string( $field->mappedFieldValueZGW ) && 0 < strlen( $field->mappedFieldValueZGW );
 			}
 		);
@@ -137,7 +162,7 @@ class RetryController
 			return array();
 		}
 
-		return $entry ?: array();
+		return $entry;
 	}
 
 	private function map_indexes_to_values( array $mapped_indexes_to_field_ids, array $meta ): array

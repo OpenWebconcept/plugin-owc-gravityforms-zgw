@@ -57,6 +57,10 @@ class TransactionController
 			return;
 		}
 
+		if ( FormUtils::entry_has_pending_payment( $entry ) ) {
+			return;
+		}
+
 		$post_id = wp_insert_post(
 			array(
 				'post_type'   => self::POST_TYPE,

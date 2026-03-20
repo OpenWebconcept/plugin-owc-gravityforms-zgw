@@ -564,6 +564,7 @@ abstract class AbstractCreateZaakAction
 		gform_update_meta( $this->entry['id'], 'owc_gz_created_zaak_url', $zaak->url ?? null );
 		gform_update_meta( $this->entry['id'], 'owc_gz_created_zaak_uuid', $zaak->uuid ?? null );
 
+		// translators: %s is the UUID of the created zaak.
 		$this->add_entry_note( $this->entry['id'], sprintf( __( 'Zaak "%s" aangemaakt.', 'owc-gravityforms-zgw' ), $zaak->uuid ?? __( 'UUID onbekend', 'owc-gravityforms-zgw' ) ), 'success' );
 	}
 }

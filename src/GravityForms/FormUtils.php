@@ -50,6 +50,16 @@ class FormUtils
 	}
 
 	/**
+	 * Check if the entry has a pending or processing payment.
+	 *
+	 * @since NEXT
+	 */
+	public static function entry_has_pending_payment( array $entry ): bool
+	{
+		return in_array( $entry['payment_status'] ?? '', array( 'Processing', 'Pending' ), true );
+	}
+
+	/**
 	 * Check if the form is configured for ZGW.
 	 */
 	public static function is_form_zgw( array $form ): bool
