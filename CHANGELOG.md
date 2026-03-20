@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.9.2] - 2026-03-20
+
+- Fix: per-supplier timeout applied to all suppliers
+
 ## [v1.9.1] - 2026-03-20
 
 - Added: implement creation of address object
