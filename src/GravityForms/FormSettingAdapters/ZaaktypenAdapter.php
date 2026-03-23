@@ -39,9 +39,9 @@ class ZaaktypenAdapter extends Adapter
 				sprintf( '%s-form-settings-zaaktypen', $this->transient_key_prefix() ), // Unique transient key.
 				'zaaktypen',
 				function (Zaaktype $zaaktype ) {
-					$identification = $zaaktype->identificatie ?? '';
-					$description    = $zaaktype->omschrijving ?? '';
-					$url            = $zaaktype->url ?? '';
+					$identification = (string) ( $zaaktype->identificatie ?? '' );
+					$description    = (string) ( $zaaktype->omschrijving ?? '' );
+					$url            = (string) ( $zaaktype->url ?? '' );
 
 					if ( empty( $identification ) || empty( $description ) || empty( $url ) ) {
 						return array();

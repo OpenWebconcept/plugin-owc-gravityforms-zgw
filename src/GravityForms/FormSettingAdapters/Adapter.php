@@ -91,6 +91,10 @@ abstract class Adapter
 
 			$types = array_merge( $types, $result->all() );
 			$page  = $result->pageMeta()->getNextPageNumber();
+
+			if ( null === $page ) {
+				break;
+			}
 		}
 
 		$this->handle_empty_result( $types, $empty_message, $request_exception );
