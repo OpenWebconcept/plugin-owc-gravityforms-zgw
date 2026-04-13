@@ -50,8 +50,8 @@ class InformatieobjecttypeAdapter extends Adapter
 						$designation = 'Aanduiding onbekend';
 					}
 
-					$description = (string) ($objecttype->omschrijving ?? '');
-					$url         = (string) ($objecttype->url ?? '');
+					$description = (string) ( $objecttype->omschrijving ?? '' );
+					$url         = (string) ( $objecttype->url ?? '' );
 
 					if ( empty( $description ) || empty( $url ) ) {
 						return array();

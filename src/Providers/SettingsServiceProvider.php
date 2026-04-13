@@ -54,7 +54,13 @@ class SettingsServiceProvider extends ServiceProvider
 		$manager->container()->get( SettingsProvider::class )->register();
 		$manager->container()->get( ClientProvider::class )->register();
 
-		$this->overwrite_client_http_options_in_container( $manager );
+		add_action(
+			'init',
+			function () use ( $manager ) {
+				$this->overwrite_client_http_options_in_container( $manager );
+			},
+			11
+		);
 
 		add_action( 'admin_menu', $this->register_settings_page( ... ) );
 		add_action( 'admin_init', $this->register_settings_options( ... ) );
@@ -74,6 +80,9 @@ class SettingsServiceProvider extends ServiceProvider
 			return;
 		}
 
+		$zgw_settings       = (array) get_option( 'zgw_api_settings' );
+		$configured_clients = $zgw_settings['zgw-api-configured-clients'] ?? [];
+
 		foreach ( $selected_suppliers as $supplier ) {
 			$found_supplier = $suppliers[ $supplier ] ?? null;
 
@@ -89,8 +98,27 @@ class SettingsServiceProvider extends ServiceProvider
 				continue;
 			}
 
+			// Resolve the user-configured client name for this supplier type.
+			// ApiClientManager stores credentials/endpoints by the configured name, not the type key.
+			$client_name = '';
+
+			foreach ( $configured_clients as $client_config ) {
+				if ( ( $client_config['client_type'] ?? '' ) === $supplier ) {
+					$client_name = trim( $client_config['name'] ?? '' );
+					break;
+				}
+			}
+
+			if ( '' === $client_name ) {
+				$this->logger->error( sprintf( 'No configured client found for supplier type %s', $supplier ) );
+
+				continue;
+			}
+
 			try {
-				$supplier_client = $manager->container()->get( $client_supplier_class );
+				$credentials     = $manager->container()->get( $client_name . 'credentials' );
+				$endpoints       = $manager->container()->get( $client_name . 'endpoints' );
+				$supplier_client = $manager->container()->make( $client_supplier_class, compact( 'credentials', 'endpoints' ) );
 				$shared_client   = $supplier_client->getRequestClient();
 				$cloned_client   = clone $shared_client;
 				$cloned_options  = $shared_client->getRequestOptions()->clone();
@@ -98,6 +126,13 @@ class SettingsServiceProvider extends ServiceProvider
 				$cloned_options->set( 'timeout', $this->container->get( 'zgw.site_options' )->client_request_timeout_option() );
 				$cloned_client->setRequestOptions( $cloned_options );
 				$supplier_client->setRequestClient( $cloned_client );
+
+				$manager->container()->set(
+					$client_supplier_class,
+					function () use ( $supplier_client ) {
+						return $supplier_client;
+					}
+				);
 			} catch ( NotFoundException $e ) {
 				$this->logger->error( sprintf( 'Could not overwrite client request options for supplier %s: %s', $supplier, $e->getMessage() ) );
 
