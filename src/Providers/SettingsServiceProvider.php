@@ -105,13 +105,12 @@ class SettingsServiceProvider extends ServiceProvider
 			foreach ( $configured_clients as $client_config ) {
 				if ( ( $client_config['client_type'] ?? '' ) === $supplier ) {
 					$client_name = trim( $client_config['name'] ?? '' );
+
 					break;
 				}
 			}
 
 			if ( '' === $client_name ) {
-				$this->logger->error( sprintf( 'No configured client found for supplier type %s', $supplier ) );
-
 				continue;
 			}
 
