@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.9.3] - 2026-04-13
+
+- Fix: overwriting of client http options
+- Change: cast object attributes to string while fetching form settings
+
 ## [v1.9.2] - 2026-03-20
 
 - Fix: per-supplier timeout applied to all suppliers
