@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.9.4] - 2026-04-17
+
+- Fix: payment hooks to prevent wrong failure handling and duplicate transactions wiping BSN/KVK
+
 ## [v1.9.3] - 2026-04-13
 
 - Fix: overwriting of client http options
