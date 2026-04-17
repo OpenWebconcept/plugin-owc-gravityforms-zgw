@@ -81,7 +81,7 @@ class SettingsServiceProvider extends ServiceProvider
 		}
 
 		$zgw_settings       = (array) get_option( 'zgw_api_settings' );
-		$configured_clients = $zgw_settings['zgw-api-configured-clients'] ?? [];
+		$configured_clients = $zgw_settings['zgw-api-configured-clients'] ?? array();
 
 		foreach ( $selected_suppliers as $supplier ) {
 			$found_supplier = $suppliers[ $supplier ] ?? null;

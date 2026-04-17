@@ -61,6 +61,12 @@ class TransactionController
 			return;
 		}
 
+		// Don't create a duplicate transaction when one was already created at
+		// submission time (e.g. when gform_post_payment_completed fires after payment).
+		if ( gform_get_meta( $entry['id'], 'transaction_post_id' ) ) {
+			return;
+		}
+
 		$post_id = wp_insert_post(
 			array(
 				'post_type'   => self::POST_TYPE,

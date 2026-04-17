@@ -75,6 +75,13 @@ class PaymentController
 			return;
 		}
 
+		// Guard against out-of-order notifications: a delayed failure/cancellation
+		// from a previous attempt can arrive after a successful payment has already
+		// been confirmed. If the entry is already paid, never treat it as failed.
+		if ( self::SUCCESSFUL_PAYMENT_STATUS === ( $entry['payment_status'] ?? '' ) ) {
+			return;
+		}
+
 		$this->handle_zaak_deletion( $entry );
 	}
 
@@ -145,9 +152,11 @@ class PaymentController
 
 	private function update_entry_payment_status(array $entry, string $status ): void
 	{
+		$fresh_entry = GFAPI::get_entry( $entry['id'] );
+
 		GFAPI::update_entry(
 			array_merge(
-				$entry,
+				is_wp_error( $fresh_entry ) ? $entry : $fresh_entry,
 				array(
 					'payment_status' => $status,
 				)
