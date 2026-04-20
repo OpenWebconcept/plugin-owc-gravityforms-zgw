@@ -2,14 +2,14 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | GravityForms ZGW 1.9.1\n"
+"Project-Id-Version: OWC | GravityForms ZGW 1.9.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-gravityforms-zgw\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-20T10:32:48+00:00\n"
+"POT-Creation-Date: 2026-04-20T15:08:46+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-gravityforms-zgw\n"
@@ -62,15 +62,15 @@ msgstr ""
 msgid "Ongeldig e-mailadres voor het verzenden van het transactie rapport."
 msgstr ""
 
-#: src/GravityForms/Controllers/PaymentController.php:103
+#: src/GravityForms/Controllers/PaymentController.php:110
 msgid "Fout bij verwijderen van aangemaakte zaak na mislukte betaling. Handmatig verwijderen vereist."
 msgstr ""
 
-#: src/GravityForms/Controllers/PaymentController.php:109
+#: src/GravityForms/Controllers/PaymentController.php:116
 msgid "Aangemaakte zaak geannuleerd, betaling mislukt."
 msgstr ""
 
-#: src/GravityForms/Controllers/PaymentController.php:143
+#: src/GravityForms/Controllers/PaymentController.php:150
 msgid "Zaak definitief, betaling succesvol."
 msgstr ""
 
@@ -138,21 +138,31 @@ msgid "Configureer instellingen handmatig (invoeren van URL's)"
 msgstr ""
 
 #: src/GravityForms/FormSettings.php:173
-#: src/GravityForms/FormSettings.php:213
+#: src/GravityForms/FormSettings.php:215
 #: src/Views/partials/gf-field-zgw-mapping-options.php:27
 msgid "Zaaktype"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:192
-#: src/GravityForms/FormSettings.php:231
+#: src/GravityForms/FormSettings.php:174
+#: src/GravityForms/FormSettings.php:216
+msgid "Een zaaktype wordt gebruikt om de aan te maken zaak te definiëren, inclusief de structuur, benodigde gegevens en het verloop van het proces."
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:193
+#: src/GravityForms/FormSettings.php:234
 msgid "Informatie object type"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:260
+#: src/GravityForms/FormSettings.php:194
+#: src/GravityForms/FormSettings.php:235
+msgid "Selecteer het informatieobjecttype dat wordt gebruikt om de PDF van de inzending aan te maken."
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:264
 msgid "Selecteer een zaaktype"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:276
+#: src/GravityForms/FormSettings.php:280
 msgid "Selecteer een informatie object type"
 msgstr ""
 
@@ -172,48 +182,48 @@ msgstr ""
 msgid "Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in."
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:114
-#: src/Providers/SettingsServiceProvider.php:115
+#: src/Providers/SettingsServiceProvider.php:151
+#: src/Providers/SettingsServiceProvider.php:152
 msgid "OWC | GravityForms ZGW instellingen"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:139
+#: src/Providers/SettingsServiceProvider.php:176
 msgid "Transactie overzicht"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:146
+#: src/Providers/SettingsServiceProvider.php:183
 msgid "Gebruikersrollen"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:155
+#: src/Providers/SettingsServiceProvider.php:192
 msgid "Transactie rapport"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:162
+#: src/Providers/SettingsServiceProvider.php:199
 msgid "Verzenden naar"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:174
+#: src/Providers/SettingsServiceProvider.php:211
 msgid "Vertraging na zaakcreatie"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:184
+#: src/Providers/SettingsServiceProvider.php:221
 msgid "Vertraging na zaakcreatie (seconden)"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:196
+#: src/Providers/SettingsServiceProvider.php:233
 msgid "Pas vertraging toe op leverancier(s)"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:208
+#: src/Providers/SettingsServiceProvider.php:245
 msgid "Client request timeout"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:218
+#: src/Providers/SettingsServiceProvider.php:255
 msgid "Request timeout (seconden)"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:230
+#: src/Providers/SettingsServiceProvider.php:267
 msgid "Pas aangepaste timeout toe op leverancier(s)"
 msgstr ""
 
