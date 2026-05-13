@@ -63,6 +63,11 @@ abstract class Adapter
 		}
 
 		$types = $this->fetch_types( $empty_message, $endpoint );
+
+		if ( 'zaaktypen' === $endpoint ) {
+			$types = $this->filter_zaaktypen( $types );
+		}
+
 		$types = $this->prepare_types( $types, $prepare_callback );
 
 		if ( empty( $types ) ) {
@@ -102,13 +107,73 @@ abstract class Adapter
 		return $types;
 	}
 
+	/**
+	 * Prepares an array of types by applying a callback and filtering out invalid items.
+	 * Also sorts the resulting array alphabetically by the 'label' key.
+	 */
 	protected function prepare_types(array $types, Closure $prepare_callback ): array
 	{
-		return (array) Collection::collect( $types )->map( $prepare_callback )->filter(
+		$types = (array) Collection::collect( $types )->map( $prepare_callback )->filter(
 			function ($item ) {
 				return isset( $item['name'], $item['label'], $item['value'] ) && is_string( $item['name'] ) && is_string( $item['label'] ) && is_string( $item['value'] );
 			}
 		)->all();
+
+		usort(
+			$types,
+			function ( $a, $b ) {
+				return strcmp( $a['label'], $b['label'] );
+			}
+		);
+
+		return $types;
+	}
+
+	/**
+	 * Filters an array of zaaktypen to ensure unique 'omschrijvingen' (description) and keeping the one with the latest 'versiedatum' (version date).
+	 *
+	 * @since NEXT
+	 */
+	private function filter_zaaktypen(array $zaaktypen ): array
+	{
+		$filtered = array();
+
+		foreach ( $zaaktypen as $zaaktype ) {
+			$omschrijving = trim( (string) ( $zaaktype->omschrijving ?? '' ) );
+
+			if ( '' === $omschrijving ) {
+				continue;
+			}
+
+			if ( ! isset( $filtered[ $omschrijving ] ) ) {
+				$filtered[ $omschrijving ] = $zaaktype;
+
+				continue;
+			}
+
+			$existing_versiedatum = $this->get_zaaktype_timestamp( $filtered[ $omschrijving ] );
+			$current_versiedatum  = $this->get_zaaktype_timestamp( $zaaktype );
+
+			if ( $current_versiedatum > $existing_versiedatum ) {
+				$filtered[ $omschrijving ] = $zaaktype;
+			}
+		}
+
+		return array_values( $filtered );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function get_zaaktype_timestamp(object $zaaktype ): int
+	{
+		if ( ! isset( $zaaktype->versiedatum ) || ! is_string( $zaaktype->versiedatum ) || '' === trim( $zaaktype->versiedatum ) ) {
+			return 0;
+		}
+
+		$timestamp = strtotime( $zaaktype->versiedatum );
+
+		return false === $timestamp ? 0 : $timestamp;
 	}
 
 	/**
