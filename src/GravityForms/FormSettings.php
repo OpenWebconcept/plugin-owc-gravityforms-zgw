@@ -171,7 +171,7 @@ class FormSettings
 					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-identifier",
 					'type'       => 'select',
 					'label'      => esc_html__( 'Zaaktype', 'owc-gravityforms-zgw' ),
-					'tooltip'	 => esc_html__( 'Een zaaktype wordt gebruikt om de aan te maken zaak te definiëren, inclusief de structuur, benodigde gegevens en het verloop van het proces.', 'owc-gravityforms-zgw' ),
+					'tooltip'    => esc_html__( 'Een zaaktype wordt gebruikt om de aan te maken zaak te definiëren, inclusief de structuur, benodigde gegevens en het verloop van het proces.', 'owc-gravityforms-zgw' ),
 					'dependency' => array(
 						'live'   => true,
 						'fields' => array(
@@ -191,7 +191,7 @@ class FormSettings
 					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-information-object-type",
 					'type'       => 'select',
 					'label'      => esc_html__( 'Informatie object type', 'owc-gravityforms-zgw' ),
-					'tooltip'	 => esc_html__( 'Selecteer het informatieobjecttype dat wordt gebruikt om de PDF van de inzending aan te maken.', 'owc-gravityforms-zgw' ),
+					'tooltip'    => esc_html__( 'Selecteer het informatieobjecttype dat wordt gebruikt om de PDF van de inzending aan te maken.', 'owc-gravityforms-zgw' ),
 					'dependency' => array(
 						'live'   => true,
 						'fields' => array(
@@ -213,7 +213,7 @@ class FormSettings
 					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-identifier-manual",
 					'type'       => 'text',
 					'label'      => esc_html__( 'Zaaktype', 'owc-gravityforms-zgw' ),
-					'tooltip'	 => esc_html__( 'Een zaaktype wordt gebruikt om de aan te maken zaak te definiëren, inclusief de structuur, benodigde gegevens en het verloop van het proces.', 'owc-gravityforms-zgw' ),
+					'tooltip'    => esc_html__( 'Een zaaktype wordt gebruikt om de aan te maken zaak te definiëren, inclusief de structuur, benodigde gegevens en het verloop van het proces.', 'owc-gravityforms-zgw' ),
 					'dependency' => array(
 						'live'   => true,
 						'fields' => array(
@@ -232,7 +232,7 @@ class FormSettings
 					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-information-object-type-manual",
 					'type'       => 'text',
 					'label'      => esc_html__( 'Informatie object type', 'owc-gravityforms-zgw' ),
-					'tooltip'	 => esc_html__( 'Selecteer het informatieobjecttype dat wordt gebruikt om de PDF van de inzending aan te maken.', 'owc-gravityforms-zgw' ),
+					'tooltip'    => esc_html__( 'Selecteer het informatieobjecttype dat wordt gebruikt om de PDF van de inzending aan te maken.', 'owc-gravityforms-zgw' ),
 					'dependency' => array(
 						'live'   => true,
 						'fields' => array(
