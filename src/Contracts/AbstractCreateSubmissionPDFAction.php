@@ -86,7 +86,7 @@ abstract class AbstractCreateSubmissionPDFAction
 	{
 		$information_object_type = FormUtils::information_object_type_form_setting( $this->form, $this->supplier_name );
 
-		if ( array() === $information_object_type ) {
+		if ( '' === $information_object_type ) {
 			return array();
 		}
 
@@ -119,7 +119,7 @@ abstract class AbstractCreateSubmissionPDFAction
 
 	public function create_submission_pdf( array $args ): ?Enkelvoudiginformatieobject
 	{
-		if ( empty( $args ) ) {
+		if ( array() === $args ) {
 			return null;
 		}
 
