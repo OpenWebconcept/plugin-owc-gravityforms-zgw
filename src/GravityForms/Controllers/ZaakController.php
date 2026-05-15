@@ -26,6 +26,7 @@ use OWCGravityFormsZGW\Actions\CreateZaakAction;
 use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
 use OWCGravityFormsZGW\Exceptions\ZaakException;
 use OWCGravityFormsZGW\Exceptions\ZaakUploadException;
+use OWCGravityFormsZGW\GravityForms\Controllers\NotificationController;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWC\ZGW\Entities\Zaak;
 use Throwable;
@@ -114,6 +115,9 @@ class ZaakController extends AbstractZaakFormController
 
 			$this->delegate_delay( $supplier_config );
 
+			// 'Zaak' creation has been successful at this point, so we can send notifications.
+			( new NotificationController() )->send_notifications( $this->entry, $this->form );
+
 			return $zaak;
 		} catch ( Throwable $e ) {
 			$reason_message = $this->extract_api_error_message( $e );
@@ -176,13 +180,17 @@ class ZaakController extends AbstractZaakFormController
 			$caught_exception = $e;
 		}
 
-		// Handle adding the generated PDF upload.
-		try {
-			$this->upload_pdf_controller->set_form_data( $this->entry, $this->form );
-			$this->upload_pdf_controller->handle( $zaak, $supplier_config );
-		} catch ( Throwable $e ) {
-			$this->logger->error( 'PDF generation failed: ' . $e->getMessage() );
-			$caught_exception = $e;
+		// Handle adding the generated PDF upload, only when the zaak has a UUID.
+		if ( ! isset( $zaak->uuid ) || ! is_string( $zaak->uuid ) ) {
+			$this->logger->warning( 'PDF generation skipped: zaak UUID is not yet available.' );
+		} else {
+			try {
+				$this->upload_pdf_controller->set_form_data( $this->entry, $this->form );
+				$this->upload_pdf_controller->handle( $zaak, $supplier_config );
+			} catch ( Throwable $e ) {
+				$this->logger->error( 'PDF generation failed: ' . $e->getMessage() );
+				$caught_exception = $e;
+			}
 		}
 
 		if ( $caught_exception ) {
