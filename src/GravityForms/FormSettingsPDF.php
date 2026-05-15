@@ -76,7 +76,14 @@ class FormSettingsPDF
 		return $settings['active'] ?? false;
 	}
 
-	public function url_pdf(): string
+	/**
+	 * Generate a fresh PDF for the current entry and return its absolute file path.
+	 *
+	 * Using GPDFAPI::create_pdf() re-fetches the entry from the database, ensuring
+	 * any metadata added after submission (e.g. the zaak UUID) is available to the
+	 * PDF template's merge tags. It also bypasses any cached version.
+	 */
+	public function generate_pdf_path(): string
 	{
 		$setting_id = $this->pdf_form_setting_id();
 
@@ -84,30 +91,12 @@ class FormSettingsPDF
 			return '';
 		}
 
-		$pdf_model = GPDFAPI::get_pdf_class( 'model' );
+		$pdf_path = GPDFAPI::create_pdf( $this->entry['id'], $setting_id );
 
-		if ( is_wp_error( $pdf_model ) ) {
+		if ( is_wp_error( $pdf_path ) || ! is_string( $pdf_path ) || ! is_file( $pdf_path ) ) {
 			return '';
 		}
 
-		return $pdf_model->get_pdf_url( $setting_id, $this->entry['id'] );
-	}
-
-	/**
-	 * Toggles the "public_access" setting for the generated PDFs.
-	 * By default, the PDFs are protected and not publicly accessible.
-	 */
-	public function update_public_access_setting_pdf( string $access = '' ): bool
-	{
-		$setting_id = $this->pdf_form_setting_id();
-		$settings   = GPDFAPI::get_pdf( $this->form['id'], $setting_id );
-
-		if ( ! is_array( $settings ) ) {
-			return false;
-		}
-
-		$settings['public_access'] = 'enable' === $access ? 'Yes' : '';
-
-		return GPDFAPI::update_pdf( $this->form['id'], $setting_id, $settings );
+		return $pdf_path;
 	}
 }

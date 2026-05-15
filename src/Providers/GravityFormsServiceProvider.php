@@ -28,6 +28,8 @@ use OWCGravityFormsZGW\GravityForms\ZGWAddon;
 use OWCGravityFormsZGW\Controllers\ActionSchedulerController;
 use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
 use OWCGravityFormsZGW\GravityForms\Controllers\PaymentController;
+use OWCGravityFormsZGW\GravityForms\Controllers\NotificationController;
+use OWCGravityFormsZGW\GravityForms\Controllers\ZaakMergeTagsController;
 
 /**
  * Register settings service provider.
@@ -56,6 +58,11 @@ class GravityFormsServiceProvider extends ServiceProvider
 		add_filter( 'gform_field_groups_form_editor', ( new FieldGroups() )->field_groups_form_editor( ... ), 10, 1 );
 		add_filter( 'gform_field_settings_tabs', ( new FieldGroups() )->add_tabs( ... ), 10, 1 );
 		add_action( 'gform_field_settings_tab_content_owc_gf_zgw', ( new FieldGroups() )->add_tab_content( ... ), 10, 1 );
+
+		// Notifications and merge tags.
+		add_filter( 'gform_disable_notifications', ( new NotificationController() )->disable_notifications( ... ), 10, 4 );
+		add_filter( 'gform_replace_merge_tags', ( new ZaakMergeTagsController() )->replace_zaak_merge_tags( ... ), 10, 7 );
+		add_filter( 'gform_custom_merge_tags', ( new ZaakMergeTagsController() )->add_zaak_merge_tags( ... ), 10, 2 );
 
 		// After submission hooks.
 		add_action( 'gform_after_submission', ( new ActionSchedulerController() )->schedule_single_actions( ... ), 10, 2 );

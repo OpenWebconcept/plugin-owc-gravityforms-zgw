@@ -73,37 +73,38 @@ abstract class AbstractCreateSubmissionPDFAction
 			return array();
 		}
 
-		$url_pdf = $this->pdf_settings->url_pdf();
+		$pdf_path = $this->pdf_settings->generate_pdf_path();
 
-		if ( empty( $url_pdf ) ) {
+		if ( '' === $pdf_path ) {
 			return array();
 		}
 
-		$this->pdf_settings->update_public_access_setting_pdf( 'enable' );
-
-		$args = $this->prepare_args_pdf( 'Aanvraag - eFormulier', $url_pdf );
-
-		$this->pdf_settings->update_public_access_setting_pdf( 'disable' );
-
-		return $args;
+		return $this->prepare_args_pdf( 'Aanvraag - eFormulier', $pdf_path );
 	}
 
-	public function prepare_args_pdf( string $file_name, string $object_url ): array
+	public function prepare_args_pdf( string $file_name, string $pdf_path ): array
 	{
 		$information_object_type = FormUtils::information_object_type_form_setting( $this->form, $this->supplier_name );
 
-		if ( empty( $information_object_type ) ) {
+		if ( array() === $information_object_type ) {
 			return array();
 		}
 
-		$file_size    = $this->get_content_length( $object_url );
-		$file_content = $this->encode_base64_from_url( $object_url );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$raw_content = file_get_contents( $pdf_path );
+
+		if ( false === $raw_content ) {
+			return array();
+		}
+
+		$file_content = base64_encode( $raw_content );
+		$file_size    = (int) filesize( $pdf_path );
 
 		$args                                = array();
 		$args['titel']                       = $file_name;
-		$args['formaat']                     = $this->get_content_type( $object_url );
+		$args['formaat']                     = 'application/pdf';
 		$args['bestandsnaam']                = sprintf( '%s.pdf', sanitize_title( $file_name ) );
-		$args['bestandsomvang']              = $file_size ? (int) $file_size : strlen( $file_content );
+		$args['bestandsomvang']              = $file_size > 0 ? $file_size : strlen( $file_content );
 		$args['inhoud']                      = $file_content;
 		$args['vertrouwelijkheidaanduiding'] = 'vertrouwelijk';
 		$args['auteur']                      = 'OWC';
