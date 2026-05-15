@@ -60,7 +60,7 @@ class GravityFormsServiceProvider extends ServiceProvider
 		add_action( 'gform_field_settings_tab_content_owc_gf_zgw', ( new FieldGroups() )->add_tab_content( ... ), 10, 1 );
 
 		// Notifications and merge tags.
-		add_filter( 'gform_disable_notifications', ( new NotificationController() )->disable_notifications( ... ), 10, 4 );
+		add_filter( 'gform_disable_notification', ( new NotificationController() )->disable_notifications( ... ), 10, 4 );
 		add_filter( 'gform_replace_merge_tags', ( new ZaakMergeTagsController() )->replace_zaak_merge_tags( ... ), 10, 7 );
 		add_filter( 'gform_custom_merge_tags', ( new ZaakMergeTagsController() )->add_zaak_merge_tags( ... ), 10, 2 );
 

@@ -180,9 +180,9 @@ class ZaakController extends AbstractZaakFormController
 			$caught_exception = $e;
 		}
 
-		// Handle adding the generated PDF upload, only when the zaak has a UUID.
-		if ( ! isset( $zaak->uuid ) || ! is_string( $zaak->uuid ) ) {
-			$this->logger->warning( 'PDF generation skipped: zaak UUID is not yet available.' );
+		// Handle adding the generated PDF upload, only when the zaak has a ID.
+		if ( ! is_string( $zaak->getValue( 'identificatie' ) ) ) {
+			$this->logger->warning( 'PDF generation skipped: zaak ID is not yet available.' );
 		} else {
 			try {
 				$this->upload_pdf_controller->set_form_data( $this->entry, $this->form );
