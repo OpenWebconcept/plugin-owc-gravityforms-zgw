@@ -10,7 +10,7 @@ declare(strict_types=1);
  * tags, including Gravity PDF template footers and headers.
  *
  * Supported merge tags:
- *   {zaak_uuid} — the UUID of the zaak created for this entry.
+ *   {zaak_id} — the identificatie (ID) of the zaak created for this entry.
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
@@ -61,20 +61,20 @@ class ZaakMergeTagsController
 			return $text;
 		}
 
-		if ( strpos( $text, '{zaak_uuid}' ) === false ) {
+		if ( strpos( $text, '{zaak_id}' ) === false ) {
 			return $text;
 		}
 
-		$zaak_uuid = '';
+		$zaak_id = '';
 
 		if ( isset( $entry['id'] ) ) {
 			$transaction_post_id = gform_get_meta( $entry['id'], 'transaction_post_id' );
-			$zaak_uuid           = (string) get_post_meta( $transaction_post_id, 'transaction_zaak_id', true );
+			$zaak_id             = (string) get_post_meta( $transaction_post_id, 'transaction_zaak_id', true );
 		}
 
-		if ( '' === $zaak_uuid ) {
+		if ( '' === $zaak_id ) {
 			$this->logger->warning(
-				'Zaak UUID merge tag found but no UUID available for entry.',
+				'Zaak ID merge tag found but no ID available for entry.',
 				array(
 					'entry_id' => $entry['id'] ?? null,
 				)
@@ -82,12 +82,12 @@ class ZaakMergeTagsController
 		}
 
 		if ( $url_encode ) {
-			$zaak_uuid = urlencode( $zaak_uuid );
+			$zaak_id = urlencode( $zaak_id );
 		} elseif ( $esc_html ) {
-			$zaak_uuid = esc_html( $zaak_uuid );
+			$zaak_id = esc_html( $zaak_id );
 		}
 
-		return str_replace( '{zaak_uuid}', $zaak_uuid, $text );
+		return str_replace( '{zaak_id}', $zaak_id, $text );
 	}
 
 	/**
@@ -107,8 +107,8 @@ class ZaakMergeTagsController
 		}
 
 		$tags[] = array(
-			'tag'   => '{zaak_uuid}',
-			'label' => __( 'Zaak UUID', 'owc-gravityforms-zgw' ),
+			'tag'   => '{zaak_id}',
+			'label' => __( 'Zaak ID', 'owc-gravityforms-zgw' ),
 		);
 
 		return $tags;

@@ -80,7 +80,7 @@ class FormSettingsPDF
 	 * Generate a fresh PDF for the current entry and return its absolute file path.
 	 *
 	 * Using GPDFAPI::create_pdf() re-fetches the entry from the database, ensuring
-	 * any metadata added after submission (e.g. the zaak UUID) is available to the
+	 * any metadata added after submission (e.g. the zaak ID) is available to the
 	 * PDF template's merge tags. It also bypasses any cached version.
 	 */
 	public function generate_pdf_path(): string

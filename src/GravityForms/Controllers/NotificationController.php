@@ -34,7 +34,8 @@ use OWCGravityFormsZGW\GravityForms\FormUtils;
 class NotificationController
 {
 	/**
-	 * Disable notifications for ZGW forms so they can be sent manually at the right moment.
+	 * Disable notifications for ZGW forms so they can be sent manually after zaak creation.
+	 * Hooks into gform_disable_notification (singular) which is what GF actually applies.
 	 */
 	public function disable_notifications( bool $is_disabled, array $notification, array $form, array $entry ): bool
 	{
