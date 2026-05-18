@@ -20,6 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use GPDFAPI;
+use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\LoggerZGW;
 
 /**
  * Form settings PDF.
@@ -32,11 +34,13 @@ class FormSettingsPDF
 {
 	protected array $entry;
 	protected array $form;
+	protected LoggerZGW $logger;
 
 	public function __construct( array $entry, array $form )
 	{
-		$this->entry = $entry;
-		$this->form  = $form;
+		$this->entry  = $entry;
+		$this->form   = $form;
+		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
 	/**
@@ -93,7 +97,15 @@ class FormSettingsPDF
 
 		$pdf_path = GPDFAPI::create_pdf( $this->entry['id'], $setting_id );
 
-		if ( is_wp_error( $pdf_path ) || ! is_string( $pdf_path ) || ! is_file( $pdf_path ) ) {
+		if ( is_wp_error( $pdf_path ) ) {
+			$this->logger->error( 'Error generating PDF: ' . $pdf_path->get_error_message() );
+
+			return '';
+		}
+
+		if ( ! is_string( $pdf_path ) || ! is_file( $pdf_path ) ) {
+			$this->logger->error( 'Generated PDF path is invalid: ' . print_r( $pdf_path, true ) );
+
 			return '';
 		}
 

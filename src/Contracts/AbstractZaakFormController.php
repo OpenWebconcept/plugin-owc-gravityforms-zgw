@@ -24,6 +24,7 @@ use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\LoggerZGW;
 use OWC\ZGW\Entities\Zaak;
 use Throwable;
+use WP_Post;
 
 /**
  * Abstract zaak form controller.
@@ -58,14 +59,20 @@ abstract class AbstractZaakFormController
 		// Get the transaction post id created earlier in TransactionController.
 		$transaction_post_id = gform_get_meta( $this->entry['id'], 'transaction_post_id' );
 
+		if ( ! is_numeric( $transaction_post_id ) || ! get_post( (int) $transaction_post_id ) instanceof WP_Post ) {
+			$this->logger->error( 'No transaction post linked to this entry.' );
+
+			return;
+		}
+
 		$value = $zaak->getValue( 'identificatie' );
 		if ( isset( $value ) ) {
-			update_post_meta( $transaction_post_id, 'transaction_zaak_id', $value );
+			update_post_meta( (int) $transaction_post_id, 'transaction_zaak_id', $value );
 		}
 
 		$value = $zaak->getValue( 'uuid' );
 		if ( isset( $value ) ) {
-			update_post_meta( $transaction_post_id, 'transaction_zaak_uuid', $value );
+			update_post_meta( (int) $transaction_post_id, 'transaction_zaak_uuid', $value );
 		}
 	}
 
@@ -77,8 +84,9 @@ abstract class AbstractZaakFormController
 		// Get the transaction post id created earlier in TransactionController.
 		$transaction_post_id = gform_get_meta( $this->entry['id'], 'transaction_post_id' );
 
-		if ( ! $transaction_post_id ) {
+		if ( ! is_numeric( $transaction_post_id ) || ! get_post( (int) $transaction_post_id ) instanceof WP_Post ) {
 			$this->logger->error( 'No transaction post linked to this entry.' );
+
 			return;
 		}
 
@@ -104,15 +112,16 @@ abstract class AbstractZaakFormController
 		// Get the transaction post id created earlier in TransactionController.
 		$transaction_post_id = gform_get_meta( $this->entry['id'], 'transaction_post_id' );
 
-		if ( ! $transaction_post_id ) {
+		if ( ! is_numeric( $transaction_post_id ) || ! get_post( (int) $transaction_post_id ) instanceof WP_Post ) {
 			$this->logger->error( 'No transaction post linked to this entry.' );
+
 			return;
 		}
 
 		// Update the transaction post status to failed.
 		wp_update_post(
 			array(
-				'ID'          => $transaction_post_id,
+				'ID'          => (int) $transaction_post_id,
 				'post_status' => 'transaction_failed',
 				'meta_input'  => array(
 					'transaction_actions' => untrailingslashit( OWC_GRAVITYFORMS_ZGW_PLUGIN_URL ) . '/assets/images/icon-retry.svg',
@@ -121,7 +130,7 @@ abstract class AbstractZaakFormController
 		);
 
 		// Update transaction message.
-		update_post_meta( $transaction_post_id, 'transaction_message', $message );
+		update_post_meta( (int) $transaction_post_id, 'transaction_message', $message );
 
 		// Add a note to the entry with the failure message.
 		GFFormsModel::add_note(
@@ -166,7 +175,7 @@ abstract class AbstractZaakFormController
 		}
 
 		// Priority: invalidParams → detail → title → generic fallback
-		if ( ! empty( $data['invalidParams'] ) ) {
+		if ( is_array( $data['invalidParams'] ?? null ) && array() !== $data['invalidParams'] ) {
 			$messages = array_map(
 				fn( $param ) => sprintf(
 					"%s: %s",
@@ -179,12 +188,22 @@ abstract class AbstractZaakFormController
 			return implode( '; ', $messages );
 		}
 
-		if ( ! empty( $data['detail'] ) ) {
-			return $data['detail'];
+		$detail = $data['detail'] ?? null;
+		if ( is_string( $detail ) ) {
+			$detail = trim( $detail );
+
+			if ( 0 < strlen( $detail ) ) {
+				return $detail;
+			}
 		}
 
-		if ( ! empty( $data['title'] ) ) {
-			return $data['title'];
+		$title = $data['title'] ?? null;
+		if ( is_string( $title ) ) {
+			$title = trim( $title );
+
+			if ( 0 < strlen( $title ) ) {
+				return $title;
+			}
 		}
 
 		return 'An unknown API error occurred.';

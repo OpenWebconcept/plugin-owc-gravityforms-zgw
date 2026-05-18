@@ -61,16 +61,12 @@ class ZaakMergeTagsController
 			return $text;
 		}
 
-		if ( strpos( $text, '{zaak_id}' ) === false ) {
+		if ( strpos( $text, '{zaak_id}' ) === false || ! isset( $entry['id'] ) ) {
 			return $text;
 		}
 
-		$zaak_id = '';
-
-		if ( isset( $entry['id'] ) ) {
-			$transaction_post_id = gform_get_meta( $entry['id'], 'transaction_post_id' );
-			$zaak_id             = (string) get_post_meta( $transaction_post_id, 'transaction_zaak_id', true );
-		}
+		$transaction_post_id = gform_get_meta( $entry['id'], 'transaction_post_id' );
+		$zaak_id             = (string) get_post_meta( $transaction_post_id, 'transaction_zaak_id', true );
 
 		if ( '' === $zaak_id ) {
 			$this->logger->warning(

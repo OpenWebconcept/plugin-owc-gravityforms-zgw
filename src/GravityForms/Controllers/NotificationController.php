@@ -64,7 +64,7 @@ class NotificationController
 			}
 		);
 
-		if ( ! is_array( $notifications ) || array() === $notifications ) {
+		if ( array() === $notifications ) {
 			return;
 		}
 
