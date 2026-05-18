@@ -48,6 +48,7 @@ class GravityFormsServiceProvider extends ServiceProvider
 	private function register_hooks(): void
 	{
 		// Form settings.
+		add_action( 'admin_init', ( new FormSettings() )->sync_zaaktypen_on_settings_page( ... ), 9 );
 		add_filter( 'gform_form_settings_fields', ( new FormSettings() )->add_form_settings( ... ), 10, 2 );
 
 		// Field tab settings.

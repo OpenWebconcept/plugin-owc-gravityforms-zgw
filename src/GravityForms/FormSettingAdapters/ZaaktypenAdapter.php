@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Exception;
+use GFAPI;
 use OWC\ZGW\Entities\Zaaktype;
 
 /**
@@ -29,6 +30,96 @@ use OWC\ZGW\Entities\Zaaktype;
  */
 class ZaaktypenAdapter extends Adapter
 {
+	/**
+	 * Loops all Gravity Forms and updates any saved zaaktype URL that has been replaced by a newer version.
+	 * Only runs when zaaktypen are freshly fetched (cache miss), so the raw and filtered data are both in memory.
+	 *
+	 * @since NEXT
+	 */
+	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $raw, array $filtered ): void
+	{
+		$saved_zaaktype_url_to_description  = $this->map_all_zaaktype_urls_to_descriptions( $raw );
+		$description_to_latest_zaaktype_url = $this->map_descriptions_to_latest_zaaktype_urls( $filtered );
+
+		$prefix         = OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX;
+		$supplier_key   = strtolower( $this->supplier_name );
+		$setting_key    = "{$prefix}-form-setting-{$supplier_key}-identifier";
+		$manual_key     = "{$prefix}-form-setting-supplier-manually";
+		$supplier_field = "{$prefix}-form-setting-supplier";
+
+		foreach ( GFAPI::get_forms() as $form ) {
+			if ( '1' === ( $form[ $manual_key ] ?? '0' ) ) {
+				continue; // Skip forms that are marked as manually configured, as we don't want to override manual settings.
+			}
+
+			if ( ( $form[ $supplier_field ] ?? '' ) !== $supplier_key ) {
+				continue; // Skip forms that are not associated with the current supplier, as we only want to update forms related to this supplier.
+			}
+
+			$saved_url = (string) ( $form[ $setting_key ] ?? '' );
+			if ( '' === $saved_url ) {
+				continue; // Skip forms that don't have a saved URL, as there's nothing to update.
+			}
+
+			$omschrijving = $saved_zaaktype_url_to_description[ $saved_url ] ?? '';
+			if ( '' === $omschrijving ) {
+				continue; // Skip if we can't find a description for the saved URL, as we won't be able to find the new URL without the description.
+			}
+
+			$winning_url = $description_to_latest_zaaktype_url[ $omschrijving ] ?? '';
+			if ( '' === $winning_url || $winning_url === $saved_url ) {
+				continue; // Skip if we can't find a new URL for the description or if the new URL is the same as the saved URL, as there's no update needed.
+			}
+
+			$form[ $setting_key ] = $winning_url;
+			GFAPI::update_form( $form );
+		}
+	}
+
+	/**
+	 * Prepare unfiltered zaaktypen by filtering out types with empty 'omschrijving' (description) or 'url'
+	 * and return a mapped array with 'url' as key and 'omschrijving' (description) as value.
+	 *
+	 * @since NEXT
+	 */
+	protected function map_all_zaaktype_urls_to_descriptions( array $raw ): array
+	{
+		$prepared_description_to_latest_zaaktype_url = array();
+
+		foreach ( $raw as $zaaktype ) {
+			$omschrijving = trim( (string) ( $zaaktype->omschrijving ?? '' ) );
+			$url          = trim( (string) ( $zaaktype->url ?? '' ) );
+
+			if ( '' !== $omschrijving && '' !== $url ) {
+				$prepared_description_to_latest_zaaktype_url[ $url ] = $omschrijving;
+			}
+		}
+
+		return $prepared_description_to_latest_zaaktype_url;
+	}
+
+	/**
+	 * Prepare filtered zaaktypen by filtering out types with empty 'omschrijving' (description) or 'url'
+	 * and return a mapped array with 'omschrijving' (description) as key and 'url' as value.
+	 *
+	 * @since NEXT
+	 */
+	protected function map_descriptions_to_latest_zaaktype_urls( array $raw ): array
+	{
+		$saved_zaaktype_url_to_description = array();
+
+		foreach ( $raw as $zaaktype ) {
+			$url          = trim( (string) ( $zaaktype->url ?? '' ) );
+			$omschrijving = trim( (string) ( $zaaktype->omschrijving ?? '' ) );
+
+			if ( '' !== $url && '' !== $omschrijving ) {
+				$saved_zaaktype_url_to_description[ $omschrijving ] = $url;
+			}
+		}
+
+		return $saved_zaaktype_url_to_description;
+	}
+
 	/**
 	 * @since 1.0.0
 	 */

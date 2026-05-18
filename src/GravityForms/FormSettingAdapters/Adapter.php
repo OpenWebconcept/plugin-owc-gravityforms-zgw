@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Closure;
+use DateTimeImmutable;
 use Exception;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\LoggerZGW;
@@ -29,6 +30,8 @@ use OWC\ZGW\Support\Collection;
 
 /**
  * Adapter.
+ *
+ * @since 1.0.0
  */
 abstract class Adapter
 {
@@ -65,7 +68,9 @@ abstract class Adapter
 		$types = $this->fetch_types( $empty_message, $endpoint );
 
 		if ( 'zaaktypen' === $endpoint ) {
-			$types = $this->filter_zaaktypen( $types );
+			$raw   = $types;
+			$types = $this->filter_zaaktypen_by_version_date( $types );
+			$this->replace_old_zaaktypen_after_fetch_in_form_settings( $raw, $types );
 		}
 
 		$types = $this->prepare_types( $types, $prepare_callback );
@@ -130,11 +135,18 @@ abstract class Adapter
 	}
 
 	/**
+	 * Called after zaaktypen are fetched and filtered. Subclasses can override to act on the data.
+	 *
+	 * @since NEXT
+	 */
+	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $raw, array $filtered ): void {}
+
+	/**
 	 * Filters an array of zaaktypen to ensure unique 'omschrijvingen' (description) and keeping the one with the latest 'versiedatum' (version date).
 	 *
 	 * @since NEXT
 	 */
-	private function filter_zaaktypen( array $zaaktypen ): array
+	private function filter_zaaktypen_by_version_date( array $zaaktypen ): array
 	{
 		$filtered = array();
 
@@ -145,6 +157,7 @@ abstract class Adapter
 				continue;
 			}
 
+			// If we haven't seen this description before, add it to the filtered list.
 			if ( ! isset( $filtered[ $omschrijving ] ) ) {
 				$filtered[ $omschrijving ] = $zaaktype;
 
@@ -165,13 +178,13 @@ abstract class Adapter
 	/**
 	 * @since NEXT
 	 */
-	private function get_zaaktype_timestamp( object $zaaktype ): int
+	protected function get_zaaktype_timestamp( object $zaaktype ): int
 	{
-		if ( ! isset( $zaaktype->versiedatum ) || ! is_string( $zaaktype->versiedatum ) || '' === trim( $zaaktype->versiedatum ) ) {
+		if ( ! $zaaktype->versiedatum instanceof DateTimeImmutable ) {
 			return 0;
 		}
 
-		$timestamp = strtotime( $zaaktype->versiedatum );
+		$timestamp = $zaaktype->versiedatum->getTimestamp();
 
 		return false === $timestamp ? 0 : $timestamp;
 	}

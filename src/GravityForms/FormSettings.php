@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Exception;
+use GFAPI;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\InformatieobjecttypeAdapter;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\ZaaktypenAdapter;
 use function OWC\ZGW\apiClient;
@@ -30,6 +32,76 @@ use OWC\ZGW\Contracts\Client;
 class FormSettings
 {
 	protected string $prefix = OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX;
+
+	/**
+	 * Hooked to admin_init so it fires before GF loads the form for the settings page.
+	 * Updating the DB here means GF reads the corrected zaaktype URL when it renders the page.
+	 *
+	 * @since NEXT
+	 */
+	public function sync_zaaktypen_on_settings_page(): void
+	{
+		if ( 'gf_edit_forms' !== ( $_GET['page'] ?? '' ) ) {
+			return;
+		}
+
+		if ( 'settings' !== ( $_GET['view'] ?? '' ) ) {
+			return;
+		}
+
+		$form_id = absint( $_GET['id'] ?? 0 );
+		if ( $form_id <= 0 ) {
+			return;
+		}
+
+		$form = GFAPI::get_form( $form_id );
+		if ( ! is_array( $form ) ) {
+			return;
+		}
+
+		$this->sync_form_after_zaaktypen_update( $form );
+	}
+
+	/**
+	 * Triggers a zaaktypen fetch for the active supplier, which updates stale zaaktype URLs across all
+	 * form settings as a side effect. Re-reads the current form from the DB so this page load reflects
+	 * any URL that was just updated.
+	 *
+	 * @since NEXT
+	 */
+	private function sync_form_after_zaaktypen_update( array $form ): void
+	{
+		if ( '1' === ( $form[ "{$this->prefix}-form-setting-supplier-manually" ] ?? '0' ) ) {
+			return;
+		}
+
+		$supplier_setting = (string) ( $form[ "{$this->prefix}-form-setting-supplier" ] ?? '' );
+
+		if ( '' === $supplier_setting || 'none' === $supplier_setting ) {
+			return;
+		}
+
+		$clients = (array) get_option( 'zgw_api_settings' );
+		$clients = $clients['zgw-api-configured-clients'] ?? array();
+
+		$supplier_name = '';
+		foreach ( $clients as $client ) {
+			if ( strtolower( $client['name'] ) === $supplier_setting ) {
+				$supplier_name = $client['name'];
+				break;
+			}
+		}
+
+		if ( '' === $supplier_name ) {
+			return;
+		}
+
+		try {
+			( new ZaaktypenAdapter( apiClient( $supplier_name ), $supplier_name ) )->handle();
+		} catch ( Exception $e ) {
+			return;
+		}
+	}
 
 	public function add_form_settings( array $fields, array $form ): array
 	{
