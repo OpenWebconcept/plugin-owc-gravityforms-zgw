@@ -31,7 +31,7 @@ class FieldGroups
 	/**
 	 * Adds a custom field group to the form editor.
 	 */
-	public function field_groups_form_editor(array $field_groups ): array
+	public function field_groups_form_editor( array $field_groups ): array
 	{
 		$field_groups['owc_gf_zgw'] = array(
 			'name'   => 'owc_gf_zgw',
@@ -45,7 +45,7 @@ class FieldGroups
 	/**
 	 * Adds a custom tab to the field settings.
 	 */
-	public function add_tabs(array $tabs ): array
+	public function add_tabs( array $tabs ): array
 	{
 		$tabs[] = array(
 			'id'    => 'owc_gf_zgw',
@@ -58,7 +58,7 @@ class FieldGroups
 	/**
 	 * Adds content to the custom tab in the field settings.
 	 */
-	public function add_tab_content(array $form ): void
+	public function add_tab_content( array $form ): void
 	{
 		esc_html( ( new FieldSettings() )->add_select( (int) $form['id'] ) );
 	}

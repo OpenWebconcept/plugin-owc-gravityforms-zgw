@@ -33,7 +33,7 @@ class FormUtils
 	/**
 	 * Get the supplier configured in the form settings.
 	 */
-	public static function get_supplier_config(array $form ): array
+	public static function get_supplier_config( array $form ): array
 	{
 		$supplier = $form[ sprintf( '%s-form-setting-supplier', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '';
 
@@ -107,7 +107,7 @@ class FormUtils
 	 * Checks if the form setting is selected or configured manually.
 	 * Returns the selected zaaktype identifier.
 	 */
-	public static function zaaktype_identifier_form_setting(array $form, string $supplier_name ): string
+	public static function zaaktype_identifier_form_setting( array $form, string $supplier_name ): string
 	{
 		$supplier_name = strtolower( $supplier_name );
 
@@ -124,7 +124,7 @@ class FormUtils
 	 * Checks if the form setting is selected or configured manually.
 	 * Returns the selected information object type identifier.
 	 */
-	public static function information_object_type_form_setting(array $form, string $supplier_name ): string
+	public static function information_object_type_form_setting( array $form, string $supplier_name ): string
 	{
 		$supplier_name = strtolower( $supplier_name );
 
@@ -142,7 +142,7 @@ class FormUtils
 	 *
 	 * @since 1.1.0
 	 */
-	public static function overwrite_bsn_form_setting(array $form ): ?string
+	public static function overwrite_bsn_form_setting( array $form ): ?string
 	{
 		return self::get_overwrite_form_setting( $form, 'form-setting-overwrite-bsn' );
 	}
@@ -152,7 +152,7 @@ class FormUtils
 	 *
 	 * @since 1.2.0
 	 */
-	public static function overwrite_kvk_form_setting(array $form ): ?string
+	public static function overwrite_kvk_form_setting( array $form ): ?string
 	{
 		return self::get_overwrite_form_setting( $form, 'form-setting-overwrite-kvk' );
 	}
@@ -162,7 +162,7 @@ class FormUtils
 	 *
 	 * @since 1.2.0
 	 */
-	private static function get_overwrite_form_setting(array $form, string $setting_key ): ?string
+	private static function get_overwrite_form_setting( array $form, string $setting_key ): ?string
 	{
 		$value = (string) ( $form[ sprintf( '%s-%s', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $setting_key ) ] ?? '' );
 		$value = trim( $value );

@@ -48,7 +48,7 @@ abstract class AbstractCreateSubmissionPDFAction
 	protected Client $client;
 	protected FormSettingsPDF $pdf_settings;
 
-	public function __construct(array $entry, array $form, array $supplier_config, Zaak $zaak )
+	public function __construct( array $entry, array $form, array $supplier_config, Zaak $zaak )
 	{
 		$this->entry         = $entry;
 		$this->form          = $form;
@@ -88,7 +88,7 @@ abstract class AbstractCreateSubmissionPDFAction
 		return $args;
 	}
 
-	public function prepare_args_pdf(string $file_name, string $object_url ): array
+	public function prepare_args_pdf( string $file_name, string $object_url ): array
 	{
 		$information_object_type = FormUtils::information_object_type_form_setting( $this->form, $this->supplier_name );
 
@@ -116,7 +116,7 @@ abstract class AbstractCreateSubmissionPDFAction
 		return $args;
 	}
 
-	public function create_submission_pdf(array $args ): ?Enkelvoudiginformatieobject
+	public function create_submission_pdf( array $args ): ?Enkelvoudiginformatieobject
 	{
 		if ( empty( $args ) ) {
 			return null;
@@ -128,7 +128,7 @@ abstract class AbstractCreateSubmissionPDFAction
 		return $pdf;
 	}
 
-	public function connect_pdf_to_zaak(?Enkelvoudiginformatieobject $pdf ): ?Zaakinformatieobject
+	public function connect_pdf_to_zaak( ?Enkelvoudiginformatieobject $pdf ): ?Zaakinformatieobject
 	{
 		if ( ! $pdf instanceof Enkelvoudiginformatieobject ) {
 			return null;

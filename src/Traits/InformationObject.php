@@ -28,7 +28,7 @@ use Exception;
  */
 trait InformationObject
 {
-	public function encode_base64_from_url(string $url ): string
+	public function encode_base64_from_url( string $url ): string
 	{
 		try {
 			$file = file_get_contents( $url, false, $this->stream_context() );
@@ -39,7 +39,7 @@ trait InformationObject
 		return $file ? base64_encode( $file ) : '';
 	}
 
-	public function get_content_length(string $url ): string
+	public function get_content_length( string $url ): string
 	{
 		$headers        = $this->get_headers( $url );
 		$content_length = $headers['Content-Length'] ?? '';
@@ -51,7 +51,7 @@ trait InformationObject
 		return $content_length ?: '';
 	}
 
-	public function get_extension(string $url ): string
+	public function get_extension( string $url ): string
 	{
 		$type     = $this->get_content_type( $url );
 		$mime_map = array(
@@ -72,7 +72,7 @@ trait InformationObject
 		return $mime_map[ $type ] ?? '';
 	}
 
-	public function get_content_type(string $url ): string
+	public function get_content_type( string $url ): string
 	{
 		$headers      = $this->get_headers( $url );
 		$content_type = $headers['content-type'] ?? $headers['Content-Type'] ?? '';
@@ -84,7 +84,7 @@ trait InformationObject
 		return $content_type ?: '';
 	}
 
-	protected function get_headers(string $url ): array
+	protected function get_headers( string $url ): array
 	{
 		if ( empty( $url ) ) {
 			return array();

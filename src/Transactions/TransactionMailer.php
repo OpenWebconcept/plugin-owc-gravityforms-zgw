@@ -31,13 +31,13 @@ class TransactionMailer
 {
 	private $queryFactory;
 
-	public function __construct($queryFactory = null ) {
-		$this->queryFactory = $queryFactory ?: function ($args ) {
+	public function __construct( $queryFactory = null ) {
+		$this->queryFactory = $queryFactory ?: function ( $args ) {
 			return new \WP_Query( $args );
 		};
 	}
 
-	public function send_report($default_email, $to ): void
+	public function send_report( $default_email, $to ): void
 	{
 		$yesterday = date( 'Y-m-d H:i:s', strtotime( '-1 day' ) );
 		$now       = current_time( 'mysql' );
@@ -45,7 +45,7 @@ class TransactionMailer
 		$all_statuses         = get_post_stati( array( 'internal' => false ) );
 		$not_success_statuses = array_filter(
 			$all_statuses,
-			function ($status ) {
+			function ( $status ) {
 				return $status !== 'transaction_success';
 			}
 		);

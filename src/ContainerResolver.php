@@ -46,7 +46,7 @@ class ContainerResolver
 	/**
 	 * @since 1.0.0
 	 */
-	public function get(string $key )
+	public function get( string $key )
 	{
 		return $this->container->get( $key ) ?? null;
 	}

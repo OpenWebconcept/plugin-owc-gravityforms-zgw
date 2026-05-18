@@ -58,7 +58,7 @@ class PopulateFormSettings
 		}
 	}
 
-	private function handle_form_settings_supplier(array $supplier ): void
+	private function handle_form_settings_supplier( array $supplier ): void
 	{
 		if ( ! isset( $supplier['name'] ) ) {
 			$this->logger->error( 'Supplier name is missing in supplier configuration.' );

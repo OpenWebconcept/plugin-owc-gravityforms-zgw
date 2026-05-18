@@ -93,7 +93,7 @@ abstract class AbstractCreateZaakAction
 	protected Client $client;
 	protected LoggerZGW $logger;
 
-	public function __construct(array $entry, array $form, array $supplier_config )
+	public function __construct( array $entry, array $form, array $supplier_config )
 	{
 		$this->entry         = $entry;
 		$this->form          = $form;
@@ -126,7 +126,7 @@ abstract class AbstractCreateZaakAction
 	 * The mapping is based on the relationship between argument keys
 	 * and form fields via their mappedFieldValueZGW values.
 	 */
-	protected function map_required_zaak_creation_args(array $args ): array
+	protected function map_required_zaak_creation_args( array $args ): array
 	{
 		foreach ( $this->form['fields'] as $field ) {
 			if ( ! isset( $field->mappedFieldValueZGW ) || ! is_string( $field->mappedFieldValueZGW ) || '' === $field->mappedFieldValueZGW || ! isset( $args[ $field->mappedFieldValueZGW ] ) ) {
@@ -159,7 +159,7 @@ abstract class AbstractCreateZaakAction
 	 *
 	 * @since 1.2.0
 	 */
-	protected function handle_zaak_creation_arg_value(GF_Field $field ): string
+	protected function handle_zaak_creation_arg_value( GF_Field $field ): string
 	{
 		if ( isset( $field->inputs ) && is_array( $field->inputs ) ) {
 			$field_value  = '';
@@ -199,7 +199,7 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * @since 1.9.1
 	 */
-	protected function add_address_object_to_zaak(Zaak $zaak ): void
+	protected function add_address_object_to_zaak( Zaak $zaak ): void
 	{
 		$address_object_args = $this->map_address_object_args( $zaak );
 
@@ -219,7 +219,7 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * @since 1.9.1
 	 */
-	private function map_address_object_args(Zaak $zaak ): array
+	private function map_address_object_args( Zaak $zaak ): array
 	{
 		$args = array();
 
@@ -254,7 +254,7 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * Assign a submitter to the created "zaak".
 	 */
-	public function add_rol_to_zaak(Zaak $zaak ): ?Rol
+	public function add_rol_to_zaak( Zaak $zaak ): ?Rol
 	{
 		$rol_types = $this->get_rol_types();
 
@@ -351,7 +351,7 @@ abstract class AbstractCreateZaakAction
 	 *
 	 * @since 1.5.2
 	 */
-	private function get_identification_from_transaction(string $meta_field )
+	private function get_identification_from_transaction( string $meta_field )
 	{
 		$args = array(
 			'post_type'   => TransactionController::POST_TYPE,
@@ -396,7 +396,7 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * @since 1.2.0
 	 */
-	private function add_identification_to_rol_args(array $args, ?string $current_bsn, ?string $current_kvk ): array
+	private function add_identification_to_rol_args( array $args, ?string $current_bsn, ?string $current_kvk ): array
 	{
 		if ( is_string( $current_bsn ) && '' !== $current_bsn ) {
 			$args['betrokkeneType']                    = BetrokkeneType::NATUURLIJK_PERSOON->value;
@@ -413,7 +413,7 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * @since 1.8.0
 	 */
-	private function add_contact_person_rol_to_rol_args(array $args ): array
+	private function add_contact_person_rol_to_rol_args( array $args ): array
 	{
 		$mapped_args = array();
 
@@ -441,7 +441,7 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * @since 1.8.0
 	 */
-	private function add_involved_identification_to_rol_args(array $args ): array
+	private function add_involved_identification_to_rol_args( array $args ): array
 	{
 		$mapped_args = array();
 
@@ -527,7 +527,7 @@ abstract class AbstractCreateZaakAction
 	 *
 	 * @since 1.8.0
 	 */
-	private function get_value_of_mapped_field(string $property ): string
+	private function get_value_of_mapped_field( string $property ): string
 	{
 		if ( ! isset( $this->form['fields'] ) || ! is_array( $this->form['fields'] ) ) {
 			return '';
@@ -548,7 +548,7 @@ abstract class AbstractCreateZaakAction
 		return '';
 	}
 
-	public function create_zaak_properties(Zaak $zaak ): void
+	public function create_zaak_properties( Zaak $zaak ): void
 	{
 		$zaak_properties = $this->map_zaak_properties_args();
 
@@ -609,7 +609,7 @@ abstract class AbstractCreateZaakAction
 		return $mapped_fields;
 	}
 
-	private function handle_zaak_date_property(string $property_value ): string
+	private function handle_zaak_date_property( string $property_value ): string
 	{
 		try {
 			$property_value = ( new DateTime( $property_value ) )->format( 'Y-m-d' );
@@ -624,7 +624,7 @@ abstract class AbstractCreateZaakAction
 	 * Store generated "zaak" information in the entry's metadata.
 	 * Could be used for further processing or debugging.
 	 */
-	protected function add_created_zaak_as_entry_meta(Zaak $zaak ): void
+	protected function add_created_zaak_as_entry_meta( Zaak $zaak ): void
 	{
 		gform_update_meta( $this->entry['id'], 'owc_gz_created_zaak_url', $zaak->url ?? null );
 		gform_update_meta( $this->entry['id'], 'owc_gz_created_zaak_uuid', $zaak->uuid ?? null );

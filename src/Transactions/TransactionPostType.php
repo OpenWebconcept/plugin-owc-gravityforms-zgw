@@ -120,7 +120,7 @@ class TransactionPostType
 	/**
 	 * Columns.
 	 */
-	public function columns(array $columns ): array
+	public function columns( array $columns ): array
 	{
 		$columns = array(
 			'transaction_status'   => sprintf(
@@ -154,7 +154,7 @@ class TransactionPostType
 	/**
 	 * Sortable columns.
 	 */
-	public function sortable_columns(array $sortable_columns ): array
+	public function sortable_columns( array $sortable_columns ): array
 	{
 		$sortable_columns['transaction_form_id']  = 'ID';
 		$sortable_columns['transaction_entry_id'] = 'ID';
@@ -164,7 +164,7 @@ class TransactionPostType
 		return $sortable_columns;
 	}
 
-	public static function get_post_status_css_class($post_status ): string
+	public static function get_post_status_css_class( $post_status ): string
 	{
 		return match ( $post_status ) {
 			'transaction_success', => 'owc-gravityforms-zgw-transaction-icon-success',
@@ -186,7 +186,7 @@ class TransactionPostType
 	/**
 	 * Custom columns.
 	 */
-	public function custom_columns(string $column, int $post_id ): void
+	public function custom_columns( string $column, int $post_id ): void
 	{
 		switch ( $column ) {
 			case 'transaction_status':

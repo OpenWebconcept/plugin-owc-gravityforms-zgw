@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 spl_autoload_register(
-	function (string $classname ) {
+	function ( string $classname ) {
 		$classmap = array(
 			'OWCGravityFormsZGW' => __DIR__ . '/',
 		);

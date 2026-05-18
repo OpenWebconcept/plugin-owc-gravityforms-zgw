@@ -32,7 +32,6 @@
     <rule ref="WordPress">
         <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
         <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
-        <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen"/>
         <exclude name="Squiz.Commenting.FileComment.Missing"/>
         <exclude name="Squiz.Strings.DoubleQuoteUsage.NotRequired" />
         <exclude name="Generic.Classes.OpeningBraceSameLine.BraceOnNewLine" />

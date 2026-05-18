@@ -40,7 +40,7 @@ beforeEach(
 		WP_Mock::userFunction(
 			'wp_mail',
 			array(
-				'return' => function ($to, $subject, $message ) {
+				'return' => function ( $to, $subject, $message ) {
 					test()->sent_mail = compact( 'to', 'subject', 'message' );
 					return true;
 				},
@@ -65,10 +65,10 @@ afterEach(
 it(
 	'does NOT send a report email when there are no failed transactions',
 	function () {
-		$factory = function ($args ) {
+		$factory = function ( $args ) {
 			return new class($args) {
 				public $posts = array();
-				public function __construct($args ) {
+				public function __construct( $args ) {
 					$statuses    = (array) $args['post_status'];
 					$all_posts   = array(
 						(object) array(
@@ -77,7 +77,7 @@ it(
 							'post_status' => 'transaction_success',
 						),
 					);
-					$this->posts = array_filter( $all_posts, fn($p ) => in_array( $p->post_status, $statuses, true ) );
+					$this->posts = array_filter( $all_posts, fn( $p ) => in_array( $p->post_status, $statuses, true ) );
 				}
 				public function have_posts() {
 					return ! empty( $this->posts ); }
@@ -94,10 +94,10 @@ it(
 it(
 	'sends a report email when there are failed transactions',
 	function () {
-		$factory = function ($args ) {
+		$factory = function ( $args ) {
 			return new class($args) {
 				public $posts = array();
-				public function __construct($args ) {
+				public function __construct( $args ) {
 					$statuses    = (array) $args['post_status'];
 					$all_posts   = array(
 						(object) array(
@@ -111,7 +111,7 @@ it(
 							'post_status' => 'transaction_failed',
 						),
 					);
-					$this->posts = array_filter( $all_posts, fn($p ) => in_array( $p->post_status, $statuses, true ) );
+					$this->posts = array_filter( $all_posts, fn( $p ) => in_array( $p->post_status, $statuses, true ) );
 				}
 				public function have_posts() {
 					return ! empty( $this->posts ); }

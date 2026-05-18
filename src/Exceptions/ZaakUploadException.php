@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ZaakUploadException extends ZaakException
 {
-	public function __construct(string $message = 'Failed to process Zaak uploads.', int $statusCode = 400 )
+	public function __construct( string $message = 'Failed to process Zaak uploads.', int $statusCode = 400 )
 	{
 		parent::__construct( $message, $statusCode );
 	}

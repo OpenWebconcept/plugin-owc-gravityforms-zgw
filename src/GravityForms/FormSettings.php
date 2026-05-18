@@ -31,7 +31,7 @@ class FormSettings
 {
 	protected string $prefix = OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX;
 
-	public function add_form_settings(array $fields, array $form ): array
+	public function add_form_settings( array $fields, array $form ): array
 	{
 		$fields['owc-gravityforms-zaaksysteem'] = array(
 			'title'       => esc_html__( 'Zaaksysteem', 'owc-gravityforms-zgw' ),
@@ -100,7 +100,7 @@ class FormSettings
 		return $supplier_choices;
 	}
 
-	protected function prepare_supplier_choice(string $label, string $value ): array
+	protected function prepare_supplier_choice( string $label, string $value ): array
 	{
 		return array(
 			'name'  => "{$this->prefix}-form-setting-supplier-{$value}",
@@ -112,7 +112,7 @@ class FormSettings
 	/**
 	 * Retrieves the fields associated with a specific supplier based on the form settings and merge with existing fields.
 	 */
-	protected function get_suppliers_form_settings_fields(array $form, array $fields ): array
+	protected function get_suppliers_form_settings_fields( array $form, array $fields ): array
 	{
 		$supplier_setting = $form[ "{$this->prefix}-form-setting-supplier" ] ?? '';
 		$manual           = $form[ "{$this->prefix}-form-setting-supplier-manually" ] ?? '0';
@@ -132,7 +132,7 @@ class FormSettings
 	 * Fields associated with suppliers, used for matching the fields of the selected supplier in form settings.
 	 * This approach minimizes unnecessary requests to multiple sources that are not needed. Because only one supplier can be selected.
 	 */
-	protected function handle_suppliers_form_settings_fields(array $form ): array
+	protected function handle_suppliers_form_settings_fields( array $form ): array
 	{
 		$fields = array();
 
@@ -154,14 +154,14 @@ class FormSettings
 	/**
 	 * Check if a supplier is selected in the form settings.
 	 */
-	private function supplier_is_selected_in_form_settings(array $form, string $supplier ): bool
+	private function supplier_is_selected_in_form_settings( array $form, string $supplier ): bool
 	{
 		$supplier_form_setting = (string) ( $form[ "{$this->prefix}-form-setting-supplier" ] ?? '' );
 
 		return $supplier_form_setting === $supplier;
 	}
 
-	protected function prepare_supplier_configuration_fields(array $fields, string $supplier_name, string $supplier_key ): array
+	protected function prepare_supplier_configuration_fields( array $fields, string $supplier_name, string $supplier_key ): array
 	{
 		$api_client = apiClient( $supplier_name );
 
@@ -256,7 +256,7 @@ class FormSettings
 	/**
 	 * @since 1.9.0
 	 */
-	private function format_choices_zaaktypen(Client $api_client, string $supplier_name ): array
+	private function format_choices_zaaktypen( Client $api_client, string $supplier_name ): array
 	{
 		return array_merge(
 			array(
@@ -272,7 +272,7 @@ class FormSettings
 	/**
 	 * @since 1.9.0
 	 */
-	private function format_choices_information_object_types(Client $api_client, string $supplier_name ): array
+	private function format_choices_information_object_types( Client $api_client, string $supplier_name ): array
 	{
 		return array_merge(
 			array(

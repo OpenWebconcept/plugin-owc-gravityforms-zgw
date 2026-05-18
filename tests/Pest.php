@@ -27,7 +27,7 @@ uses( TestCase::class )->in( __DIR__ );
 |
 */
 
-function get_option($key, $default = array() )
+function get_option( $key, $default = array() )
 {
 	if ( 'owc_zgw_settings' === $key ) {
 		return array(

@@ -57,7 +57,7 @@ class PaymentController
 		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
-	public function post_payment_pending_expired(array $entry, array $action ): void
+	public function post_payment_pending_expired( array $entry, array $action ): void
 	{
 		if ( self::PENDING_PAYMENT_STATUS !== $action['payment_status'] ) {
 			return;
@@ -69,7 +69,7 @@ class PaymentController
 	/**
 	 * Is called after a payment status is added or changed.
 	 */
-	public function post_payment_failed(array $entry, array $action ): void
+	public function post_payment_failed( array $entry, array $action ): void
 	{
 		if ( ! in_array( $action['payment_status'], self::FAILED_PAYMENT_STATUSES ) ) {
 			return;
@@ -85,7 +85,7 @@ class PaymentController
 		$this->handle_zaak_deletion( $entry );
 	}
 
-	protected function handle_zaak_deletion(array $entry )
+	protected function handle_zaak_deletion( array $entry )
 	{
 		$zaak_uuid = $this->get_created_zaak_uuid( $entry );
 
@@ -117,14 +117,14 @@ class PaymentController
 		$this->update_entry_payment_status( $entry, 'Cancelled' );
 	}
 
-	protected function get_created_zaak_uuid(array $entry ): string
+	protected function get_created_zaak_uuid( array $entry ): string
 	{
 		$created_zaak_uuid = gform_get_meta( $entry['id'], 'owc_gz_created_zaak_uuid' );
 
 		return is_string( $created_zaak_uuid ) && '' !== trim( $created_zaak_uuid ) ? trim( $created_zaak_uuid ) : '';
 	}
 
-	protected function delete_zaak(string $zaak_uuid, array $form ): void
+	protected function delete_zaak( string $zaak_uuid, array $form ): void
 	{
 		$supplier_config = FormUtils::get_supplier_config( $form );
 
@@ -136,7 +136,7 @@ class PaymentController
 		( new DeleteZaakAction( $supplier_config ) )->delete( $zaak_uuid );
 	}
 
-	public function post_payment_completed(array $entry, array $action ): void
+	public function post_payment_completed( array $entry, array $action ): void
 	{
 		if ( self::SUCCESSFUL_PAYMENT_STATUS !== $action['payment_status'] ) {
 			return;
@@ -150,7 +150,7 @@ class PaymentController
 		$this->add_entry_note( $entry['id'], __( 'Zaak definitief, betaling succesvol.', 'owc-gravityforms-zgw' ), 'success' );
 	}
 
-	private function update_entry_payment_status(array $entry, string $status ): void
+	private function update_entry_payment_status( array $entry, string $status ): void
 	{
 		$fresh_entry = GFAPI::get_entry( $entry['id'] );
 

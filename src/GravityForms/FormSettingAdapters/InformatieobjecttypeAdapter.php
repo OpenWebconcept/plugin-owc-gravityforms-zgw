@@ -39,7 +39,7 @@ class InformatieobjecttypeAdapter extends Adapter
 			return $this->get_types(
 				sprintf( '%s-form-settings-information-object-type', $this->transient_key_prefix() ), // Unique transient key.
 				'informatieobjecttypen',
-				function (Informatieobjecttype $objecttype ) {
+				function ( Informatieobjecttype $objecttype ) {
 					$designation = $objecttype->vertrouwelijkheidaanduiding ?? ( $objecttype->vertrouwelijkheidsaanduiding ?? '' );
 
 					if ( $designation instanceof Confidentiality ) {

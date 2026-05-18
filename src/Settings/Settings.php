@@ -28,7 +28,7 @@ class Settings
 {
 	protected array $options = array();
 
-	final private function __construct(string $settings_key )
+	final private function __construct( string $settings_key )
 	{
 		$this->options = get_option( $settings_key, array() );
 	}
@@ -36,7 +36,7 @@ class Settings
 	/**
 	 * @since 1.0.0
 	 */
-	public static function make(string $settings_key ): self
+	public static function make( string $settings_key ): self
 	{
 		return new static( $settings_key );
 	}
@@ -44,7 +44,7 @@ class Settings
 	/**
 	 * @since 1.0.0
 	 */
-	public function get(string $key ): mixed
+	public function get( string $key ): mixed
 	{
 		return $this->options[ $key ] ?? '';
 	}

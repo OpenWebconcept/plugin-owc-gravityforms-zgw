@@ -70,7 +70,7 @@ class CleanupFailedPaymentZaken
 	/**
 	 * Processes each entry with a pending payment status.
 	 */
-	private function process_pending_payment_entries(array $entries ): void
+	private function process_pending_payment_entries( array $entries ): void
 	{
 		foreach ( $entries as $entry ) {
 			$this->evaluate_pending_payment_entry( $entry );
@@ -81,7 +81,7 @@ class CleanupFailedPaymentZaken
 	 * Evaluates a single entry to determine if the payment has been pending for too long.
 	 * If so, triggers the appropriate action (e.g., delete the zaak).
 	 */
-	private function evaluate_pending_payment_entry(array $entry ): void
+	private function evaluate_pending_payment_entry( array $entry ): void
 	{
 		if ( ! $this->has_payment_been_pending_too_long( $entry ) ) {
 			return;
@@ -98,7 +98,7 @@ class CleanupFailedPaymentZaken
 	/**
 	 * Checks if the payment for an entry has been pending for too long.
 	 */
-	private function has_payment_been_pending_too_long(array $entry ): bool
+	private function has_payment_been_pending_too_long( array $entry ): bool
 	{
 		if ( 'Pending' !== $entry['payment_status'] ) {
 			return false;

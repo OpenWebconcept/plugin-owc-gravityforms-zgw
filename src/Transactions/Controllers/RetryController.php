@@ -95,7 +95,7 @@ class RetryController
 	/**
 	 * Validates the request and returns mapped field values or WP_Error.
 	 */
-	private function get_mapped_fields_and_values(int $entry_id ): array|WP_Error
+	private function get_mapped_fields_and_values( int $entry_id ): array|WP_Error
 	{
 		if ( ! $entry_id ) {
 			return new WP_Error( 'missing_entry_id', __( 'Inzending ID ontbreekt.', 'owc-gravityforms-zgw' ) );

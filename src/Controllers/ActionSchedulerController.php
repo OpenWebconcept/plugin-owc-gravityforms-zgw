@@ -44,7 +44,7 @@ class ActionSchedulerController
 		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
-	public function schedule_single_actions(array $entry, array $form ): void
+	public function schedule_single_actions( array $entry, array $form ): void
 	{
 		if ( ! FormUtils::is_form_zgw( $form ) ) {
 			return;
@@ -87,7 +87,7 @@ class ActionSchedulerController
 		( new ZaakController() )->handle( $entry, $form );
 	}
 
-	private function get_entry_and_form(int $entry_id, int $form_id ): array
+	private function get_entry_and_form( int $entry_id, int $form_id ): array
 	{
 		if ( $entry_id <= 0 || $form_id <= 0 ) {
 			throw new InvalidArgumentException( 'Missing entry_id/form_id' );

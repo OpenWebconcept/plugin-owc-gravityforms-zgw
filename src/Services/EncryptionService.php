@@ -34,7 +34,7 @@ class EncryptionService
 	/**
 	 * Encrypts the given data var into a secure string.
 	 */
-	public static function encrypt(mixed $data ): string
+	public static function encrypt( mixed $data ): string
 	{
 		$iv        = random_bytes( openssl_cipher_iv_length( self::$cipher ) );
 		$tag       = '';
@@ -60,7 +60,7 @@ class EncryptionService
 	 * @throws Exception
 	 * @return mixed
 	 */
-	public static function decrypt(string $encrypted )
+	public static function decrypt( string $encrypted )
 	{
 		$raw = base64_decode( $encrypted );
 

@@ -35,11 +35,11 @@ abstract class AbstractDeleteZaakAction
 	protected Client $client;
 	protected LoggerZGW $logger;
 
-	public function __construct(array $supplier_config )
+	public function __construct( array $supplier_config )
 	{
 		$this->client = apiClient( $supplier_config['name'] ?? '' );
 		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
-	abstract public function delete(string $identifier ): Response;
+	abstract public function delete( string $identifier ): Response;
 }

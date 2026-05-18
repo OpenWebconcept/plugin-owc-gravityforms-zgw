@@ -28,7 +28,7 @@ use GFAPI;
  */
 trait EntryNote
 {
-	public function add_entry_note(int|string $entry_id, string $message, string $type = 'error' ): void
+	public function add_entry_note( int|string $entry_id, string $message, string $type = 'error' ): void
 	{
 		GFAPI::add_note( $entry_id, 0, \OWC_GRAVITYFORMS_ZGW_PLUGIN_NAME, $message, 'user', $type );
 	}

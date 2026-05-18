@@ -29,7 +29,7 @@ trait CheckURL
 	/**
 	 * @since 1.0.0
 	 */
-	public function check_url($url ): bool
+	public function check_url( $url ): bool
 	{
 		if ( ! $this->is_valid_url( $url ) ) {
 			return false;
@@ -52,7 +52,7 @@ trait CheckURL
 	/**
 	 * @since 1.0.0
 	 */
-	public function is_valid_url($url ): bool
+	public function is_valid_url( $url ): bool
 	{
 		$url = filter_var( $url, FILTER_SANITIZE_URL ); // Remove invisible characters such as 'soft hyphens'.
 

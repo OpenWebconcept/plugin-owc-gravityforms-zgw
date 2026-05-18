@@ -145,7 +145,7 @@ class ZaakController extends AbstractZaakFormController
 	 * synchronous consistency. This workaround can be removed once such guarantees
 	 * are in place.
 	 */
-	private function delegate_delay(array $supplier_config ): void
+	private function delegate_delay( array $supplier_config ): void
 	{
 		$selected_suppliers = ContainerResolver::make()->get( 'zgw.site_options' )->delay_after_zaak_creation_suppliers();
 
@@ -163,7 +163,7 @@ class ZaakController extends AbstractZaakFormController
 	 *
 	 * @throws ZaakUploadException
 	 */
-	protected function handle_uploads(Zaak $zaak, array $supplier_config ): void
+	protected function handle_uploads( Zaak $zaak, array $supplier_config ): void
 	{
 		$caught_exception = null;
 

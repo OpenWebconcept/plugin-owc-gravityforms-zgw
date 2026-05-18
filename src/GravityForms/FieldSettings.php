@@ -42,7 +42,7 @@ class FieldSettings
 	/**
 	 * Adds select elements to the field settings tabs in the editor to map form fields to ZGW properties.
 	 */
-	public function add_select(int $form_id ): void
+	public function add_select( int $form_id ): void
 	{
 		$form = GFAPI::get_form( $form_id );
 
@@ -98,7 +98,7 @@ class FieldSettings
 	 *
 	 * @see https://github.com/OpenWebconcept/plugin-owc-gravityforms-zaaksysteem/issues/13#issue-1697256063
 	 */
-	public function get_zaak_type(string $supplier_name, string $zaak_type_identifier ): ?Zaaktype
+	public function get_zaak_type( string $supplier_name, string $zaak_type_identifier ): ?Zaaktype
 	{
 		$transient_key = sprintf( '%s-%s', sanitize_title( $supplier_name ), sanitize_title( $zaak_type_identifier ) );
 		$zaak_type     = get_transient( $transient_key );
@@ -128,7 +128,7 @@ class FieldSettings
 	 * Decos API is very slow.
 	 * For demostration purposes we match on "zaaktype" identifier to ensure some speed.
 	 */
-	protected function get_zaak_type_by_client($client, string $zaak_type_identifier ): ?Zaaktype
+	protected function get_zaak_type_by_client( $client, string $zaak_type_identifier ): ?Zaaktype
 	{
 		/**
 		 * In previous versions the UUID of a "zaaktype" was saved instead of its URL.
@@ -157,7 +157,7 @@ class FieldSettings
 	/**
 	 * Get the "zaakeigenschappen" belonging to the chosen "zaaktype".
 	 */
-	public function get_zaak_type_properties(string $supplier_name, string $zaak_type_url ): Collection
+	public function get_zaak_type_properties( string $supplier_name, string $zaak_type_url ): Collection
 	{
 		$client = apiClient( $supplier_name );
 
@@ -181,10 +181,10 @@ class FieldSettings
 		return count( $types ) ? Collection::collect( $types ) : $client->eigenschappen()->filter( $filter );
 	}
 
-	protected function prepare_properties_options(Collection $properties ): array
+	protected function prepare_properties_options( Collection $properties ): array
 	{
 		$options = $properties->map(
-			function ($property ) {
+			function ( $property ) {
 				if ( ! isset( $property['naam'] ) || ! isset( $property['url'] ) ) {
 					return array();
 				}
@@ -199,7 +199,7 @@ class FieldSettings
 		return array_filter( (array) $options );
 	}
 
-	public function get_information_object_types(Zaaktype $zaak_type, string $zaak_type_identification ): array
+	public function get_information_object_types( Zaaktype $zaak_type, string $zaak_type_identification ): array
 	{
 		if ( '' === $zaak_type_identification ) {
 			return array();
@@ -223,14 +223,14 @@ class FieldSettings
 		return $types;
 	}
 
-	protected function prepare_object_types_options(array $types ): array
+	protected function prepare_object_types_options( array $types ): array
 	{
 		if ( empty( $types ) ) {
 			return array();
 		}
 
 		return (array) Collection::collect( $types )->map(
-			function (Informatieobjecttype $object_type ) {
+			function ( Informatieobjecttype $object_type ) {
 				$designation = $object_type->vertrouwelijkheidaanduiding;
 				if ( $designation instanceof Confidentiality ) {
 					$designation = $designation->name ?? '';
@@ -253,7 +253,7 @@ class FieldSettings
 				);
 			}
 		)->filter(
-			function (array $item ) {
+			function ( array $item ) {
 				return isset( $item['label'], $item['value'] ) && is_string( $item['label'] ) && is_string( $item['value'] );
 			}
 		)->all();

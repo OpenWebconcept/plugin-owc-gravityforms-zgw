@@ -25,11 +25,11 @@ return array(
 	/**
 	 * Generic client settings.
 	 */
-	'zgw.get-configured-client'  => function (Container $container, string $type, string $name ) {
+	'zgw.get-configured-client'  => function ( Container $container, string $type, string $name ) {
 		$clients = $container->make( 'zgw.api.settings', array( 'zgw-api-configured-clients' ) ) ?: array();
 		$clients = array_filter(
 			$clients,
-			function ($client ) use ($name ) {
+			function ( $client ) use ( $name ) {
 				return $name === $client['client_type'];
 			}
 		);
@@ -37,16 +37,16 @@ return array(
 
 		return is_array( $client ) && 0 < count( $client ) ? $client : array();
 	},
-	'zgw.api-configured-clients' => function (Container $container ) {
+	'zgw.api-configured-clients' => function ( Container $container ) {
 		return $container->make( 'zgw.api.settings', array( 'zgw-api-configured-clients' ) );
 	},
-	'zgw.api.settings'           => function (Container $container, string $type, string $name ) {
+	'zgw.api.settings'           => function ( Container $container, string $type, string $name ) {
 		return Settings::make( 'zgw_api_settings' )->get( $name );
 	},
-	'zgw.rsin'                   => function (Container $container ) {
+	'zgw.rsin'                   => function ( Container $container ) {
 		return $container->make( 'zgw.addon.settings', array( 'owc-gf-zgw-add-on-organization-rsin' ) );
 	},
-	'zgw.addon.settings'         => function (Container $container, string $type, string $name ) {
+	'zgw.addon.settings'         => function ( Container $container, string $type, string $name ) {
 		return Settings::make( 'gravityformsaddon_owc-gravityforms-zgw_settings' )->get( $name );
 	},
 	'zgw.site_options'           => OWCGravityFormsZGW\Singletons\SiteOptionsSingleton::get_instance( get_option( OWC_GRAVITYFORMS_ZGW_SITE_OPTION_NAME, array() ) ),
@@ -54,11 +54,11 @@ return array(
 	/**
 	 * ZGW error logging.
 	 */
-	'message.logger.active'      => function (Container $container ) {
+	'message.logger.active'      => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.addon.settings', array( 'owc-gf-zgw-add-on-logging-enabled' ) );
 	},
 	'message.logger.path'        => sprintf( '%s/owc-zgw-log.json', dirname( ABSPATH ) ),
-	'message.logger'             => function (Container $container ) {
+	'message.logger'             => function ( Container $container ) {
 		$logger   = new OWCGravityFormsZGW\Vendor_Prefixed\Monolog\Logger( 'owc_zgw_log' );
 		$maxFiles = apply_filters( 'owcgfzgw::logger/rotating_filer_handler_max_files', OWC_GRAVITYFORMS_ZGW_LOGGER_DEFAULT_MAX_FILES );
 
@@ -74,7 +74,7 @@ return array(
 		return $logger;
 	},
 
-	'logger.zgw'                 => function (Container $container ) {
+	'logger.zgw'                 => function ( Container $container ) {
 		return new \OWCGravityFormsZGW\LoggerZGW( $container->get( 'message.logger' ) );
 	},
 );

@@ -10,7 +10,7 @@ beforeEach(
 		{
 			public $posts = array();
 
-			public function __construct(array $args ) {
+			public function __construct( array $args ) {
 				$threshold = $args['meta_query'][0]['value'];
 
 				$posts = array(
@@ -30,7 +30,7 @@ beforeEach(
 		WP_Mock::userFunction(
 			'wp_delete_post',
 			array(
-				'return' => function ($post_id, $force_delete = false ) {
+				'return' => function ( $post_id, $force_delete = false ) {
 					TransactionCleanerTest::$deletedPosts[] = $post_id;
 					return true;
 				},
@@ -49,7 +49,7 @@ beforeEach(
 it(
 	'only deletes transactions older than threshold',
 	function () {
-		$factory = function ($args ) {
+		$factory = function ( $args ) {
 			return new FakeWPQueryCleaner( $args );
 		};
 

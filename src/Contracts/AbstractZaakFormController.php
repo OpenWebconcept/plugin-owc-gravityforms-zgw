@@ -44,7 +44,7 @@ abstract class AbstractZaakFormController
 	/**
 	 * Set the form and entry data for the controller.
 	 */
-	public function set_form_data(array $entry, array $form ): void
+	public function set_form_data( array $entry, array $form ): void
 	{
 		$this->entry = $entry;
 		$this->form  = $form;
@@ -143,7 +143,7 @@ abstract class AbstractZaakFormController
 	/**
 	 * Extracts a readable error message from an API exception.
 	 */
-	protected function extract_api_error_message(Throwable $e ): string
+	protected function extract_api_error_message( Throwable $e ): string
 	{
 		if ( ! method_exists( $e, 'getResponse' ) ) {
 			return $e->getMessage() ?: 'Unknown error occurred.';
@@ -168,7 +168,7 @@ abstract class AbstractZaakFormController
 		// Priority: invalidParams → detail → title → generic fallback
 		if ( ! empty( $data['invalidParams'] ) ) {
 			$messages = array_map(
-				fn($param ) => sprintf(
+				fn( $param ) => sprintf(
 					"%s: %s",
 					$param['name'] ?? '(unknown field)',
 					$param['reason'] ?? '(no reason)'

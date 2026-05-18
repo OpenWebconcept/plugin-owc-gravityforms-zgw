@@ -71,7 +71,7 @@ class SettingsServiceProvider extends ServiceProvider
 	 *
 	 * @since 1.7.0
 	 */
-	private function overwrite_client_http_options_in_container(ApiClientManager $manager ): void
+	private function overwrite_client_http_options_in_container( ApiClientManager $manager ): void
 	{
 		$selected_suppliers = $this->container->get( 'zgw.site_options' )->client_request_timeout_option_suppliers();
 		$suppliers          = $this->container->get( 'suppliers' );

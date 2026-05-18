@@ -33,7 +33,7 @@ class FormSettingsPDF
 	protected array $entry;
 	protected array $form;
 
-	public function __construct(array $entry, array $form )
+	public function __construct( array $entry, array $form )
 	{
 		$this->entry = $entry;
 		$this->form  = $form;
@@ -49,7 +49,7 @@ class FormSettingsPDF
 		return $settings[0] ?? '';
 	}
 
-	protected function get_form_settings_pdf($default = null ): mixed
+	protected function get_form_settings_pdf( $default = null ): mixed
 	{
 		if ( ! is_array( $this->form['gfpdf_form_settings'] ?? false ) || array() === $this->form['gfpdf_form_settings'] ) {
 			return $default;
@@ -57,7 +57,7 @@ class FormSettingsPDF
 
 		return array_filter(
 			$this->form['gfpdf_form_settings'],
-			function ($form_settings_pdf ) {
+			function ( $form_settings_pdf ) {
 				return ! empty( $form_settings_pdf['active'] );
 			}
 		);
@@ -97,7 +97,7 @@ class FormSettingsPDF
 	 * Toggles the "public_access" setting for the generated PDFs.
 	 * By default, the PDFs are protected and not publicly accessible.
 	 */
-	public function update_public_access_setting_pdf(string $access = '' ): bool
+	public function update_public_access_setting_pdf( string $access = '' ): bool
 	{
 		$setting_id = $this->pdf_form_setting_id();
 		$settings   = GPDFAPI::get_pdf( $this->form['id'], $setting_id );

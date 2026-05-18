@@ -38,11 +38,11 @@ trait MergeTagTranslator
 	 *
 	 * @since 1.0.0
 	 */
-	public function translate_merge_tags(array $entry, array $form, string $value ): string
+	public function translate_merge_tags( array $entry, array $form, string $value ): string
 	{
 		return preg_replace_callback(
 			'/\[[^\]]+\]/',
-			function ($matches ) use ($entry, $form ) {
+			function ( $matches ) use ( $entry, $form ) {
 				$field_id    = trim( $matches[0], '[]' );
 				$field_value = $this->resolve_field_value( $form, $field_id, $entry );
 
@@ -63,7 +63,7 @@ trait MergeTagTranslator
 	 *
 	 * @since 1.0.0
 	 */
-	protected function resolve_field_value(array $form, string $field_id, array $entry ): mixed
+	protected function resolve_field_value( array $form, string $field_id, array $entry ): mixed
 	{
 		if ( $field = $this->field_by_type( $form, $field_id, 'checkbox' ) ) {
 			return $this->implode_with_conjunction( $this->handle_checkbox_field( $entry, $field ) );
@@ -83,7 +83,7 @@ trait MergeTagTranslator
 	 *
 	 * @since 1.0.0
 	 */
-	protected function handle_checkbox_field(array $entry, GF_Field $field ): array
+	protected function handle_checkbox_field( array $entry, GF_Field $field ): array
 	{
 		$field_value = array();
 
@@ -91,7 +91,7 @@ trait MergeTagTranslator
 			$field_value[] = rgar( $entry, $input['id'] );
 		}
 
-		return array_filter( $field_value, fn ($item ) => trim( $item ) !== '' );
+		return array_filter( $field_value, fn ( $item ) => trim( $item ) !== '' );
 	}
 
 	/**
@@ -99,11 +99,11 @@ trait MergeTagTranslator
 	 *
 	 * @since 1.0.0
 	 */
-	protected function field_by_type(array $form, string $field_id, string $field_type ): ?GF_Field
+	protected function field_by_type( array $form, string $field_id, string $field_type ): ?GF_Field
 	{
 		$fields = array_filter(
 			$form['fields'],
-			function ($field ) use ($field_id, $field_type ) {
+			function ( $field ) use ( $field_id, $field_type ) {
 				return $field->id == $field_id && $field_type === $field->type;
 			}
 		);
@@ -118,9 +118,9 @@ trait MergeTagTranslator
 	 *
 	 * @since 1.0.0
 	 */
-	protected function implode_with_onjunction(array $items, string $conjunction = 'en' ): ?string
+	protected function implode_with_onjunction( array $items, string $conjunction = 'en' ): ?string
 	{
-		$items = array_filter( $items, fn ($item ) => trim( $item ) !== '' );
+		$items = array_filter( $items, fn ( $item ) => trim( $item ) !== '' );
 
 		if ( empty( $items ) ) {
 			return null;
@@ -140,7 +140,7 @@ trait MergeTagTranslator
 	 *
 	 * @since 1.0.0
 	 */
-	protected function format_possible_date_in_merge_tag(string $value, string $format = 'd-m-Y' ): string
+	protected function format_possible_date_in_merge_tag( string $value, string $format = 'd-m-Y' ): string
 	{
 		/**
 		 * A valid date string has a length of 10.

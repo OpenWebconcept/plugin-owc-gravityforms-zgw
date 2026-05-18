@@ -29,7 +29,7 @@ use OWC\ZGW\Http\Response;
  */
 class DeleteZaakAction extends AbstractDeleteZaakAction
 {
-	public function delete(string $identifier ): Response
+	public function delete( string $identifier ): Response
 	{
 		return $this->client->zaken()->delete( $identifier );
 	}

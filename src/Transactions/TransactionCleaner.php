@@ -30,10 +30,10 @@ class TransactionCleaner
 {
 	private $queryFactory;
 
-	public function __construct(callable $queryFactory = null )
+	public function __construct( callable $queryFactory = null )
 	{
 		// default factory uses real WP_Query
-		$this->queryFactory = $queryFactory ?: function (array $args ) {
+		$this->queryFactory = $queryFactory ?: function ( array $args ) {
 			return new WP_Query( $args );
 		};
 	}
@@ -41,7 +41,7 @@ class TransactionCleaner
 	/**
 	 * Delete transactions older than the given number of days.
 	 */
-	public function delete_old_transactions(int $days = 30 ): void
+	public function delete_old_transactions( int $days = 30 ): void
 	{
 		$threshold = date( 'Y-m-d H:i:s', strtotime( "-{$days} days" ) );
 

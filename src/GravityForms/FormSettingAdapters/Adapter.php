@@ -54,7 +54,7 @@ abstract class Adapter
 
 	abstract public function handle(): array;
 
-	protected function get_types(string $transient_key, string $endpoint, Closure $prepare_callback, string $empty_message ): array
+	protected function get_types( string $transient_key, string $endpoint, Closure $prepare_callback, string $empty_message ): array
 	{
 		$types = get_transient( $transient_key );
 
@@ -79,7 +79,7 @@ abstract class Adapter
 		return $types;
 	}
 
-	protected function fetch_types(string $empty_message, string $endpoint ): array
+	protected function fetch_types( string $empty_message, string $endpoint ): array
 	{
 		$page              = 1;
 		$types             = array();
@@ -111,10 +111,10 @@ abstract class Adapter
 	 * Prepares an array of types by applying a callback and filtering out invalid items.
 	 * Also sorts the resulting array alphabetically by the 'label' key.
 	 */
-	protected function prepare_types(array $types, Closure $prepare_callback ): array
+	protected function prepare_types( array $types, Closure $prepare_callback ): array
 	{
 		$types = (array) Collection::collect( $types )->map( $prepare_callback )->filter(
-			function ($item ) {
+			function ( $item ) {
 				return isset( $item['name'], $item['label'], $item['value'] ) && is_string( $item['name'] ) && is_string( $item['label'] ) && is_string( $item['value'] );
 			}
 		)->all();
@@ -134,7 +134,7 @@ abstract class Adapter
 	 *
 	 * @since NEXT
 	 */
-	private function filter_zaaktypen(array $zaaktypen ): array
+	private function filter_zaaktypen( array $zaaktypen ): array
 	{
 		$filtered = array();
 
@@ -165,7 +165,7 @@ abstract class Adapter
 	/**
 	 * @since NEXT
 	 */
-	private function get_zaaktype_timestamp(object $zaaktype ): int
+	private function get_zaaktype_timestamp( object $zaaktype ): int
 	{
 		if ( ! isset( $zaaktype->versiedatum ) || ! is_string( $zaaktype->versiedatum ) || '' === trim( $zaaktype->versiedatum ) ) {
 			return 0;
@@ -179,7 +179,7 @@ abstract class Adapter
 	/**
 	 * @throws Exception Message
 	 */
-	protected function handle_empty_result(array $types, string $empty_message, string $request_exception ): void
+	protected function handle_empty_result( array $types, string $empty_message, string $request_exception ): void
 	{
 		if ( 0 === count( $types ) ) {
 			$exception_message = esc_html( $empty_message );
@@ -192,7 +192,7 @@ abstract class Adapter
 		}
 	}
 
-	protected function handle_no_choices(string $endpoint ): array
+	protected function handle_no_choices( string $endpoint ): array
 	{
 		// translators: %s: The endpoint that could not be retrieved.
 		$message = sprintf( __( 'Kan de "%s" die horen bij de geselecteerde leverancier niet ophalen.', 'owc-gravityforms-zaaksysteem' ), $endpoint );

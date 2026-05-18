@@ -45,7 +45,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	protected Zaak $zaak;
 	protected Client $client;
 
-	public function __construct(array $entry, array $form, array $supplier_config, Zaak $zaak )
+	public function __construct( array $entry, array $form, array $supplier_config, Zaak $zaak )
 	{
 		$this->entry        = $entry;
 		$this->form         = $form;
@@ -86,7 +86,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	/**
 	 * Fields mapped to 'informatieobject' can contain a simple url but also an array of urls in JSON format.
 	 */
-	protected function map_information_object_arg(array $args, GF_Field $field, $field_value ): array
+	protected function map_information_object_arg( array $args, GF_Field $field, $field_value ): array
 	{
 		$start = substr( $field_value, 0, 1 );
 		$end   = substr( $field_value, -1, 1 );
@@ -123,7 +123,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	 * Converts a JSON-encoded array of URLs into an array of information object structures,
 	 * each with a document type and URL.
 	 */
-	protected function parse_information_object_json(string $field_value, GF_Field $field ): array
+	protected function parse_information_object_json( string $field_value, GF_Field $field ): array
 	{
 		$field_values = json_decode( $field_value );
 
@@ -132,7 +132,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		}
 
 		return array_map(
-			function ($field_value ) use ($field ) {
+			function ( $field_value ) use ( $field ) {
 				return array(
 					'type'        => $field->mappedFieldDocumentTypeValueZGW,
 					'url'         => $field_value,
@@ -143,7 +143,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		);
 	}
 
-	protected function prepare_information_object_args(string $object_url, string $information_object_type, string $object_description = '' ): array
+	protected function prepare_information_object_args( string $object_url, string $information_object_type, string $object_description = '' ): array
 	{
 		if ( 1 > strlen( $information_object_type ) ) {
 			return array();
@@ -171,7 +171,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		return $args;
 	}
 
-	protected function create_file_name(string $object_url ): string
+	protected function create_file_name( string $object_url ): string
 	{
 		$path_info = pathinfo( $object_url );
 		$file_name = $path_info['filename'];
@@ -179,7 +179,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		return sprintf( '%s_%s', uniqid(), $file_name );
 	}
 
-	protected function create_information_object(array $args ): ?Enkelvoudiginformatieobject
+	protected function create_information_object( array $args ): ?Enkelvoudiginformatieobject
 	{
 		if ( empty( $args ) ) {
 			return null;
@@ -191,7 +191,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		return $information_object;
 	}
 
-	protected function connect_zaak_to_information_object(?Enkelvoudiginformatieobject $information_object ): ?Zaakinformatieobject
+	protected function connect_zaak_to_information_object( ?Enkelvoudiginformatieobject $information_object ): ?Zaakinformatieobject
 	{
 		if ( empty( $information_object ) ) {
 			return null;

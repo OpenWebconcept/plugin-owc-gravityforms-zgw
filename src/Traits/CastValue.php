@@ -29,7 +29,7 @@ trait CastValue
 	/**
 	 * @since 1.8.0
 	 */
-	public function cast_value(string $type, $value ): int|string
+	public function cast_value( string $type, $value ): int|string
 	{
 		switch ( $type ) {
 			case 'int':
