@@ -22,9 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use GFCommon;
 use GFAPI;
+use GFCommon;
+use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
+use OWCGravityFormsZGW\LoggerZGW;
 
 /**
  * Notification controller.
@@ -33,6 +35,13 @@ use OWCGravityFormsZGW\GravityForms\FormUtils;
  */
 class NotificationController
 {
+	protected LoggerZGW $logger;
+
+	public function __construct()
+	{
+		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
+	}
+
 	/**
 	 * Disable notifications for ZGW forms so they can be sent manually after zaak creation.
 	 * Hooks into gform_disable_notification (singular) which is what GF actually applies.
@@ -64,11 +73,24 @@ class NotificationController
 			}
 		);
 
-		if ( ! is_array( $notifications ) || array() === $notifications ) {
+		if ( array() === $notifications ) {
 			return;
 		}
 
+		// Re-fetch the entry so merge tags (e.g. {zaak_id}) resolve against the post meta written after submission.
 		$lead = GFAPI::get_entry( $entry['id'] );
+
+		if ( is_wp_error( $lead ) ) {
+			$this->logger->error(
+				'Failed to fetch entry when sending notifications manually',
+				array(
+					'entry_id' => $entry['id'],
+					'error'    => $lead,
+				)
+			);
+
+			return;
+		}
 
 		GFCommon::send_notifications( array_keys( $notifications ), $form, $lead );
 	}
