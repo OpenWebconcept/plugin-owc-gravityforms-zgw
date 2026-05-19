@@ -34,7 +34,7 @@ class ZaaktypenAdapter extends Adapter
 	 * Loops all Gravity Forms and updates any saved zaaktype URL that has been replaced by a newer version.
 	 * Only runs when zaaktypen are freshly fetched (cache miss), so the raw and filtered data are both in memory.
 	 *
-	 * @since NEXT
+	 * @since 1.10.0
 	 */
 	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $raw, array $filtered ): void
 	{
@@ -80,7 +80,7 @@ class ZaaktypenAdapter extends Adapter
 	 * Prepare unfiltered zaaktypen by filtering out types with empty 'omschrijving' (description) or 'url'
 	 * and return a mapped array with 'url' as key and 'omschrijving' (description) as value.
 	 *
-	 * @since NEXT
+	 * @since 1.10.0
 	 */
 	protected function map_all_zaaktype_urls_to_descriptions( array $raw ): array
 	{
@@ -102,7 +102,7 @@ class ZaaktypenAdapter extends Adapter
 	 * Prepare filtered zaaktypen by filtering out types with empty 'omschrijving' (description) or 'url'
 	 * and return a mapped array with 'omschrijving' (description) as key and 'url' as value.
 	 *
-	 * @since NEXT
+	 * @since 1.10.0
 	 */
 	protected function map_descriptions_to_latest_zaaktype_urls( array $raw ): array
 	{

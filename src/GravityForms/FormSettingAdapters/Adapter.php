@@ -137,14 +137,14 @@ abstract class Adapter
 	/**
 	 * Called after zaaktypen are fetched and filtered. Subclasses can override to act on the data.
 	 *
-	 * @since NEXT
+	 * @since 1.10.0
 	 */
 	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $raw, array $filtered ): void {}
 
 	/**
 	 * Filters an array of zaaktypen to ensure unique 'omschrijvingen' (description) and keeping the one with the latest 'versiedatum' (version date).
 	 *
-	 * @since NEXT
+	 * @since 1.10.0
 	 */
 	private function filter_zaaktypen_by_version_date( array $zaaktypen ): array
 	{
@@ -176,7 +176,7 @@ abstract class Adapter
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.10.0
 	 */
 	protected function get_zaaktype_timestamp( object $zaaktype ): int
 	{

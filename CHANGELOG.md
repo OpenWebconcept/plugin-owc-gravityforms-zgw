@@ -1,5 +1,12 @@
 # Changelog
 
+## [v1.10.0] - 2026-05-19
+
+- Added: auto-migrate saved zaaktype URL to latest version on form settings load
+- Style: remove FunctionDeclarationArgumentSpacing exclusion from PHPCS config
+- Change: sort form settings types and filter zaaktypen by version date
+- Chore: add form settings tooltips
+
 ## [v1.9.4] - 2026-04-17
 
 - Fix: payment hooks to prevent wrong failure handling and duplicate transactions wiping BSN/KVK

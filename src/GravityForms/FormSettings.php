@@ -37,7 +37,7 @@ class FormSettings
 	 * Hooked to admin_init so it fires before GF loads the form for the settings page.
 	 * Updating the DB here means GF reads the corrected zaaktype URL when it renders the page.
 	 *
-	 * @since NEXT
+	 * @since 1.10.0
 	 */
 	public function sync_zaaktypen_on_settings_page(): void
 	{
@@ -67,7 +67,7 @@ class FormSettings
 	 * form settings as a side effect. Re-reads the current form from the DB so this page load reflects
 	 * any URL that was just updated.
 	 *
-	 * @since NEXT
+	 * @since 1.10.0
 	 */
 	private function sync_form_after_zaaktypen_update( array $form ): void
 	{
