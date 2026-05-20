@@ -21,10 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Exception;
 use GFAPI;
+use OWC\ZGW\Contracts\Client;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\InformatieobjecttypeAdapter;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\ZaaktypenAdapter;
 use function OWC\ZGW\apiClient;
-use OWC\ZGW\Contracts\Client;
 
 /**
  * Form settings.

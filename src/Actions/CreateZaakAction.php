@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use OWCGravityFormsZGW\Contracts\AbstractCreateZaakAction;
 use OWC\ZGW\Entities\Zaak;
+use OWCGravityFormsZGW\Contracts\AbstractCreateZaakAction;
 
 /**
  * Create Zaak action.

@@ -21,13 +21,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Exception;
 use GFAPI;
-use OWCGravityFormsZGW\ContainerResolver;
-use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWC\ZGW\Endpoints\Filter\EigenschappenFilter;
 use OWC\ZGW\Entities\Attributes\Confidentiality;
 use OWC\ZGW\Entities\Informatieobjecttype;
 use OWC\ZGW\Entities\Zaaktype;
 use OWC\ZGW\Support\Collection;
+use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\GravityForms\FormUtils;
 use function OWC\ZGW\apiClient;
 
 /**

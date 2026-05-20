@@ -19,10 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use OWCGravityFormsZGW\ContainerResolver;
-use OWCGravityFormsZGW\LoggerZGW;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Http\Response;
+use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\LoggerZGW;
 use function OWC\ZGW\apiClient;
 
 /**

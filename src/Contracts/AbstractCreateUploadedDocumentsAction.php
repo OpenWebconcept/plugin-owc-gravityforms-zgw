@@ -20,13 +20,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use GF_Field;
-use OWCGravityFormsZGW\ContainerResolver;
-use OWCGravityFormsZGW\Traits\InformationObject;
-use OWCGravityFormsZGW\Traits\MergeTagTranslator;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Zaakinformatieobject;
+use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\Traits\InformationObject;
+use OWCGravityFormsZGW\Traits\MergeTagTranslator;
 use function OWC\ZGW\apiClient;
 
 /**

@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use OWCGravityFormsZGW\Contracts\AbstractDeleteZaakAction;
 use OWC\ZGW\Http\Response;
+use OWCGravityFormsZGW\Contracts\AbstractDeleteZaakAction;
 
 /**
  * Delete Zaak action.

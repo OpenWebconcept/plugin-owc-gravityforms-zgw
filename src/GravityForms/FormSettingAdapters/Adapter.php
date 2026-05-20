@@ -22,11 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Closure;
 use DateTimeImmutable;
 use Exception;
-use OWCGravityFormsZGW\ContainerResolver;
-use OWCGravityFormsZGW\LoggerZGW;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ResultaattypenFilter;
 use OWC\ZGW\Support\Collection;
+use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\LoggerZGW;
 
 /**
  * Adapter.

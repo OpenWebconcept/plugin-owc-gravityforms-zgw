@@ -20,11 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Exception;
+use OWC\ZGW\Contracts\AbstractClient;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\InformatieobjecttypeAdapter;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\ZaaktypenAdapter;
 use OWCGravityFormsZGW\LoggerZGW;
-use OWC\ZGW\Contracts\AbstractClient;
 use function OWC\ZGW\apiClient;
 
 /**

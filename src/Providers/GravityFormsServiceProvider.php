@@ -21,15 +21,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use GFAddOn;
 use GFForms;
+use OWCGravityFormsZGW\Controllers\ActionSchedulerController;
+use OWCGravityFormsZGW\GravityForms\Controllers\NotificationController;
+use OWCGravityFormsZGW\GravityForms\Controllers\PaymentController;
+use OWCGravityFormsZGW\GravityForms\Controllers\ZaakMergeTagsController;
 use OWCGravityFormsZGW\GravityForms\FieldGroups;
 use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
-use OWCGravityFormsZGW\Controllers\ActionSchedulerController;
 use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
-use OWCGravityFormsZGW\GravityForms\Controllers\PaymentController;
-use OWCGravityFormsZGW\GravityForms\Controllers\NotificationController;
-use OWCGravityFormsZGW\GravityForms\Controllers\ZaakMergeTagsController;
 
 /**
  * Register settings service provider.
