@@ -14,7 +14,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.11.0
  */
 
 namespace OWCGravityFormsZGW\GravityForms\Controllers;
@@ -34,7 +34,7 @@ use OWCGravityFormsZGW\LoggerZGW;
 /**
  * Zaak merge tags controller.
  *
- * @since NEXT
+ * @since 1.11.0
  */
 class ZaakMergeTagsController
 {

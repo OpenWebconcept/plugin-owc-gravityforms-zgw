@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.11.0] - 2026-05-20
+
+- Change: add phpcs rule AlphabeticallySortedUses
+- Chore: improved validations and logging
+- Chore: update .pot file
+- Chore: require gravity-forms-pdf-extended in plugin header
+- Added: add zaak nummer to submission PDF with custom merge tag
+
 ## [v1.10.0] - 2026-05-19
 
 - Added: auto-migrate saved zaaktype URL to latest version on form settings load
