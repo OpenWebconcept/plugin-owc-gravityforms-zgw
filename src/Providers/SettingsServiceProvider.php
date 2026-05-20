@@ -19,13 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use OWCGravityFormsZGW\Controllers\SettingsController;
 use OWC\ZGW\ApiClientManager;
 use OWC\ZGW\WordPress\ClientProvider;
 use OWC\ZGW\WordPress\SettingsProvider;
 use OWCGravityFormsZGW\ContainerResolver;
-use DI\NotFoundException;
+use OWCGravityFormsZGW\Controllers\SettingsController;
 use OWCGravityFormsZGW\LoggerZGW;
+use OWCGravityFormsZGW\Vendor_Prefixed\DI\NotFoundException;
 
 /**
  * Register settings service provider.

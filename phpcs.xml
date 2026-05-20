@@ -49,6 +49,7 @@
         <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
         <exclude name="Squiz.Commenting.FunctionComment.ThrowsNoFullStop" />
     </rule>
+    <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses" />
     <rule ref="WordPress-Docs" />
     <rule ref="Squiz.Commenting.DocCommentAlignment" />
     <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />

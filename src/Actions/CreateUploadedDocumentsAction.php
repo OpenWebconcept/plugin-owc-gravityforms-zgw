@@ -19,8 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use OWCGravityFormsZGW\Contracts\AbstractCreateUploadedDocumentsAction;
 use OWC\ZGW\Entities\Zaakinformatieobject;
+use OWCGravityFormsZGW\Contracts\AbstractCreateUploadedDocumentsAction;
 
 /**
  * Create uploaded documents action.

@@ -20,15 +20,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Exception;
+use OWC\ZGW\Contracts\Client;
+use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
+use OWC\ZGW\Entities\Zaak;
+use OWC\ZGW\Entities\Zaakinformatieobject;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormSettingsPDF;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\Traits\CheckURL;
 use OWCGravityFormsZGW\Traits\InformationObject;
-use OWC\ZGW\Contracts\Client;
-use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
-use OWC\ZGW\Entities\Zaak;
-use OWC\ZGW\Entities\Zaakinformatieobject;
 use function OWC\ZGW\apiClient;
 
 /**

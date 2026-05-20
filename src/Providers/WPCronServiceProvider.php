@@ -21,8 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use DateTime;
 use DateTimeZone;
-use OWCGravityFormsZGW\WPCron\Events\PopulateFormSettings;
 use OWCGravityFormsZGW\WPCron\Events\CleanupFailedPaymentZaken;
+use OWCGravityFormsZGW\WPCron\Events\PopulateFormSettings;
 
 /**
  * Register transactions service provider.

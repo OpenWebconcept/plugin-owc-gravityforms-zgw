@@ -20,12 +20,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Exception;
+use OWCGravityFormsZGW\Auth\DigiD;
+use OWCGravityFormsZGW\Auth\eHerkenning;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\Services\EncryptionService;
 use OWCGravityFormsZGW\Transactions\TransactionStatus;
-use OWCGravityFormsZGW\Auth\DigiD;
-use OWCGravityFormsZGW\Auth\eHerkenning;
 
 /**
  * Transaction Controller.

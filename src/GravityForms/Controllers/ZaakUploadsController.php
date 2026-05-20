@@ -22,10 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use OWC\ZGW\Entities\Zaak;
 use OWCGravityFormsZGW\Actions\CreateUploadedDocumentsAction;
 use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
 use OWCGravityFormsZGW\Exceptions\ZaakUploadException;
-use OWC\ZGW\Entities\Zaak;
 use Throwable;
 
 /**

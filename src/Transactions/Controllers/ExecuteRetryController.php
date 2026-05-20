@@ -20,10 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Exception;
+use OWC\ZGW\Entities\Zaak;
 use OWCGravityFormsZGW\Actions\DeleteZaakAction;
 use OWCGravityFormsZGW\GravityForms\Controllers\ZaakController;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
-use OWC\ZGW\Entities\Zaak;
 
 /**
  * Execute Retry Controller.
