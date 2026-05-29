@@ -65,6 +65,7 @@ class GravityFormsServiceProvider extends ServiceProvider
 		add_filter( 'gform_custom_merge_tags', ( new ZaakMergeTagsController() )->add_zaak_merge_tags( ... ), 10, 2 );
 
 		// After submission hooks.
+		add_action( 'gform_after_submission', ( new TransactionController() )->capture_identification_for_pending_payment( ... ), 10, 2 );
 		add_action( 'gform_after_submission', ( new ActionSchedulerController() )->schedule_single_actions( ... ), 10, 2 );
 		add_action( 'gform_after_submission', ( new TransactionController() )->create( ... ), 10, 2 );
 
