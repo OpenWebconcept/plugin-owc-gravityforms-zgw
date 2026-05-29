@@ -91,7 +91,7 @@ class TransactionController
 	 * so DigiD/eHerkenning session data is unavailable at that point. Capturing the identification
 	 * here, while the session is still active, ensures add_metadata() can fall back to it.
 	 *
-	 * @since NEXT
+	 * @since 1.11.1
 	 */
 	public function capture_identification_for_pending_payment( array $entry, array $form ): void
 	{
@@ -144,7 +144,7 @@ class TransactionController
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.11.1
 	 */
 	private static function get_pending_encrypted_identification( int|string $entry_id, string $meta_key ): ?string
 	{

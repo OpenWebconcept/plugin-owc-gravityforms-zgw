@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.11.1] - 2026-05-29
+
+- Fix: persist encrypted BSN and KVK for pending payment transactions
+
 ## [v1.11.0] - 2026-05-20
 
 - Change: add phpcs rule AlphabeticallySortedUses
