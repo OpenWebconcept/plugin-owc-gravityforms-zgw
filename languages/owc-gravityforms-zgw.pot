@@ -2,59 +2,58 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | GravityForms ZGW 1.9.4\n"
+"Project-Id-Version: OWC | GravityForms ZGW 1.11.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-gravityforms-zgw\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-18T09:09:15+00:00\n"
+"POT-Creation-Date: 2026-06-01T10:53:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.12.0\n"
+"X-Generator: WP-CLI 2.13.0-alpha\n"
 "X-Domain: owc-gravityforms-zgw\n"
 
 #. Plugin Name of the plugin
-#: owc-gravityforms-zgw.php
 msgid "OWC | GravityForms ZGW"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: owc-gravityforms-zgw.php
 msgid "https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw"
 msgstr ""
 
 #. Description of the plugin
-#: owc-gravityforms-zgw.php
 msgid "Koppelt GravityForms met ZGW."
 msgstr ""
 
 #. Author of the plugin
-#: owc-gravityforms-zgw.php
 msgid "Yard | Digital Agency"
 msgstr ""
 
 #. Author URI of the plugin
-#: owc-gravityforms-zgw.php
 msgid "https://www.yard.nl"
 msgstr ""
 
-#. translators: %s is the UUID of the created zaak.
-#: src/Contracts/AbstractCreateZaakAction.php:633
-#, php-format
-msgid "Zaak \"%s\" aangemaakt."
+#. translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
+#: src/Contracts/AbstractCreateZaakAction.php:634
+msgid "Zaak \"%1$s\" aangemaakt onder zaak nummer \"%2$s\"."
 msgstr ""
 
-#. translators: %s is the UUID of the created zaak.
-#: src/Contracts/AbstractCreateZaakAction.php:633
+#. translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
+#: src/Contracts/AbstractCreateZaakAction.php:634
 msgid "UUID onbekend"
 msgstr ""
 
-#: src/Contracts/AbstractZaakFormController.php:130
+#. translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
+#: src/Contracts/AbstractCreateZaakAction.php:634
+msgid "ID onbekend"
+msgstr ""
+
+#: src/Contracts/AbstractZaakFormController.php:139
 msgid "Systeem"
 msgstr ""
 
-#: src/Contracts/AbstractZaakFormController.php:131
+#: src/Contracts/AbstractZaakFormController.php:140
 msgid "Er waren problemen bij het succesvol indienen van deze zaak, bekijk de transacties voor meer informatie."
 msgstr ""
 
@@ -74,7 +73,7 @@ msgstr ""
 msgid "Zaak definitief, betaling succesvol."
 msgstr ""
 
-#: src/GravityForms/Controllers/ZaakMergeTagsController.php:111
+#: src/GravityForms/Controllers/ZaakMergeTagsController.php:108
 #: src/Transactions/TransactionPostType.php:143
 #: src/Transactions/TransactionPostType.php:144
 msgid "Zaak ID"
@@ -85,90 +84,90 @@ msgstr ""
 msgid "Zaaksysteem (ZGW)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:37
+#: src/GravityForms/FormSettings.php:109
 msgid "Zaaksysteem"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:38
+#: src/GravityForms/FormSettings.php:110
 msgid "Om de snelheid te verhogen worden de instellingen van leveranciers pas opgehaald na het kiezen van een leverancier. Dit betekent dat de pagina herladen moet worden na het selecteren van een leverancier."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:43
-#: src/GravityForms/FormSettings.php:45
+#: src/GravityForms/FormSettings.php:115
+#: src/GravityForms/FormSettings.php:117
 msgid "Selecteer een leverancier"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:43
+#: src/GravityForms/FormSettings.php:115
 msgid "Kies een Zaaksysteem leverancier. Let op dat je ook de instellingen van de leverancier moet configureren in de hoofdinstellingen van Gravity Forms."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:51
+#: src/GravityForms/FormSettings.php:123
 msgid "Dummy BSN"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:52
+#: src/GravityForms/FormSettings.php:124
 msgid "BSN vervangen door dummywaarde (BSN)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:52
+#: src/GravityForms/FormSettings.php:124
 msgid "Vul hier een 9 cijferig BSN in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen BSN van de burger aanwezig of vereist is."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:57
+#: src/GravityForms/FormSettings.php:129
 msgid "Dummy KVK"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:58
+#: src/GravityForms/FormSettings.php:130
 msgid "KVK-nummer vervangen door dummywaarde (KVK)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:58
+#: src/GravityForms/FormSettings.php:130
 msgid "Vul hier een 8 cijferig KVK-nummer in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen KVK-nummer van een onderneming aanwezig of vereist is."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:63
-#: src/GravityForms/FormSettings.php:65
+#: src/GravityForms/FormSettings.php:135
+#: src/GravityForms/FormSettings.php:137
 msgid "Leverancier instellingen"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:63
+#: src/GravityForms/FormSettings.php:135
 msgid "Kies hoe de leverancier instellingen geconfigureerd moeten worden."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:69
+#: src/GravityForms/FormSettings.php:141
 msgid "Selecteer instellingen (opgehaald vanuit zaaksysteem)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:74
+#: src/GravityForms/FormSettings.php:146
 msgid "Configureer instellingen handmatig (invoeren van URL's)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:173
-#: src/GravityForms/FormSettings.php:215
+#: src/GravityForms/FormSettings.php:245
+#: src/GravityForms/FormSettings.php:287
 #: src/Views/partials/gf-field-zgw-mapping-options.php:27
 msgid "Zaaktype"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:174
-#: src/GravityForms/FormSettings.php:216
+#: src/GravityForms/FormSettings.php:246
+#: src/GravityForms/FormSettings.php:288
 msgid "Een zaaktype wordt gebruikt om de aan te maken zaak te definiëren, inclusief de structuur, benodigde gegevens en het verloop van het proces."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:193
-#: src/GravityForms/FormSettings.php:234
+#: src/GravityForms/FormSettings.php:265
+#: src/GravityForms/FormSettings.php:306
 msgid "Informatie object type"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:194
-#: src/GravityForms/FormSettings.php:235
+#: src/GravityForms/FormSettings.php:266
+#: src/GravityForms/FormSettings.php:307
 msgid "Selecteer het informatieobjecttype dat wordt gebruikt om de PDF van de inzending aan te maken."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:264
+#: src/GravityForms/FormSettings.php:336
 msgid "Selecteer een zaaktype"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:280
+#: src/GravityForms/FormSettings.php:352
 msgid "Selecteer een informatie object type"
 msgstr ""
 
@@ -255,25 +254,21 @@ msgstr ""
 
 #. translators: %s is the zaak reference number.
 #: src/Transactions/Controllers/ExecuteRetryController.php:83
-#, php-format
 msgid "Herpoging mislukt voor zaak %s."
 msgstr ""
 
 #. translators: %1$s is the zaak UUID, %2$s is the error message.
 #: src/Transactions/Controllers/ExecuteRetryController.php:99
-#, php-format
 msgid "Kon nieuw aangemaakte zaak %1$s niet verwijderen na mislukte herpoging: %2$s"
 msgstr ""
 
 #. translators: %s is the zaak UUID.
 #: src/Transactions/Controllers/ExecuteRetryController.php:102
-#, php-format
 msgid "Kon nieuw aangemaakte zaak %s niet verwijderen na mislukte herpoging."
 msgstr ""
 
 #. translators: %1$s is the zaak reference number, %2$s is the error message.
 #: src/Transactions/Controllers/ExecuteRetryController.php:117
-#, php-format
 msgid "Kon originele zaak %1$s niet verwijderen na geslaagde herpoging: %2$s"
 msgstr ""
 
@@ -350,7 +345,6 @@ msgstr ""
 
 #. translators: %s: count value
 #: src/Transactions/TransactionPostType.php:95
-#, php-format
 msgid "Voltooid <span class=\"count\">(%s)</span>"
 msgid_plural "Voltooid <span class=\"count\">(%s)</span>"
 msgstr[0] ""
@@ -363,7 +357,6 @@ msgstr ""
 
 #. translators: %s: count value
 #: src/Transactions/TransactionPostType.php:105
-#, php-format
 msgid "In behandeling <span class=\"count\">(%s)</span>"
 msgid_plural "In behandeling <span class=\"count\">(%s)</span>"
 msgstr[0] ""
@@ -376,7 +369,6 @@ msgstr ""
 
 #. translators: %s: count value
 #: src/Transactions/TransactionPostType.php:115
-#, php-format
 msgid "Mislukt <span class=\"count\">(%s)</span>"
 msgid_plural "Mislukt <span class=\"count\">(%s)</span>"
 msgstr[0] ""
@@ -418,7 +410,6 @@ msgstr ""
 
 #. translators: %d is the number of zaaks waiting to be deleted.
 #: src/Transactions/TransactionPostType.php:264
-#, php-format
 msgid "%d verwijdering in afwachting"
 msgid_plural "%d verwijderingen in afwachting"
 msgstr[0] ""

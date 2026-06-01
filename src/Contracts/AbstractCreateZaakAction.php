@@ -628,8 +628,9 @@ abstract class AbstractCreateZaakAction
 	{
 		gform_update_meta( $this->entry['id'], 'owc_gz_created_zaak_url', $zaak->url ?? null );
 		gform_update_meta( $this->entry['id'], 'owc_gz_created_zaak_uuid', $zaak->uuid ?? null );
+		gform_update_meta( $this->entry['id'], 'owc_gz_created_zaak_id', $zaak->identificatie ?? null );
 
-		// translators: %s is the UUID of the created zaak.
-		$this->add_entry_note( $this->entry['id'], sprintf( __( 'Zaak "%s" aangemaakt.', 'owc-gravityforms-zgw' ), $zaak->uuid ?? __( 'UUID onbekend', 'owc-gravityforms-zgw' ) ), 'success' );
+		// translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
+		$this->add_entry_note( $this->entry['id'], sprintf( __( 'Zaak "%1$s" aangemaakt onder zaak nummer "%2$s".', 'owc-gravityforms-zgw' ), $zaak->uuid ?? __( 'UUID onbekend', 'owc-gravityforms-zgw' ), $zaak->identificatie ?? __( 'ID onbekend', 'owc-gravityforms-zgw' ) ), 'success' );
 	}
 }
