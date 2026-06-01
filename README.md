@@ -14,7 +14,7 @@ To ensure the connection works properly, make sure the ZGW registers are configu
 - Connect a form to a ZGW "zaaktype"
 - Submit a form to create a zaak in a connected ZGW "zaaksysteem"
 - Upload and attach documents to the created "zaak"
-- Generate a PDF and attach it to a "zaak" (requires [Gravity PDF](https://wordpress.org/plugins/gravity-forms-pdf-extended/))
+- Generate a PDF and attach it to a "zaak" (requires [Gravity PDF](https://gravitypdf.com/))
 - Track "zaaksysteem" transactions and their status
 
 ## Wiki
