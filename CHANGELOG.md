@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.12.0] - 2026-06-01
+
+- Chore: update gravity-pdf plugin slug, plugin relocated from gravity-forms-pdf-extended to gravity-pdf
+- Added: store and display zaak identificatie in entry meta and note
+
 ## [v1.11.1] - 2026-05-29
 
 - Fix: persist encrypted BSN and KVK for pending payment transactions
