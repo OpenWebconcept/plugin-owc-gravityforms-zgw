@@ -31,6 +31,13 @@ beforeEach(
 		);
 
 		WP_Mock::userFunction(
+			'wp_date',
+			array(
+				'return' => '1 mei 2024 12:00:00',
+			)
+		);
+
+		WP_Mock::userFunction(
 			'get_post_meta',
 			array(
 				'return_in_order' => array( 123, '2024-05-01 12:00:00' ),
@@ -123,7 +130,7 @@ it(
 
 		expect( $this->sent_mail )->not->toBeNull()
 		->and( $this->sent_mail['to'] )->toBe( 'recipient@example.com' )
-		->and( $this->sent_mail['subject'] )->toContain( 'Zaaksysteem Failed Transactions Report' )
+		->and( $this->sent_mail['subject'] )->toContain( 'Zaaksysteem gefaalde transacties rapport' )
 		->and( $this->sent_mail['message'] )->toContain( 'transaction_failed' )
 		->and( $this->sent_mail['message'] )->not->toContain( 'transaction_success' );
 	}
