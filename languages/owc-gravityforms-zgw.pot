@@ -2,14 +2,14 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | GravityForms ZGW 1.11.1\n"
+"Project-Id-Version: OWC | GravityForms ZGW 1.12.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-gravityforms-zgw\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-01T10:53:40+00:00\n"
+"POT-Creation-Date: 2026-06-02T00:00:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.13.0-alpha\n"
 "X-Domain: owc-gravityforms-zgw\n"
@@ -308,30 +308,33 @@ msgstr ""
 msgid "Geen geldige waarden gevonden voor de gekoppelde ZGW-velden."
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:72
-msgid "Transaction ID"
+#: src/Transactions/TransactionMailer.php:75
+msgid "Transactie ID"
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:73
-#: src/Transactions/TransactionPostType.php:128
-#: src/Transactions/TransactionPostType.php:129
+#: src/Transactions/TransactionMailer.php:76
+#: src/Transactions/TransactionPostType.php:130
+#: src/Transactions/TransactionPostType.php:131
 msgid "Status"
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:74
-msgid "Entry ID"
+#: src/Transactions/TransactionMailer.php:77
+#: src/Transactions/TransactionPostType.php:140
+#: src/Transactions/TransactionPostType.php:141
+msgid "Inzending ID"
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:75
-msgid "Datetime"
+#: src/Transactions/TransactionMailer.php:78
+#: src/Transactions/TransactionPostType.php:149
+msgid "Datumtijd"
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:97
-msgid "Zaaksysteem Failed Transactions Report"
+#: src/Transactions/TransactionMailer.php:100
+msgid "Zaaksysteem gefaalde transacties rapport"
 msgstr ""
 
-#: src/Transactions/TransactionMailer.php:98
-msgid "The following transactions had failures:"
+#: src/Transactions/TransactionMailer.php:101
+msgid "De volgende transacties zijn mislukt:"
 msgstr ""
 
 #: src/Transactions/TransactionPostType.php:75

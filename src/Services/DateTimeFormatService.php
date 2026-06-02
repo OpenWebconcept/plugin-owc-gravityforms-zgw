@@ -30,7 +30,7 @@ use Exception;
  */
 class DateTimeFormatService
 {
-	public static function utc_localized_date_time( string $date_time_string ): string
+	public static function utc_localized_date_time( string $date_time_string ): string|bool
 	{
 		if ( '' === $date_time_string ) {
 			return '';

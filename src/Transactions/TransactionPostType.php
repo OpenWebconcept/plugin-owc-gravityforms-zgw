@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use OWCGravityFormsZGW\GravityForms\FormUtils;
-use OWCGravityFormsZGW\Services\DateTimeFormatService;
+use OWCGravityFormsZGW\Traits\LocalizeMetaDateTime;
 
 /**
  * Transaction Post Type.
@@ -29,6 +29,8 @@ use OWCGravityFormsZGW\Services\DateTimeFormatService;
  */
 class TransactionPostType
 {
+	use LocalizeMetaDateTime;
+
 	public const POST_TYPE = 'owc_zgw_transaction';
 
 	public function __construct()
@@ -278,9 +280,7 @@ class TransactionPostType
 
 				break;
 			case 'transaction_datetime':
-				$date_time = (string) get_post_meta( $post_id, 'transaction_datetime', true );
-				$formatted = DateTimeFormatService::utc_localized_date_time( $date_time );
-				echo esc_html( false !== $formatted ? $formatted : '-' );
+				echo esc_html( $this->localize_meta_datetime( $post_id, 'transaction_datetime' ) );
 
 				break;
 			case 'transaction_actions':
