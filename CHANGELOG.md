@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.13.0] - 2026-06-02
+
+- Change: extract datetime localization into reusable trait and translate mailer strings to Dutch
+- Fix: guard against duplicate webhook delivery
+- Change: track sent notifications to prevent duplicates for ZGW forms
+
 ## [v1.12.0] - 2026-06-01
 
 - Chore: update gravity-pdf plugin slug, plugin relocated from gravity-forms-pdf-extended to gravity-pdf

@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.13.0
  */
 
 namespace OWCGravityFormsZGW\Traits;
@@ -24,7 +24,7 @@ use OWCGravityFormsZGW\Services\DateTimeFormatService;
 /**
  * Localize DateTime from post meta trait.
  *
- * @since NEXT
+ * @since 1.13.0
  */
 trait LocalizeMetaDateTime
 {
