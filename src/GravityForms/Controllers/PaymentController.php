@@ -142,6 +142,11 @@ class PaymentController
 			return;
 		}
 
+		// Guard against duplicate webhook delivery, scheduling again would cause double Zaak creation.
+		if ( '' !== $this->get_created_zaak_uuid( $entry ) ) {
+			return;
+		}
+
 		$form = GFAPI::get_form( $entry['form_id'] );
 
 		( new ActionSchedulerController() )->schedule_single_actions( $entry, $form );
