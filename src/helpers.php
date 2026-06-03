@@ -66,7 +66,7 @@ if ( ! function_exists( 'owc_gravityforms_zgw_asset_url' ) ) {
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */
-function owc_gravityforms_zgw_render_view( string $file_path, $data = array() )
+function owc_gravityforms_zgw_render_view( string $file_path, $data = array() ): mixed
 {
 	$full_path = OWC_GRAVITYFORMS_ZGW_DIR_PATH . 'src/Views/' . $file_path . '.php';
 
@@ -83,23 +83,27 @@ function owc_gravityforms_zgw_render_view( string $file_path, $data = array() )
 }
 
 /**
- * Get the current environment type.
- *
- * @package OWC_GravityForms_ZGW
- * @author  Yard | Digital Agency
- * @since   1.0.0
- */
-function owc_gravityforms_zgw_env_type(): string {
-	return defined( 'WP_ENVIRONMENT_TYPE' ) ? WP_ENVIRONMENT_TYPE : 'production';
-}
-
-/**
  * Check if the current environment is a development environment.
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */
-function owc_gravityforms_zgw_env_is_dev(): bool {
-	return strpos( owc_gravityforms_zgw_env_type(), 'dev' ) !== false;
+function owc_gravityforms_zgw_env_is_dev(): bool
+{
+	$env = wp_get_environment_type();
+
+	return str_contains( $env, 'dev' ) || str_contains( $env, 'local' );
+}
+
+/**
+ * Check if the current environment is a production environment.
+ *
+ * @package OWC_GravityForms_ZGW
+ * @author  Yard | Digital Agency
+ * @since   NEXT
+ */
+function owc_gravityforms_zgw_env_is_prod(): bool
+{
+	return wp_get_environment_type() === 'production';
 }

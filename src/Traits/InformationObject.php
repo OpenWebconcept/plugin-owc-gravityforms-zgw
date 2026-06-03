@@ -19,7 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Exception;
+use OWCGravityFormsZGW\ContainerResolver;
+use Traversable;
 
 /**
  * Information object trait.
@@ -30,19 +31,39 @@ trait InformationObject
 {
 	public function encode_base64_from_url( string $url ): string
 	{
-		try {
-			$file = file_get_contents( $url, false, $this->stream_context() );
-		} catch ( Exception $e ) {
-			$file = '';
+		$response = wp_remote_get(
+			$url,
+			array(
+				'sslverify' => owc_gravityforms_zgw_env_is_prod(),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			ContainerResolver::make()->get( 'logger.zgw' )->error( 'Failed to retrieve content from URL: ' . $url, array( 'error' => $response->get_error_message() ) );
+
+			return '';
 		}
 
-		return $file ? base64_encode( $file ) : '';
+		$status_code = (int) wp_remote_retrieve_response_code( $response );
+
+		if ( $status_code < 200 || $status_code >= 300 ) {
+			ContainerResolver::make()->get( 'logger.zgw' )->error(
+				'Unexpected response code while retrieving content from URL: ' . $url,
+				array( 'status_code' => $status_code )
+			);
+
+			return '';
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+
+		return '' !== $body ? base64_encode( $body ) : '';
 	}
 
 	public function get_content_length( string $url ): string
 	{
 		$headers        = $this->get_headers( $url );
-		$content_length = $headers['Content-Length'] ?? '';
+		$content_length = $headers['content-length'] ?? '';
 
 		if ( is_array( $content_length ) && ! empty( $content_length[0] ) ) {
 			return $content_length[0];
@@ -75,7 +96,7 @@ trait InformationObject
 	public function get_content_type( string $url ): string
 	{
 		$headers      = $this->get_headers( $url );
-		$content_type = $headers['content-type'] ?? $headers['Content-Type'] ?? '';
+		$content_type = $headers['content-type'] ?? '';
 
 		if ( is_array( $content_type ) && ! empty( $content_type[0] ) ) {
 			return $content_type[0];
@@ -90,37 +111,29 @@ trait InformationObject
 			return array();
 		}
 
-		try {
-			$response = get_headers( $url, true, $this->stream_context() );
-		} catch ( Exception $e ) {
+		$response = wp_remote_head(
+			$url,
+			array(
+				'sslverify' => owc_gravityforms_zgw_env_is_prod(),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			ContainerResolver::make()->get( 'logger.zgw' )->error( 'Failed to retrieve headers from URL: ' . $url, array( 'error' => $response->get_error_message() ) );
+
 			return array();
 		}
 
-		return $response ?: array();
-	}
+		$headers = wp_remote_retrieve_headers( $response );
 
-	/**
-	 * Creates a stream context for SSL connections.
-	 *
-	 * This method checks the environment type using the `owc_gravityforms_zgw_env_type()` function.
-	 * If the environment type does not contain 'dev', it returns null.
-	 * Otherwise, it creates and returns a stream context with SSL peer verification disabled.
-	 *
-	 * @return resource|null The stream context resource or null if not in a 'dev' environment.
-	 */
-	protected function stream_context(): mixed
-	{
-		if ( false === owc_gravityforms_zgw_env_is_dev() ) {
-			return null;
+		if ( $headers instanceof Traversable ) {
+			$headers = iterator_to_array( $headers );
 		}
 
-		return stream_context_create(
-			array(
-				'ssl' => array(
-					'verify_peer'      => false,
-					'verify_peer_name' => false,
-				),
-			)
-		);
+		if ( ! is_array( $headers ) ) {
+			return array();
+		}
+
+		return array_change_key_case( $headers, CASE_LOWER );
 	}
 }
