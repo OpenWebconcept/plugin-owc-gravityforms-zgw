@@ -90,6 +90,10 @@ abstract class AbstractCreateSubmissionPDFAction
 			return array();
 		}
 
+		if ( ! is_readable( $pdf_path ) ) {
+			return array();
+		}
+
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$raw_content = file_get_contents( $pdf_path );
 

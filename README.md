@@ -17,6 +17,12 @@ To ensure the connection works properly, make sure the ZGW registers are configu
 - Generate a PDF and attach it to a "zaak" (requires [Gravity PDF](https://gravitypdf.com/))
 - Track "zaaksysteem" transactions and their status
 
+## SSL Verification
+
+SSL verification is enabled by default and only disabled when `WP_ENVIRONMENT_TYPE` is explicitly set to a non-production value (`staging`, `development`, or `local`). This accommodates environments where SSL certificates may not be valid.
+
+When `WP_ENVIRONMENT_TYPE` is not defined or set to an unrecognized value, WordPress defaults to `production`, so SSL verification remains enabled.
+
 ## Wiki
 
 For detailed setup instructions and documentation, visit our [Wiki on GitHub](https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw/wiki).
