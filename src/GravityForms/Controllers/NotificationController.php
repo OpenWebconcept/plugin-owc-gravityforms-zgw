@@ -39,7 +39,7 @@ class NotificationController
 	 * Entry meta key used to track which notification IDs have already been sent.
 	 * Written by track_sent_notification() and read by send_notifications().
 	 *
-	 * @since NEXT
+	 * @since 1.13.0
 	 */
 	private const SENT_META_KEY = 'owc_gz_sent_notification_ids';
 
@@ -74,7 +74,7 @@ class NotificationController
 	 * Notifications sent via GFCommon are always sent, regardless if the 'gform_disable_notification' hook disabled them or not.
 	 * We can rely on this hook to track all sends and prevent double sends by ZGW.
 	 *
-	 * @since NEXT
+	 * @since 1.13.0
 	 */
 	public function track_sent_notification( array $notification, array $form, array $entry ): array
 	{

@@ -101,7 +101,7 @@ function owc_gravityforms_zgw_env_is_dev(): bool
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.13.1
  */
 function owc_gravityforms_zgw_env_is_prod(): bool
 {

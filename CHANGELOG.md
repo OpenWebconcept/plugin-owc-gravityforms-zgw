@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.13.1] - 2026-06-04
+
+- Change: disable ssl verify for non production environments
+
 ## [v1.13.0] - 2026-06-02
 
 - Change: extract datetime localization into reusable trait and translate mailer strings to Dutch
