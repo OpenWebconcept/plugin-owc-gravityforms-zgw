@@ -56,7 +56,7 @@ abstract class Adapter
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.14.0
 	 */
 	protected static function key_prefix( string $supplier_name ): string
 	{

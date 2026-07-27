@@ -276,7 +276,7 @@ class SettingsServiceProvider extends ServiceProvider
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 1.14.0
 		 */
 		add_settings_section(
 			'owc_gf_zgw_section_form_settings_cache',

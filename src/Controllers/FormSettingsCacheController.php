@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.14.0
  */
 
 namespace OWCGravityFormsZGW\Controllers;
@@ -26,7 +26,7 @@ use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\ZaaktypenAdapter;
 /**
  * Controller for manually clearing the cached zaaktypen and informatieobjecttypen.
  *
- * @since NEXT
+ * @since 1.14.0
  */
 class FormSettingsCacheController
 {

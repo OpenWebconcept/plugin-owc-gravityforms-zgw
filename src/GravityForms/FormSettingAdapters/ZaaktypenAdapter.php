@@ -33,7 +33,7 @@ class ZaaktypenAdapter extends Adapter
 	/**
 	 * Builds the transient key used to cache the zaaktypen of a supplier.
 	 *
-	 * @since NEXT
+	 * @since 1.14.0
 	 */
 	public static function transient_key( string $supplier_name ): string
 	{

@@ -40,7 +40,7 @@ class SettingsController
 		 * form. This avoids exposing the other, admin-only settings to them and prevents them
 		 * from accidentally overwriting those settings by submitting the form.
 		 *
-		 * @since NEXT
+		 * @since 1.14.0
 		 */
 		owc_gravityforms_zgw_render_view(
 			'admin/settings-page-cache-only',
@@ -77,7 +77,7 @@ class SettingsController
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.14.0
 	 */
 	public function section_description_form_settings_cache(): void
 	{
