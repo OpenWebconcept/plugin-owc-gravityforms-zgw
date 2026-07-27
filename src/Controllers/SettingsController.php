@@ -28,7 +28,26 @@ class SettingsController
 {
 	public function render_page(): void
 	{
-		owc_gravityforms_zgw_render_view( 'admin/settings-page' );
+		if ( current_user_can( 'manage_options' ) ) {
+			owc_gravityforms_zgw_render_view( 'admin/settings-page' );
+
+			return;
+		}
+
+		/**
+		 * Users who only have the filtered "clear cache" capability, and not 'manage_options',
+		 * get a minimal page containing just the cache section instead of the full settings
+		 * form. This avoids exposing the other, admin-only settings to them and prevents them
+		 * from accidentally overwriting those settings by submitting the form.
+		 *
+		 * @since NEXT
+		 */
+		owc_gravityforms_zgw_render_view(
+			'admin/settings-page-cache-only',
+			array(
+				'cache_controller' => new FormSettingsCacheController(),
+			)
+		);
 	}
 
 	public function section_description_transactions_overview(): void
@@ -55,6 +74,19 @@ class SettingsController
 	public function description_client_request_timeout_option(): void
 	{
 		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description-client-request-timeout-option' );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	public function section_description_form_settings_cache(): void
+	{
+		owc_gravityforms_zgw_render_view(
+			'admin/partials/settings/description-form-settings-cache',
+			array(
+				'cache_controller' => new FormSettingsCacheController(),
+			)
+		);
 	}
 
 	public function section_fields_render( array $args ): void

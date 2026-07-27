@@ -31,13 +31,23 @@ use OWC\ZGW\Entities\Informatieobjecttype;
 class InformatieobjecttypeAdapter extends Adapter
 {
 	/**
+	 * Builds the transient key used to cache the informatieobjecttypen of a supplier.
+	 *
+	 * @since NEXT
+	 */
+	public static function transient_key( string $supplier_name ): string
+	{
+		return sprintf( '%s-form-settings-information-object-type', self::key_prefix( $supplier_name ) );
+	}
+
+	/**
 	 * @since 1.0.0
 	 */
 	public function handle(): array
 	{
 		try {
 			return $this->get_types(
-				sprintf( '%s-form-settings-information-object-type', $this->transient_key_prefix() ), // Unique transient key.
+				self::transient_key( $this->supplier_name ),
 				'informatieobjecttypen',
 				function ( Informatieobjecttype $objecttype ) {
 					$designation = $objecttype->vertrouwelijkheidaanduiding ?? ( $objecttype->vertrouwelijkheidsaanduiding ?? '' );

@@ -35,7 +35,7 @@ use OWCGravityFormsZGW\LoggerZGW;
  */
 abstract class Adapter
 {
-	protected const TRANSIENT_LIFETIME_IN_SECONDS = 64800; // 18 hours.
+	protected const TRANSIENT_LIFETIME_IN_SECONDS = 86400; // 24 hours.
 
 	protected Client $client;
 	protected string $supplier_name;
@@ -52,7 +52,15 @@ abstract class Adapter
 
 	protected function transient_key_prefix(): string
 	{
-		return strtolower( str_replace( '\\', '-', $this->supplier_name ) );
+		return self::key_prefix( $this->supplier_name );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected static function key_prefix( string $supplier_name ): string
+	{
+		return strtolower( str_replace( '\\', '-', $supplier_name ) );
 	}
 
 	abstract public function handle(): array;
@@ -208,7 +216,7 @@ abstract class Adapter
 	protected function handle_no_choices( string $endpoint ): array
 	{
 		// translators: %s: The endpoint that could not be retrieved.
-		$message = sprintf( __( 'Kan de "%s" die horen bij de geselecteerde leverancier niet ophalen.', 'owc-gravityforms-zaaksysteem' ), $endpoint );
+		$message = sprintf( __( 'Kan de "%s" die horen bij de geselecteerde leverancier niet ophalen.', 'owc-gravityforms-zgw' ), $endpoint );
 
 		return array(
 			array(

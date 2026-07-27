@@ -23,6 +23,7 @@ use OWC\ZGW\ApiClientManager;
 use OWC\ZGW\WordPress\ClientProvider;
 use OWC\ZGW\WordPress\SettingsProvider;
 use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\Controllers\FormSettingsCacheController;
 use OWCGravityFormsZGW\Controllers\SettingsController;
 use OWCGravityFormsZGW\LoggerZGW;
 use OWCGravityFormsZGW\Vendor_Prefixed\DI\NotFoundException;
@@ -64,6 +65,9 @@ class SettingsServiceProvider extends ServiceProvider
 
 		add_action( 'admin_menu', $this->register_settings_page( ... ) );
 		add_action( 'admin_init', $this->register_settings_options( ... ) );
+
+		add_action( 'admin_post_' . FormSettingsCacheController::ACTION, ( new FormSettingsCacheController() )->handle_clear_cache_request( ... ) );
+		add_action( 'admin_notices', ( new FormSettingsCacheController() )->render_cache_cleared_notice( ... ) );
 	}
 
 	/**
@@ -150,7 +154,7 @@ class SettingsServiceProvider extends ServiceProvider
 		add_options_page(
 			__( 'OWC | GravityForms ZGW instellingen', 'owc-gravityforms-zgw' ),
 			__( 'OWC | GravityForms ZGW instellingen', 'owc-gravityforms-zgw' ),
-			'manage_options',
+			FormSettingsCacheController::allowed_capability(),
 			OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX,
 			$this->controller->render_page( ... )
 		);
@@ -269,6 +273,16 @@ class SettingsServiceProvider extends ServiceProvider
 			'owc-gf-zgw',
 			'owc_gf_zgw_section_client_request_timeout',
 			array( 'settings_field_id' => 'owc_zgw_client_request_timeout_option_suppliers' )
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		add_settings_section(
+			'owc_gf_zgw_section_form_settings_cache',
+			__( 'Zaaktypen en informatieobjecttypen cache', 'owc-gravityforms-zgw' ),
+			$this->controller->section_description_form_settings_cache( ... ),
+			'owc-gf-zgw'
 		);
 	}
 }

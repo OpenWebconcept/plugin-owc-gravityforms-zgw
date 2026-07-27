@@ -31,6 +31,16 @@ use OWC\ZGW\Entities\Zaaktype;
 class ZaaktypenAdapter extends Adapter
 {
 	/**
+	 * Builds the transient key used to cache the zaaktypen of a supplier.
+	 *
+	 * @since NEXT
+	 */
+	public static function transient_key( string $supplier_name ): string
+	{
+		return sprintf( '%s-form-settings-zaaktypen', self::key_prefix( $supplier_name ) );
+	}
+
+	/**
 	 * Loops all Gravity Forms and updates any saved zaaktype URL that has been replaced by a newer version.
 	 * Only runs when zaaktypen are freshly fetched (cache miss), so the raw and filtered data are both in memory.
 	 *
@@ -127,7 +137,7 @@ class ZaaktypenAdapter extends Adapter
 	{
 		try {
 			return $this->get_types(
-				sprintf( '%s-form-settings-zaaktypen', $this->transient_key_prefix() ), // Unique transient key.
+				self::transient_key( $this->supplier_name ),
 				'zaaktypen',
 				function ( Zaaktype $zaaktype ) {
 					$identification = (string) ( $zaaktype->identificatie ?? '' );

@@ -2,40 +2,46 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | GravityForms ZGW 1.12.0\n"
+"Project-Id-Version: OWC | GravityForms ZGW 1.13.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-gravityforms-zgw\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-02T00:00:00+00:00\n"
+"POT-Creation-Date: 2026-07-27T11:18:36+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.13.0-alpha\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-gravityforms-zgw\n"
 
 #. Plugin Name of the plugin
+#: owc-gravityforms-zgw.php
 msgid "OWC | GravityForms ZGW"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: owc-gravityforms-zgw.php
 msgid "https://github.com/OpenWebconcept/plugin-owc-gravityforms-zgw"
 msgstr ""
 
 #. Description of the plugin
+#: owc-gravityforms-zgw.php
 msgid "Koppelt GravityForms met ZGW."
 msgstr ""
 
 #. Author of the plugin
+#: owc-gravityforms-zgw.php
 msgid "Yard | Digital Agency"
 msgstr ""
 
 #. Author URI of the plugin
+#: owc-gravityforms-zgw.php
 msgid "https://www.yard.nl"
 msgstr ""
 
 #. translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
 #: src/Contracts/AbstractCreateZaakAction.php:634
+#, php-format
 msgid "Zaak \"%1$s\" aangemaakt onder zaak nummer \"%2$s\"."
 msgstr ""
 
@@ -57,7 +63,19 @@ msgstr ""
 msgid "Er waren problemen bij het succesvol indienen van deze zaak, bekijk de transacties voor meer informatie."
 msgstr ""
 
-#: src/Controllers/SettingsController.php:129
+#: src/Controllers/FormSettingsCacheController.php:67
+msgid "Zaaktypen en informatieobjecttypen opnieuw ophalen"
+msgstr ""
+
+#: src/Controllers/FormSettingsCacheController.php:77
+msgid "Je hebt geen toestemming om deze actie uit te voeren."
+msgstr ""
+
+#: src/Controllers/FormSettingsCacheController.php:102
+msgid "De cache van de zaaktypen en informatieobjecttypen is geleegd. Ze worden opnieuw opgehaald bij het volgende gebruik of bij de volgende geplande taak."
+msgstr ""
+
+#: src/Controllers/SettingsController.php:161
 msgid "Ongeldig e-mailadres voor het verzenden van het transactie rapport."
 msgstr ""
 
@@ -69,19 +87,25 @@ msgstr ""
 msgid "Aangemaakte zaak geannuleerd, betaling mislukt."
 msgstr ""
 
-#: src/GravityForms/Controllers/PaymentController.php:150
+#: src/GravityForms/Controllers/PaymentController.php:155
 msgid "Zaak definitief, betaling succesvol."
 msgstr ""
 
 #: src/GravityForms/Controllers/ZaakMergeTagsController.php:108
-#: src/Transactions/TransactionPostType.php:143
-#: src/Transactions/TransactionPostType.php:144
+#: src/Transactions/TransactionPostType.php:145
+#: src/Transactions/TransactionPostType.php:146
 msgid "Zaak ID"
 msgstr ""
 
 #: src/GravityForms/FieldGroups.php:38
 #: src/GravityForms/FieldGroups.php:52
 msgid "Zaaksysteem (ZGW)"
+msgstr ""
+
+#. translators: %s: The endpoint that could not be retrieved.
+#: src/GravityForms/FormSettingAdapters/Adapter.php:219
+#, php-format
+msgid "Kan de \"%s\" die horen bij de geselecteerde leverancier niet ophalen."
 msgstr ""
 
 #: src/GravityForms/FormSettings.php:109
@@ -187,49 +211,54 @@ msgstr ""
 msgid "Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in."
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:151
-#: src/Providers/SettingsServiceProvider.php:152
+#: src/Providers/SettingsServiceProvider.php:155
+#: src/Providers/SettingsServiceProvider.php:156
 msgid "OWC | GravityForms ZGW instellingen"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:176
+#: src/Providers/SettingsServiceProvider.php:180
 msgid "Transactie overzicht"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:183
+#: src/Providers/SettingsServiceProvider.php:187
 msgid "Gebruikersrollen"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:192
+#: src/Providers/SettingsServiceProvider.php:196
 msgid "Transactie rapport"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:199
+#: src/Providers/SettingsServiceProvider.php:203
 msgid "Verzenden naar"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:211
+#: src/Providers/SettingsServiceProvider.php:215
 msgid "Vertraging na zaakcreatie"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:221
+#: src/Providers/SettingsServiceProvider.php:225
 msgid "Vertraging na zaakcreatie (seconden)"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:233
+#: src/Providers/SettingsServiceProvider.php:237
 msgid "Pas vertraging toe op leverancier(s)"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:245
+#: src/Providers/SettingsServiceProvider.php:249
 msgid "Client request timeout"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:255
+#: src/Providers/SettingsServiceProvider.php:259
 msgid "Request timeout (seconden)"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:267
+#: src/Providers/SettingsServiceProvider.php:271
 msgid "Pas aangepaste timeout toe op leverancier(s)"
+msgstr ""
+
+#: src/Providers/SettingsServiceProvider.php:283
+#: src/Views/admin/settings-page-cache-only.php:18
+msgid "Zaaktypen en informatieobjecttypen cache"
 msgstr ""
 
 #: src/Providers/TransactionsServiceProvider.php:56
@@ -254,21 +283,25 @@ msgstr ""
 
 #. translators: %s is the zaak reference number.
 #: src/Transactions/Controllers/ExecuteRetryController.php:83
+#, php-format
 msgid "Herpoging mislukt voor zaak %s."
 msgstr ""
 
 #. translators: %1$s is the zaak UUID, %2$s is the error message.
 #: src/Transactions/Controllers/ExecuteRetryController.php:99
+#, php-format
 msgid "Kon nieuw aangemaakte zaak %1$s niet verwijderen na mislukte herpoging: %2$s"
 msgstr ""
 
 #. translators: %s is the zaak UUID.
 #: src/Transactions/Controllers/ExecuteRetryController.php:102
+#, php-format
 msgid "Kon nieuw aangemaakte zaak %s niet verwijderen na mislukte herpoging."
 msgstr ""
 
 #. translators: %1$s is the zaak reference number, %2$s is the error message.
 #: src/Transactions/Controllers/ExecuteRetryController.php:117
+#, php-format
 msgid "Kon originele zaak %1$s niet verwijderen na geslaagde herpoging: %2$s"
 msgstr ""
 
@@ -337,92 +370,87 @@ msgstr ""
 msgid "De volgende transacties zijn mislukt:"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:75
+#: src/Transactions/TransactionPostType.php:77
 msgid "Overzicht van zaaksysteemtransacties vanuit Gravity Forms formulieren welke gekoppeld zijn met een zaaksysteem."
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:92
+#: src/Transactions/TransactionPostType.php:94
 msgctxt "Transactie status"
 msgid "Voltooid"
 msgstr ""
 
 #. translators: %s: count value
-#: src/Transactions/TransactionPostType.php:95
+#: src/Transactions/TransactionPostType.php:97
+#, php-format
 msgid "Voltooid <span class=\"count\">(%s)</span>"
 msgid_plural "Voltooid <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Transactions/TransactionPostType.php:102
+#: src/Transactions/TransactionPostType.php:104
 msgctxt "Transactie status"
 msgid "In behandeling"
 msgstr ""
 
 #. translators: %s: count value
-#: src/Transactions/TransactionPostType.php:105
+#: src/Transactions/TransactionPostType.php:107
+#, php-format
 msgid "In behandeling <span class=\"count\">(%s)</span>"
 msgid_plural "In behandeling <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Transactions/TransactionPostType.php:112
+#: src/Transactions/TransactionPostType.php:114
 msgctxt "Transactie status"
 msgid "Mislukt"
 msgstr ""
 
 #. translators: %s: count value
-#: src/Transactions/TransactionPostType.php:115
+#: src/Transactions/TransactionPostType.php:117
+#, php-format
 msgid "Mislukt <span class=\"count\">(%s)</span>"
 msgid_plural "Mislukt <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Transactions/TransactionPostType.php:133
-#: src/Transactions/TransactionPostType.php:134
+#: src/Transactions/TransactionPostType.php:135
+#: src/Transactions/TransactionPostType.php:136
 msgid "Formulier ID"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:138
-#: src/Transactions/TransactionPostType.php:139
-msgid "Inzending ID"
-msgstr ""
-
-#: src/Transactions/TransactionPostType.php:146
+#: src/Transactions/TransactionPostType.php:148
 msgid "Melding"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:147
-msgid "Datumtijd"
-msgstr ""
-
-#: src/Transactions/TransactionPostType.php:148
+#: src/Transactions/TransactionPostType.php:150
 msgid "Acties"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:199
+#: src/Transactions/TransactionPostType.php:201
 msgid "Onbekend"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:256
+#: src/Transactions/TransactionPostType.php:258
 msgid "Toon melding"
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:257
+#: src/Transactions/TransactionPostType.php:259
 msgid "Verberg melding"
 msgstr ""
 
 #. translators: %d is the number of zaaks waiting to be deleted.
-#: src/Transactions/TransactionPostType.php:264
+#: src/Transactions/TransactionPostType.php:266
+#, php-format
 msgid "%d verwijdering in afwachting"
 msgid_plural "%d verwijderingen in afwachting"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Transactions/TransactionPostType.php:265
+#: src/Transactions/TransactionPostType.php:267
 msgid "Een herpoging maakt een nieuwe zaak aan. Bij succes wordt de originele zaak verwijderd. Bij mislukking wordt de nieuwe zaak verwijderd. Als die verwijdering mislukt, worden de zaken hier bijgehouden."
 msgstr ""
 
-#: src/Transactions/TransactionPostType.php:266
+#: src/Transactions/TransactionPostType.php:268
 msgid "Bij een herpoging wordt een nieuwe zaak aangemaakt. Als de herpoging slaagt, wordt de originele zaak verwijderd. Als de herpoging mislukt, wordt de nieuw aangemaakte zaak verwijderd. De verwijdering van de onderstaande zaken is mislukt — ze zijn niet meer in gebruik maar staan nog in het zaaksysteem. De verwijdering wordt automatisch opnieuw geprobeerd bij de volgende herpoging."
 msgstr ""
 
@@ -432,6 +460,10 @@ msgstr ""
 
 #: src/Views/admin/partials/settings/description-delay-after-zaak-creation.php:15
 msgid "Selecteer één of meerdere leverancier(s) waarbij een vertraging na de zaakcreatie gewenst is en stel de gewenste vertraging in."
+msgstr ""
+
+#: src/Views/admin/partials/settings/description-form-settings-cache.php:17
+msgid "De zaaktypen en informatieobjecttypen die worden getoond in de \"Zaaksysteem\" instellingen van een formulier worden 18 uur gecached en dagelijks om 04:00 automatisch ververst. Gebruik onderstaande knop om de cache handmatig te legen."
 msgstr ""
 
 #: src/Views/admin/partials/settings/description-transactions-overview.php:15
