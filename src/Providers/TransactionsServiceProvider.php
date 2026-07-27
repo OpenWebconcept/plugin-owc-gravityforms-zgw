@@ -150,7 +150,7 @@ class TransactionsServiceProvider extends ServiceProvider
 	 */
 	public function handle_transaction_cleaner(): void
 	{
-		$days = apply_filters( 'owc_zgw_transaction_cleanup_days', 30 );
+		$days = apply_filters( 'owcgfzgw::transaction/cleanup_days', 30 );
 
 		$cleaner = new TransactionCleaner();
 		$cleaner->delete_old_transactions( (int) $days );

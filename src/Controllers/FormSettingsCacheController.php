@@ -43,7 +43,7 @@ class FormSettingsCacheController
 	 */
 	public static function allowed_capability(): string
 	{
-		return (string) apply_filters( 'owc_gf_zgw_form_settings_cache_capability', 'manage_options' );
+		return (string) apply_filters( 'owcgfzgw::form_settings/cache_capability', 'manage_options' );
 	}
 
 	/**
