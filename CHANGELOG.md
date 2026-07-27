@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.14.1] - 2026-07-27
+
+-   Change: tighten types on plugin options settings methods
+
 ## [v1.14.0] - 2026-07-27
 
 -   Added: add manual cache clearing for zaaktypen and informatieobjecttypen form settings
