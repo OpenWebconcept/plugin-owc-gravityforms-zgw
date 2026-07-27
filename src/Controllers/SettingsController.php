@@ -107,7 +107,7 @@ class SettingsController
 		);
 	}
 
-	public function sanitize_validate_plugin_options_settings( $settings ): array
+	public function sanitize_validate_plugin_options_settings( mixed $settings ): array
 	{
 		if ( ! is_array( $settings ) ) {
 			return array();
@@ -122,7 +122,7 @@ class SettingsController
 	/**
 	 * @since 1.1.4
 	 */
-	private function sanitize_plugin_options_settings( $settings ): array
+	private function sanitize_plugin_options_settings( array $settings ): array
 	{
 		$sanitize_recursive = function ( $value ) use ( &$sanitize_recursive ) {
 			if ( is_array( $value ) ) {
@@ -142,9 +142,9 @@ class SettingsController
 	/**
 	 * @since 1.1.4
 	 */
-	private function validate_plugin_options_settings( $settings ): array
+	private function validate_plugin_options_settings( array $settings ): array
 	{
-		$settings['owc_zgw_transactions_report_recipient_email'] = $this->validate_email( $settings['owc_zgw_transactions_report_recipient_email'] ?? '' );
+		$settings['owc_zgw_transactions_report_recipient_email'] = $this->validate_email( (string) ( $settings['owc_zgw_transactions_report_recipient_email'] ?? '' ) );
 
 		return $settings;
 	}
@@ -152,7 +152,7 @@ class SettingsController
 	/**
 	 * @since 1.1.4
 	 */
-	private function validate_email( $email ): string
+	private function validate_email( string $email ): string
 	{
 		if ( ! is_email( $email ) ) {
 			add_settings_error(
