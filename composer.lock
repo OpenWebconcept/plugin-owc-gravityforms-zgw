@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "546bf308d9a53ce4dc7a6f05eae056f5",
+    "content-hash": "5bde190b928e94b886cdf51b4e6708bb",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -272,16 +272,16 @@
         },
         {
             "name": "owc/zgw-api",
-            "version": "2.5.2",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenWebconcept/owc-zgw-api.git",
-                "reference": "b9d94b1e97c23e7f07156e9c40ffa503cb3e03f4"
+                "reference": "e4336e32e37665a1ae9475e6a3093977cc74099a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenWebconcept/owc-zgw-api/zipball/b9d94b1e97c23e7f07156e9c40ffa503cb3e03f4",
-                "reference": "b9d94b1e97c23e7f07156e9c40ffa503cb3e03f4",
+                "url": "https://api.github.com/repos/OpenWebconcept/owc-zgw-api/zipball/e4336e32e37665a1ae9475e6a3093977cc74099a",
+                "reference": "e4336e32e37665a1ae9475e6a3093977cc74099a",
                 "shasum": ""
             },
             "require": {
@@ -346,10 +346,10 @@
             ],
             "description": "PHP implementation of the ZGW API, with an optional WordPress integration.",
             "support": {
-                "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/2.5.2",
+                "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/2.6.0",
                 "issues": "https://github.com/OpenWebconcept/owc-zgw-api/issues"
             },
-            "time": "2026-04-21T11:31:38+00:00"
+            "time": "2026-07-29T06:58:11+00:00"
         },
         {
             "name": "php-di/invoker",
