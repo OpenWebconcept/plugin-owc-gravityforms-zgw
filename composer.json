@@ -59,7 +59,7 @@
 		"owc/idp-userdata": "^1.1",
 		"php": ">=8.1",
 		"php-di/php-di": "^7.0",
-		"woocommerce/action-scheduler": "^3.9"
+		"woocommerce/action-scheduler": "^4.0"
 	},
 	"require-dev": {
 		"brianhenryie/strauss": "^0.15.0",

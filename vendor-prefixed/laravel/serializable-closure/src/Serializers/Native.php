@@ -2,7 +2,7 @@
 /**
  * @license MIT
  *
- * Modified by plugin on 12-January-2026 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by plugin on 30-July-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace OWCGravityFormsZGW\Vendor_Prefixed\Laravel\SerializableClosure\Serializers;
@@ -131,7 +131,11 @@ class Native implements Serializable
         }
 
         if ($scope = $reflector->getClosureScopeClass()) {
-            $scope = $scope->name;
+            if (! $scope->isAnonymous() || $reflector->isBindingRequired() || $reflector->isScopeRequired()) {
+                $scope = $scope->name;
+            } else {
+                $scope = null;
+            }
         }
 
         $this->reference = spl_object_hash($this->closure);
@@ -202,7 +206,13 @@ class Native implements Serializable
 
         if (! empty($this->code['objects'])) {
             foreach ($this->code['objects'] as $item) {
-                $item['property']->setValue($item['instance'], $item['object']->getClosure());
+                static::setPropertyValue(
+                    $item['property'],
+                    $item['instance'],
+                    $item['object'] instanceof SerializableClosure || $item['object'] instanceof UnsignedSerializableClosure
+                        ? $item['object']
+                        : $item['object']->getClosure()
+                );
             }
         }
 
@@ -274,7 +284,7 @@ class Native implements Serializable
                 }
 
                 foreach ($reflection->getProperties() as $property) {
-                    if ($property->isStatic() || ! $property->getDeclaringClass()->isUserDefined()) {
+                    if ($property->isStatic() || ! $property->getDeclaringClass()->isUserDefined() || static::isVirtualProperty($property)) {
                         continue;
                     }
 
@@ -282,13 +292,19 @@ class Native implements Serializable
                         continue;
                     }
 
-                    $value = $property->getValue($instance);
+                    $value = static::getPropertyValue($property, $instance);
+
+                    if (static::isClosureTypedProperty($property)) {
+                        static::setPropertyValue($property, $data, $value);
+
+                        continue;
+                    }
 
                     if (is_array($value) || is_object($value)) {
                         static::wrapClosures($value, $storage);
                     }
 
-                    $property->setValue($data, $value);
+                    static::setPropertyValue($property, $data, $value);
                 }
             } while ($reflection = $reflection->getParentClass());
         }
@@ -317,6 +333,10 @@ class Native implements Serializable
      */
     protected function mapPointers(&$data)
     {
+        if ($data instanceof SerializableClosure || $data instanceof UnsignedSerializableClosure) {
+            return;
+        }
+
         $scope = $this->scope;
 
         if ($data instanceof static) {
@@ -352,6 +372,8 @@ class Native implements Serializable
             foreach ($data as $key => &$value) {
                 if ($value instanceof SelfReference && $value->hash === $this->code['self']) {
                     $data->{$key} = &$this->closure;
+                } elseif ($value instanceof static) {
+                    $data->{$key} = &$value->closure;
                 } elseif (is_array($value) || is_object($value)) {
                     $this->mapPointers($value);
                 }
@@ -372,7 +394,7 @@ class Native implements Serializable
                 }
 
                 foreach ($reflection->getProperties() as $property) {
-                    if ($property->isStatic() || ! $property->getDeclaringClass()->isUserDefined()) {
+                    if ($property->isStatic() || ! $property->getDeclaringClass()->isUserDefined() || static::isVirtualProperty($property)) {
                         continue;
                     }
 
@@ -380,7 +402,7 @@ class Native implements Serializable
                         continue;
                     }
 
-                    $item = $property->getValue($data);
+                    $item = static::getPropertyValue($property, $data);
 
                     if ($item instanceof SerializableClosure || $item instanceof UnsignedSerializableClosure || ($item instanceof SelfReference && $item->hash === $this->code['self'])) {
                         $this->code['objects'][] = [
@@ -388,9 +410,11 @@ class Native implements Serializable
                             'property' => $property,
                             'object' => $item instanceof SelfReference ? $this : $item,
                         ];
+                    } elseif ($item instanceof static) {
+                        static::setPropertyValue($property, $data, $item->closure);
                     } elseif (is_array($item) || is_object($item)) {
                         $this->mapPointers($item);
-                        $property->setValue($data, $item);
+                        static::setPropertyValue($property, $data, $item);
                     }
                 }
             } while ($reflection = $reflection->getParentClass());
@@ -492,7 +516,7 @@ class Native implements Serializable
                 }
 
                 foreach ($reflection->getProperties() as $property) {
-                    if ($property->isStatic() || ! $property->getDeclaringClass()->isUserDefined() || $this->isVirtualProperty($property)) {
+                    if ($property->isStatic() || ! $property->getDeclaringClass()->isUserDefined() || static::isVirtualProperty($property)) {
                         continue;
                     }
 
@@ -500,16 +524,51 @@ class Native implements Serializable
                         continue;
                     }
 
-                    $value = $property->getValue($instance);
+                    $value = static::getPropertyValue($property, $instance);
+
+                    if (static::isClosureTypedProperty($property)) {
+                        static::setPropertyValue($property, $data, $value);
+
+                        continue;
+                    }
 
                     if (is_array($value) || is_object($value)) {
                         $this->mapByReference($value);
                     }
 
-                    $property->setValue($data, $value);
+                    static::setPropertyValue($property, $data, $value);
                 }
             } while ($reflection = $reflection->getParentClass());
         }
+    }
+
+    /**
+     * Get the value of a property, bypassing hooks on PHP 8.4+.
+     *
+     * @param  \ReflectionProperty  $property
+     * @param  object  $object
+     * @return mixed
+     */
+    protected static function getPropertyValue(ReflectionProperty $property, object $object): mixed
+    {
+        return PHP_VERSION_ID >= 80400
+            ? $property->getRawValue($object)
+            : $property->getValue($object);
+    }
+
+    /**
+     * Set the value of a property, bypassing hooks on PHP 8.4+.
+     *
+     * @param  \ReflectionProperty  $property
+     * @param  object  $object
+     * @param  mixed  $value
+     * @return void
+     */
+    protected static function setPropertyValue(ReflectionProperty $property, object $object, mixed $value): void
+    {
+        PHP_VERSION_ID >= 80400
+            ? $property->setRawValue($object, $value)
+            : $property->setValue($object, $value);
     }
 
     /**
@@ -518,8 +577,33 @@ class Native implements Serializable
      * @param  \ReflectionProperty  $property
      * @return bool
      */
-    protected function isVirtualProperty(ReflectionProperty $property): bool
+    protected static function isVirtualProperty(ReflectionProperty $property): bool
     {
         return method_exists($property, 'isVirtual') && $property->isVirtual();
+    }
+
+    /**
+     * Determine if property is typed as Closure.
+     *
+     * @param  \ReflectionProperty  $property
+     * @return bool
+     */
+    protected static function isClosureTypedProperty(ReflectionProperty $property): bool
+    {
+        $type = $property->getType();
+
+        if ($type instanceof \ReflectionNamedType) {
+            return $type->getName() === 'Closure';
+        }
+
+        if ($type instanceof \ReflectionUnionType || $type instanceof \ReflectionIntersectionType) {
+            foreach ($type->getTypes() as $t) {
+                if ($t instanceof \ReflectionNamedType && $t->getName() === 'Closure') {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
