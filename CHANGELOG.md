@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.15.1] - 2026-07-30
+
+-   Chore: update deps + fix CVE-2026-45293
+
 ## [v1.15.0] - 2026-07-30
 
 -   Added: supplier EnableU
