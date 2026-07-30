@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.15.0] - 2026-07-30
+
+-   Added: supplier EnableU
+
 ## [v1.14.1] - 2026-07-27
 
 -   Change: tighten types on plugin options settings methods
