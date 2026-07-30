@@ -20,6 +20,7 @@ return array(
 		'rxmission' => 'RxMission',
 		'decosjoin' => 'DecosJOIN',
 		'procura'   => 'Procura',
+		'enable-u' 	=> 'EnableU',
 	),
 
 	/**
