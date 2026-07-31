@@ -25,6 +25,12 @@ $objecttypes = $objecttypes ?? array();
 		<option value="omschrijving"><?php esc_html_e( 'Omschrijving', 'owc-gravityforms-zgw' ); ?></option>
 		<option value="telefoonnummer"><?php esc_html_e( 'Telefoonnummer', 'owc-gravityforms-zgw' ); ?></option>
 		<option value="informatieobject"><?php esc_html_e( 'Informatieobject', 'owc-gravityforms-zgw' ); ?></option>
+		<option value="aanhef"><?php esc_html_e( 'Aanhef', 'owc-gravityforms-zgw' ); ?></option>
+		<option value="voorletters"><?php esc_html_e( 'Voorletters', 'owc-gravityforms-zgw' ); ?></option>
+		<option value="voorvoegsel"><?php esc_html_e( 'Voorvoegsel', 'owc-gravityforms-zgw' ); ?></option>
+		<option value="e-mailadres"><?php esc_html_e( 'E-mailadres', 'owc-gravityforms-zgw' ); ?></option>
+		<option value="datumVoorval"><?php esc_html_e( 'Datum voorval', 'owc-gravityforms-zgw' ); ?></option>
+		<option value="uitgebreideOmschrijving"><?php esc_html_e( 'Uitgebreide omschrijving', 'owc-gravityforms-zgw' ); ?></option>
 	</select>
 </li>
 <li class="label_setting field_setting zgw_mapping_setting">
