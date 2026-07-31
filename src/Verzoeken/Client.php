@@ -203,6 +203,12 @@ class Client
 						'naam'           => 'Jan Jansen',
 						'omschrijving'   => 'Ik heb een vraag over mijn paspoort',
 						'telefoonnummer' => '0612345678',
+						'aanhef'         => 'Dhr.',
+						'voorletters'    => 'J.',
+						'voorvoegsel'    => 'van',
+						'e-mailadres'    => 'jjansen@test.nl',
+						'datumVoorval'   => '2026-01-18',
+						'uitgebreideOmschrijving' => 'Ik heb een vraag over mijn paspoort.'
 					),
 				),
 			),

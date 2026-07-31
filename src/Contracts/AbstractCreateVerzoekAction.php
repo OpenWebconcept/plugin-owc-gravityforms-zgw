@@ -70,6 +70,30 @@ abstract class AbstractCreateVerzoekAction
 				'value'    => '',
 				'location' => 'record.data.data.telefoonnummer',
 			),
+			'aanhef'         => array(
+				'value'    => '',
+				'location' => 'record.data.data.aanhef',
+			),
+			'voorletters'    => array(
+				'value'    => '',
+				'location' => 'record.data.data.voorletters',
+			),
+			'voorvoegsel'    => array(
+				'value'    => '',
+				'location' => 'record.data.data.voorvoegsel',
+			),
+			'e-mailadres'    => array(
+				'value'    => '',
+				'location' => 'record.data.data.e-mailadres',
+			),
+			'datumVoorval'   => array(
+				'value'    => '',
+				'location' => 'record.data.data.datumVoorval',
+			),
+			'uitgebreideOmschrijving' => array(
+				'value'    => '',
+				'location' => 'record.data.data.uitgebreideOmschrijving',
+			),
 		);
 
 		$mapped_args = $this->map_required_zaak_creation_args( $mapped_args );
@@ -87,6 +111,12 @@ abstract class AbstractCreateVerzoekAction
 						'naam'           => '',
 						'omschrijving'   => '',
 						'telefoonnummer' => '',
+						'aanhef'         => '',
+						'voorletters'    => '',
+						'voorvoegsel'    => '',
+						'e-mailadres'    => '',
+						'datumVoorval'   => '',
+						'uitgebreideOmschrijving' => '',
 					),
 					'attachments'   => array(),
 				),
