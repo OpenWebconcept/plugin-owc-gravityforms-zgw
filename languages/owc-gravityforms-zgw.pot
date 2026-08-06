@@ -126,72 +126,88 @@ msgid "Kies een Zaaksysteem leverancier. Let op dat je ook de instellingen van d
 msgstr ""
 
 #: src/GravityForms/FormSettings.php:123
+msgid "Producten of diensten"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:124
+msgid "Producten of diensten meesturen"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:124
+msgid "Wanneer ingeschakeld worden de producten/diensten die op het geselecteerde zaaktype zijn geconfigureerd automatisch meegestuurd bij het aanmaken van de zaak."
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:128
+msgid "Producten/diensten van het zaaktype meesturen bij het aanmaken van de zaak"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:136
 msgid "Dummy BSN"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:124
+#: src/GravityForms/FormSettings.php:137
 msgid "BSN vervangen door dummywaarde (BSN)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:124
+#: src/GravityForms/FormSettings.php:137
 msgid "Vul hier een 9 cijferig BSN in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen BSN van de burger aanwezig of vereist is."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:129
+#: src/GravityForms/FormSettings.php:142
 msgid "Dummy KVK"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:130
+#: src/GravityForms/FormSettings.php:143
 msgid "KVK-nummer vervangen door dummywaarde (KVK)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:130
+#: src/GravityForms/FormSettings.php:143
 msgid "Vul hier een 8 cijferig KVK-nummer in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen KVK-nummer van een onderneming aanwezig of vereist is."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:135
-#: src/GravityForms/FormSettings.php:137
+#: src/GravityForms/FormSettings.php:148
+#: src/GravityForms/FormSettings.php:150
 msgid "Leverancier instellingen"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:135
+#: src/GravityForms/FormSettings.php:148
 msgid "Kies hoe de leverancier instellingen geconfigureerd moeten worden."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:141
+#: src/GravityForms/FormSettings.php:154
 msgid "Selecteer instellingen (opgehaald vanuit zaaksysteem)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:146
+#: src/GravityForms/FormSettings.php:159
 msgid "Configureer instellingen handmatig (invoeren van URL's)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:245
-#: src/GravityForms/FormSettings.php:287
+#: src/GravityForms/FormSettings.php:258
+#: src/GravityForms/FormSettings.php:300
 #: src/Views/partials/gf-field-zgw-mapping-options.php:27
 msgid "Zaaktype"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:246
-#: src/GravityForms/FormSettings.php:288
+#: src/GravityForms/FormSettings.php:259
+#: src/GravityForms/FormSettings.php:301
 msgid "Een zaaktype wordt gebruikt om de aan te maken zaak te definiëren, inclusief de structuur, benodigde gegevens en het verloop van het proces."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:265
-#: src/GravityForms/FormSettings.php:306
+#: src/GravityForms/FormSettings.php:278
+#: src/GravityForms/FormSettings.php:319
 msgid "Informatie object type"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:266
-#: src/GravityForms/FormSettings.php:307
+#: src/GravityForms/FormSettings.php:279
+#: src/GravityForms/FormSettings.php:320
 msgid "Selecteer het informatieobjecttype dat wordt gebruikt om de PDF van de inzending aan te maken."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:336
+#: src/GravityForms/FormSettings.php:349
 msgid "Selecteer een zaaktype"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:352
+#: src/GravityForms/FormSettings.php:365
 msgid "Selecteer een informatie object type"
 msgstr ""
 

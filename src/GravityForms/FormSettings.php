@@ -118,6 +118,19 @@ class FormSettings
 					'choices'       => $this->handle_supplier_choices(),
 				),
 				array(
+					'name'    => "{$this->prefix}-form-setting-producten-of-diensten",
+					'type'    => 'checkbox',
+					'label'   => esc_html__( 'Producten of diensten', 'owc-gravityforms-zgw' ),
+					'tooltip' => '<h6>' . __( 'Producten of diensten meesturen', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Wanneer ingeschakeld worden de producten/diensten die op het geselecteerde zaaktype zijn geconfigureerd automatisch meegestuurd bij het aanmaken van de zaak.', 'owc-gravityforms-zgw' ),
+					'choices' => array(
+						array(
+							'name'          => "{$this->prefix}-form-setting-producten-of-diensten-enabled",
+							'label'         => esc_html__( 'Producten/diensten van het zaaktype meesturen bij het aanmaken van de zaak', 'owc-gravityforms-zgw' ),
+							'default_value' => '0',
+						),
+					),
+				),
+				array(
 					'name'    => "{$this->prefix}-form-setting-overwrite-bsn",
 					'type'    => 'text',
 					'label'   => esc_html__( 'Dummy BSN', 'owc-gravityforms-zgw' ),
