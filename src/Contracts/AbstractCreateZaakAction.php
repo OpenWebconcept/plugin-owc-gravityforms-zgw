@@ -28,10 +28,12 @@ use OWC\ZGW\Entities\Rol;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Zaakeigenschap;
 use OWC\ZGW\Entities\Zaakobject;
+use OWC\ZGW\Entities\Zaaktype;
 use OWC\ZGW\Http\Errors\BadRequestError;
 use OWC\ZGW\Support\PagedCollection;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\Enums\BetrokkeneType;
+use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\GravityForms\Traits\EntryNote;
 use OWCGravityFormsZGW\LoggerZGW;
@@ -116,9 +118,37 @@ abstract class AbstractCreateZaakAction
 			'startdatum'                   => date( 'Y-m-d' ),
 			'verantwoordelijkeOrganisatie' => ContainerResolver::make()->get( 'zgw.rsin' ),
 			'zaaktype'                     => FormUtils::zaaktype_identifier_form_setting( $this->form, $this->supplier_name ),
+			'productenOfDiensten'          => $this->get_zaaktype_producten_of_diensten(),
 		);
 
 		return $this->map_required_zaak_creation_args( $args );
+	}
+
+	/**
+	 * Retrieve the "productenOfDiensten" configured on the "zaaktype" so they can be
+	 * carried over onto the "zaak" being created.
+	 *
+	 * @since NEXT
+	 */
+	protected function get_zaaktype_producten_of_diensten(): array
+	{
+		if ( ! FormUtils::producten_of_diensten_form_setting( $this->form ) ) {
+			return array();
+		}
+
+		$zaaktype_identifier = FormUtils::zaaktype_identifier_form_setting( $this->form, $this->supplier_name );
+
+		if ( '' === $zaaktype_identifier ) {
+			return array();
+		}
+
+		$zaaktype = ( new FieldSettings() )->get_zaak_type( $this->supplier_name, $zaaktype_identifier );
+
+		if ( ! $zaaktype instanceof Zaaktype || ! is_array( $zaaktype->productenOfDiensten ) ) {
+			return array();
+		}
+
+		return array_values( array_filter( $zaaktype->productenOfDiensten, 'is_string' ) );
 	}
 
 	/**

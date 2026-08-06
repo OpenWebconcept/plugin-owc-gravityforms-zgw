@@ -138,6 +138,19 @@ class FormUtils
 	}
 
 	/**
+	 * Checks whether the "producten of diensten" of the configured zaaktype should be
+	 * passed along when creating a "zaak". Enabled by default.
+	 *
+	 * @since NEXT
+	 */
+	public static function producten_of_diensten_form_setting( array $form ): bool
+	{
+		$value = $form[ sprintf( '%s-form-setting-producten-of-diensten-enabled', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX ) ] ?? '0';
+
+		return '1' === (string) $value;
+	}
+
+	/**
 	 * Return the value of the overwrite BSN form setting.
 	 *
 	 * @since 1.1.0
