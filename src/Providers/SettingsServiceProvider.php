@@ -102,45 +102,69 @@ class SettingsServiceProvider extends ServiceProvider
 				continue;
 			}
 
-			// Resolve the user-configured client name for this supplier type.
-			// ApiClientManager stores credentials/endpoints by the configured name, not the type key.
-			$client_name = '';
+			// Resolve every user-configured register of this supplier type. A supplier type
+			// can have multiple registers (e.g. two RxMission registers with different
+			// credentials), so all of them need the timeout override, not just the first.
+			$client_names = array();
 
 			foreach ( $configured_clients as $client_config ) {
 				if ( ( $client_config['client_type'] ?? '' ) === $supplier ) {
 					$client_name = trim( $client_config['name'] ?? '' );
 
-					break;
+					if ( '' !== $client_name ) {
+						$client_names[] = $client_name;
+					}
 				}
 			}
 
-			if ( '' === $client_name ) {
-				continue;
+			foreach ( $client_names as $client_name ) {
+				$this->overwrite_client_http_options_for_register( $manager, $client_name, $client_supplier_class, $supplier );
 			}
+		}
+	}
 
-			try {
-				$credentials     = $manager->container()->get( $client_name . 'credentials' );
-				$endpoints       = $manager->container()->get( $client_name . 'endpoints' );
-				$supplier_client = $manager->container()->make( $client_supplier_class, compact( 'credentials', 'endpoints' ) );
-				$shared_client   = $supplier_client->getRequestClient();
-				$cloned_client   = clone $shared_client;
-				$cloned_options  = $shared_client->getRequestOptions()->clone();
+	/**
+	 * Overwrite the HTTP request timeout for a single configured register.
+	 *
+	 * The resolved client is pinned under a container key scoped to this specific
+	 * register (`$client_name . 'client'`), not the shared client class. Overwriting
+	 * the class identifier itself would leak this one register's client/credentials
+	 * to every other register using the same supplier (e.g. a second RxMission or
+	 * DecosJoin register), since ApiClientManager::buildClient() resolves clients by
+	 * that class identifier for all registers of a given supplier.
+	 *
+	 * @since NEXT
+	 */
+	private function overwrite_client_http_options_for_register( ApiClientManager $manager, string $client_name, string $client_supplier_class, string $supplier ): void
+	{
+		try {
+			$credentials     = $manager->container()->get( $client_name . 'credentials' );
+			$endpoints       = $manager->container()->get( $client_name . 'endpoints' );
+			$supplier_client = $manager->container()->make( $client_supplier_class, compact( 'credentials', 'endpoints' ) );
+			$shared_client   = $supplier_client->getRequestClient();
+			$cloned_client   = clone $shared_client; // Clone the shared client to avoid mutating it for other registers of the same supplier.
+			$cloned_options  = $shared_client->getRequestOptions()->clone();
 
-				$cloned_options->set( 'timeout', $this->container->get( 'zgw.site_options' )->client_request_timeout_option() );
-				$cloned_client->setRequestOptions( $cloned_options );
-				$supplier_client->setRequestClient( $cloned_client );
+			$cloned_options->set( 'timeout', $this->container->get( 'zgw.site_options' )->client_request_timeout_option() );
+			$cloned_client->setRequestOptions( $cloned_options );
+			$supplier_client->setRequestClient( $cloned_client );
 
-				$manager->container()->set(
-					$client_supplier_class,
-					function () use ( $supplier_client ) {
-						return $supplier_client;
-					}
-				);
-			} catch ( NotFoundException $e ) {
-				$this->logger->error( sprintf( 'Could not overwrite client request options for supplier %s: %s', $supplier, $e->getMessage() ) );
+			$pinned_client_key = $client_name . '.http-options-client';
 
-				continue;
-			}
+			// Pin the client under a key unique to this register, then repoint the register's
+			// existing `{name}client` entry to it. ApiClientManager::buildClient() always passes
+			// that entry's value into container->make(), which requires a string, so the built
+			// object can't be stored there directly — it has to go through this indirection.
+			$manager->container()->set(
+				$pinned_client_key,
+				function () use ( $supplier_client ) {
+					return $supplier_client;
+				}
+			);
+
+			$manager->container()->set( $client_name . 'client', $pinned_client_key );
+		} catch ( NotFoundException $e ) {
+			$this->logger->error( sprintf( 'Could not overwrite client request options for supplier %s (register %s): %s', $supplier, $client_name, $e->getMessage() ) );
 		}
 	}
 
