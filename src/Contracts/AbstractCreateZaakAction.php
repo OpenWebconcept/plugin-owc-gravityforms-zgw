@@ -118,6 +118,14 @@ abstract class AbstractCreateZaakAction
 			'zaaktype'                     => FormUtils::zaaktype_identifier_form_setting( $this->form, $this->supplier_name ),
 		);
 
+		$product = FormUtils::product_form_setting( $this->form, $this->supplier_name );
+
+		// Omitted rather than sent as an empty array, so forms without a chosen product
+		// create a "zaak" exactly as they did before this setting existed.
+		if ( '' !== $product ) {
+			$args['productenOfDiensten'] = array( $product );
+		}
+
 		return $this->map_required_zaak_creation_args( $args );
 	}
 

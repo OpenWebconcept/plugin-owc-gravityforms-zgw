@@ -138,6 +138,42 @@ class FormUtils
 	}
 
 	/**
+	 * Returns the "product of dienst" configured for the "zaaktype" on the form settings,
+	 * so it can be carried over onto the "zaak" being created.
+	 *
+	 * @since NEXT
+	 */
+	public static function product_form_setting( array $form, string $supplier_name ): string
+	{
+		$supplier_name = strtolower( $supplier_name );
+
+		return trim( (string) $form[ sprintf( '%s-form-setting-%s-product', OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX, $supplier_name ) ] ?? '' );
+	}
+
+	/**
+	 * Normalizes a "zaaktype" URL down to its trailing identifier segment, so a full URL and
+	 * a bare identifier for the same zaaktype resolve to the same lookup key. Previous versions
+	 * of the plugin saved the bare identifier instead of the URL, so form settings can contain either.
+	 *
+	 * @since NEXT
+	 */
+	public static function normalize_zaaktype_identifier( string $identifier ): string
+	{
+		$identifier = trim( $identifier );
+
+		if ( '' === $identifier ) {
+			return '';
+		}
+
+		if ( filter_var( $identifier, FILTER_VALIDATE_URL ) ) {
+			$segments   = explode( '/', $identifier );
+			$identifier = (string) end( $segments );
+		}
+
+		return $identifier;
+	}
+
+	/**
 	 * Return the value of the overwrite BSN form setting.
 	 *
 	 * @since 1.1.0

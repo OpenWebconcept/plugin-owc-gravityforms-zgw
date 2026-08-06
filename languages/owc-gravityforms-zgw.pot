@@ -2,14 +2,14 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | GravityForms ZGW 1.13.1\n"
+"Project-Id-Version: OWC | GravityForms ZGW 1.15.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-gravityforms-zgw\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-27T11:18:36+00:00\n"
+"POT-Creation-Date: 2026-08-10T09:33:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-gravityforms-zgw\n"
@@ -39,20 +39,18 @@ msgstr ""
 msgid "https://www.yard.nl"
 msgstr ""
 
-#. translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
-#: src/Contracts/AbstractCreateZaakAction.php:634
-#, php-format
-msgid "Zaak \"%1$s\" aangemaakt onder zaak nummer \"%2$s\"."
+#: src/Contracts/AbstractCreateZaakAction.php:642
+msgid "ID onbekend"
 msgstr ""
 
-#. translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
-#: src/Contracts/AbstractCreateZaakAction.php:634
+#: src/Contracts/AbstractCreateZaakAction.php:642
 msgid "UUID onbekend"
 msgstr ""
 
 #. translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
-#: src/Contracts/AbstractCreateZaakAction.php:634
-msgid "ID onbekend"
+#: src/Contracts/AbstractCreateZaakAction.php:642
+#, php-format
+msgid "Zaak \"%1$s\" aangemaakt onder zaak nummer \"%2$s\"."
 msgstr ""
 
 #: src/Contracts/AbstractZaakFormController.php:139
@@ -91,6 +89,11 @@ msgstr ""
 msgid "Zaak definitief, betaling succesvol."
 msgstr ""
 
+#: src/GravityForms/Controllers/ProductChoicesController.php:42
+#: src/Transactions/Controllers/RetryController.php:37
+msgid "Geen toegang."
+msgstr ""
+
 #: src/GravityForms/Controllers/ZaakMergeTagsController.php:108
 #: src/Transactions/TransactionPostType.php:145
 #: src/Transactions/TransactionPostType.php:146
@@ -108,90 +111,118 @@ msgstr ""
 msgid "Kan de \"%s\" die horen bij de geselecteerde leverancier niet ophalen."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:109
+#: src/GravityForms/FormSettings.php:136
+#: src/GravityForms/FormSettings.php:426
+msgid "Selecteer een product"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:137
+#: src/GravityForms/FormSettings.php:414
+msgid "Selecteer eerst een zaaktype"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:138
+#: src/GravityForms/FormSettings.php:425
+msgid "Geen producten geconfigureerd op dit zaaktype"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:139
+msgid "Producten konden niet worden opgehaald."
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:147
 msgid "Zaaksysteem"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:110
+#: src/GravityForms/FormSettings.php:148
 msgid "Om de snelheid te verhogen worden de instellingen van leveranciers pas opgehaald na het kiezen van een leverancier. Dit betekent dat de pagina herladen moet worden na het selecteren van een leverancier."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:115
-#: src/GravityForms/FormSettings.php:117
-msgid "Selecteer een leverancier"
-msgstr ""
-
-#: src/GravityForms/FormSettings.php:115
+#: src/GravityForms/FormSettings.php:153
 msgid "Kies een Zaaksysteem leverancier. Let op dat je ook de instellingen van de leverancier moet configureren in de hoofdinstellingen van Gravity Forms."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:123
+#: src/GravityForms/FormSettings.php:153
+#: src/GravityForms/FormSettings.php:155
+msgid "Selecteer een leverancier"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:161
 msgid "Dummy BSN"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:124
+#: src/GravityForms/FormSettings.php:162
 msgid "BSN vervangen door dummywaarde (BSN)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:124
+#: src/GravityForms/FormSettings.php:162
 msgid "Vul hier een 9 cijferig BSN in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen BSN van de burger aanwezig of vereist is."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:129
+#: src/GravityForms/FormSettings.php:167
 msgid "Dummy KVK"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:130
+#: src/GravityForms/FormSettings.php:168
 msgid "KVK-nummer vervangen door dummywaarde (KVK)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:130
+#: src/GravityForms/FormSettings.php:168
 msgid "Vul hier een 8 cijferig KVK-nummer in die gebruikt wordt bij het aanmaken van een zaak. Handig wanneer er geen KVK-nummer van een onderneming aanwezig of vereist is."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:135
-#: src/GravityForms/FormSettings.php:137
-msgid "Leverancier instellingen"
-msgstr ""
-
-#: src/GravityForms/FormSettings.php:135
+#: src/GravityForms/FormSettings.php:173
 msgid "Kies hoe de leverancier instellingen geconfigureerd moeten worden."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:141
+#: src/GravityForms/FormSettings.php:173
+#: src/GravityForms/FormSettings.php:175
+msgid "Leverancier instellingen"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:179
 msgid "Selecteer instellingen (opgehaald vanuit zaaksysteem)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:146
+#: src/GravityForms/FormSettings.php:184
 msgid "Configureer instellingen handmatig (invoeren van URL's)"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:245
-#: src/GravityForms/FormSettings.php:287
+#: src/GravityForms/FormSettings.php:301
+#: src/GravityForms/FormSettings.php:328
 #: src/Views/partials/gf-field-zgw-mapping-options.php:27
 msgid "Zaaktype"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:246
-#: src/GravityForms/FormSettings.php:288
+#: src/GravityForms/FormSettings.php:302
+#: src/GravityForms/FormSettings.php:329
 msgid "Een zaaktype wordt gebruikt om de aan te maken zaak te definiëren, inclusief de structuur, benodigde gegevens en het verloop van het proces."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:265
-#: src/GravityForms/FormSettings.php:306
+#: src/GravityForms/FormSettings.php:310
+#: src/GravityForms/FormSettings.php:311
+msgid "Product"
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:311
+msgid "Kies het product of de dienst dat wordt meegestuurd bij het aanmaken van de zaak. De keuzes zijn afhankelijk van het hierboven gekozen zaaktype."
+msgstr ""
+
+#: src/GravityForms/FormSettings.php:318
+#: src/GravityForms/FormSettings.php:347
 msgid "Informatie object type"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:266
-#: src/GravityForms/FormSettings.php:307
+#: src/GravityForms/FormSettings.php:319
+#: src/GravityForms/FormSettings.php:348
 msgid "Selecteer het informatieobjecttype dat wordt gebruikt om de PDF van de inzending aan te maken."
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:336
+#: src/GravityForms/FormSettings.php:377
 msgid "Selecteer een zaaktype"
 msgstr ""
 
-#: src/GravityForms/FormSettings.php:352
+#: src/GravityForms/FormSettings.php:393
 msgid "Selecteer een informatie object type"
 msgstr ""
 
@@ -211,52 +242,52 @@ msgstr ""
 msgid "Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in."
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:155
-#: src/Providers/SettingsServiceProvider.php:156
+#: src/Providers/SettingsServiceProvider.php:179
+#: src/Providers/SettingsServiceProvider.php:180
 msgid "OWC | GravityForms ZGW instellingen"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:180
+#: src/Providers/SettingsServiceProvider.php:204
 msgid "Transactie overzicht"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:187
+#: src/Providers/SettingsServiceProvider.php:211
 msgid "Gebruikersrollen"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:196
+#: src/Providers/SettingsServiceProvider.php:220
 msgid "Transactie rapport"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:203
+#: src/Providers/SettingsServiceProvider.php:227
 msgid "Verzenden naar"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:215
+#: src/Providers/SettingsServiceProvider.php:239
 msgid "Vertraging na zaakcreatie"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:225
+#: src/Providers/SettingsServiceProvider.php:249
 msgid "Vertraging na zaakcreatie (seconden)"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:237
+#: src/Providers/SettingsServiceProvider.php:261
 msgid "Pas vertraging toe op leverancier(s)"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:249
+#: src/Providers/SettingsServiceProvider.php:273
 msgid "Client request timeout"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:259
+#: src/Providers/SettingsServiceProvider.php:283
 msgid "Request timeout (seconden)"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:271
+#: src/Providers/SettingsServiceProvider.php:295
 msgid "Pas aangepaste timeout toe op leverancier(s)"
 msgstr ""
 
-#: src/Providers/SettingsServiceProvider.php:283
+#: src/Providers/SettingsServiceProvider.php:307
 #: src/Views/admin/settings-page-cache-only.php:18
 msgid "Zaaktypen en informatieobjecttypen cache"
 msgstr ""
@@ -303,10 +334,6 @@ msgstr ""
 #: src/Transactions/Controllers/ExecuteRetryController.php:117
 #, php-format
 msgid "Kon originele zaak %1$s niet verwijderen na geslaagde herpoging: %2$s"
-msgstr ""
-
-#: src/Transactions/Controllers/RetryController.php:37
-msgid "Geen toegang."
 msgstr ""
 
 #: src/Transactions/Controllers/RetryController.php:55

@@ -103,6 +103,44 @@ class FormSettings
 		}
 	}
 
+	/**
+	 * Enqueues the script that live-refreshes the "product" select whenever the "zaaktype"
+	 * select changes, so a page reload is not required to pick the matching products.
+	 *
+	 * @since NEXT
+	 */
+	public function enqueue_settings_scripts(): void
+	{
+		if ( 'gf_edit_forms' !== ( $_GET['page'] ?? '' ) || 'settings' !== ( $_GET['view'] ?? '' ) ) {
+			return;
+		}
+
+		$rel         = 'assets/zaaktype-product-select.js';
+		$script_path = OWC_GRAVITYFORMS_ZGW_DIR_PATH . $rel;
+		$script_url  = OWC_GRAVITYFORMS_ZGW_PLUGIN_URL . $rel;
+
+		wp_enqueue_script(
+			'owc-gravityforms-zgw-zaaktype-product-select',
+			$script_url,
+			array(),
+			file_exists( $script_path ) ? filemtime( $script_path ) : null,
+			true
+		);
+
+		wp_localize_script(
+			'owc-gravityforms-zgw-zaaktype-product-select',
+			'owcZGWProductSelect',
+			array(
+				'url'            => admin_url( 'admin-ajax.php' ),
+				'nonce'          => wp_create_nonce( 'owcgfzgw_get_producten' ),
+				'selectProduct'  => esc_html__( 'Selecteer een product', 'owc-gravityforms-zgw' ),
+				'selectZaaktype' => esc_html__( 'Selecteer eerst een zaaktype', 'owc-gravityforms-zgw' ),
+				'noProducts'     => esc_html__( 'Geen producten geconfigureerd op dit zaaktype', 'owc-gravityforms-zgw' ),
+				'requestError'   => esc_html__( 'Producten konden niet worden opgehaald.', 'owc-gravityforms-zgw' ),
+			)
+		);
+	}
+
 	public function add_form_settings( array $fields, array $form ): array
 	{
 		$fields['owc-gravityforms-zaaksysteem'] = array(
@@ -216,7 +254,7 @@ class FormSettings
 			$supplier_key  = strtolower( $supplier_name );
 
 			if ( $this->supplier_is_selected_in_form_settings( $form, $supplier_key ) ) {
-				$fields = $this->prepare_supplier_configuration_fields( $fields, $supplier_name, $supplier_key, $client );
+				$fields = $this->prepare_supplier_configuration_fields( $fields, $supplier_name, $supplier_key, $form );
 			}
 		}
 
@@ -233,50 +271,53 @@ class FormSettings
 		return $supplier_form_setting === $supplier;
 	}
 
-	protected function prepare_supplier_configuration_fields( array $fields, string $supplier_name, string $supplier_key ): array
+	/**
+	 * @since NEXT Added the $form parameter, needed to resolve the currently selected zaaktype.
+	 */
+	protected function prepare_supplier_configuration_fields( array $fields, string $supplier_name, string $supplier_key, array $form ): array
 	{
-		$api_client = apiClient( $supplier_name );
+		$api_client          = apiClient( $supplier_name );
+		$zaaktype_identifier = $this->resolve_zaaktype_identifier_for_product_choices( $form, $supplier_name, $supplier_key );
+		$supplier_dependency = array(
+			'live'   => true,
+			'fields' => array(
+				array(
+					'field'  => "{$this->prefix}-form-setting-supplier",
+					'values' => array( $supplier_key ),
+				),
+				array(
+					'field'  => "{$this->prefix}-form-setting-supplier-manually",
+					'values' => array( '0' ),
+				),
+			),
+		);
 
 		$fields[ $supplier_key ] = array(
 			'select_setting' => array(
 				array(
 					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-identifier",
 					'type'       => 'select',
+					'class'      => 'owc-gf-zgw-zaaktype-select',
 					'label'      => esc_html__( 'Zaaktype', 'owc-gravityforms-zgw' ),
 					'tooltip'    => esc_html__( 'Een zaaktype wordt gebruikt om de aan te maken zaak te definiëren, inclusief de structuur, benodigde gegevens en het verloop van het proces.', 'owc-gravityforms-zgw' ),
-					'dependency' => array(
-						'live'   => true,
-						'fields' => array(
-							array(
-								'field'  => "{$this->prefix}-form-setting-supplier",
-								'values' => array( $supplier_key ),
-							),
-							array(
-								'field'  => "{$this->prefix}-form-setting-supplier-manually",
-								'values' => array( '0' ),
-							),
-						),
-					),
+					'dependency' => $supplier_dependency,
 					'choices'    => $this->format_choices_zaaktypen( $api_client, $supplier_name ),
+				),
+				array(
+					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-product",
+					'type'       => 'select',
+					'class'      => 'owc-gf-zgw-product-select',
+					'label'      => esc_html__( 'Product', 'owc-gravityforms-zgw' ),
+					'tooltip'    => '<h6>' . __( 'Product', 'owc-gravityforms-zgw' ) . '</h6>' . __( 'Kies het product of de dienst dat wordt meegestuurd bij het aanmaken van de zaak. De keuzes zijn afhankelijk van het hierboven gekozen zaaktype.', 'owc-gravityforms-zgw' ),
+					'dependency' => $supplier_dependency,
+					'choices'    => $this->format_choices_producten( $supplier_name, $zaaktype_identifier ),
 				),
 				array(
 					'name'       => "{$this->prefix}-form-setting-{$supplier_key}-information-object-type",
 					'type'       => 'select',
 					'label'      => esc_html__( 'Informatie object type', 'owc-gravityforms-zgw' ),
 					'tooltip'    => esc_html__( 'Selecteer het informatieobjecttype dat wordt gebruikt om de PDF van de inzending aan te maken.', 'owc-gravityforms-zgw' ),
-					'dependency' => array(
-						'live'   => true,
-						'fields' => array(
-							array(
-								'field'  => "{$this->prefix}-form-setting-supplier",
-								'values' => array( $supplier_key ),
-							),
-							array(
-								'field'  => "{$this->prefix}-form-setting-supplier-manually",
-								'values' => array( '0' ),
-							),
-						),
-					),
+					'dependency' => $supplier_dependency,
 					'choices'    => $this->format_choices_information_object_types( $api_client, $supplier_name ),
 				),
 			),
@@ -355,5 +396,71 @@ class FormSettings
 			),
 			( new InformatieobjecttypeAdapter( $api_client, $supplier_name ) )->handle()
 		);
+	}
+
+	/**
+	 * Resolves the zaaktype identifier the "product" choices should be based on. Gravity Forms
+	 * rebuilds the settings fields (via the `gform_form_settings_fields` filter) from the form
+	 * as it exists in the database *before* this save, even while processing the save postback
+	 * itself, and then validates the posted values against those same choices. So if we based
+	 * the product choices on $form alone, saving a newly picked zaaktype together with one of
+	 * its products would validate the product against the *previous* zaaktype's product list
+	 * and fail with GF's "Invalid selection" error. Preferring the posted identifier (when
+	 * present) keeps the choices in sync with what the user actually just selected.
+	 *
+	 * @since NEXT
+	 */
+	private function resolve_zaaktype_identifier_for_product_choices( array $form, string $supplier_name, string $supplier_key ): string
+	{
+		// Gravity Forms' settings framework prefixes every posted field name with
+		// "_gform_setting_" (see Settings::$input_name_prefix), so the raw field name never
+		// appears as-is in $_POST.
+		$posted_field = '_gform_setting_' . "{$this->prefix}-form-setting-{$supplier_key}-identifier";
+
+		if ( array_key_exists( $posted_field, $_POST ) ) {
+			return sanitize_text_field( wp_unslash( $_POST[ $posted_field ] ) );
+		}
+
+		return FormUtils::zaaktype_identifier_form_setting( $form, $supplier_name );
+	}
+
+	/**
+	 * Choices for the "product" select, based on the "productenOfDiensten" cached for the
+	 * currently selected zaaktype (see ZaaktypenAdapter::get_cached_products()). Used for the
+	 * initial page render; a live AJAX refresh (see ProductChoicesController) updates these
+	 * choices client-side when the zaaktype changes.
+	 *
+	 * @since NEXT
+	 */
+	private function format_choices_producten( string $supplier_name, string $zaaktype_identifier ): array
+	{
+		if ( '' === $zaaktype_identifier ) {
+			return array(
+				array(
+					'label' => esc_html__( 'Selecteer eerst een zaaktype', 'owc-gravityforms-zgw' ),
+					'value' => '',
+				),
+			);
+		}
+
+		$producten = ZaaktypenAdapter::get_cached_products( $supplier_name, $zaaktype_identifier );
+
+		$choices = array(
+			array(
+				'label' => array() === $producten
+					? esc_html__( 'Geen producten geconfigureerd op dit zaaktype', 'owc-gravityforms-zgw' )
+					: esc_html__( 'Selecteer een product', 'owc-gravityforms-zgw' ),
+				'value' => '',
+			),
+		);
+
+		foreach ( $producten as $product ) {
+			$choices[] = array(
+				'label' => $product,
+				'value' => $product,
+			);
+		}
+
+		return $choices;
 	}
 }

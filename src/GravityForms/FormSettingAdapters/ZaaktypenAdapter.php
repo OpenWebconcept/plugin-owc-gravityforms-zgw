@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Exception;
 use GFAPI;
 use OWC\ZGW\Entities\Zaaktype;
+use OWCGravityFormsZGW\GravityForms\FormUtils;
 
 /**
  * Adapter for zaaktypen.
@@ -41,6 +42,36 @@ class ZaaktypenAdapter extends Adapter
 	}
 
 	/**
+	 * Builds the transient key used to cache the "productenOfDiensten" per zaaktype of a supplier.
+	 *
+	 * @since NEXT
+	 */
+	public static function products_transient_key( string $supplier_name ): string
+	{
+		return sprintf( '%s-form-settings-zaaktypen-producten', self::key_prefix( $supplier_name ) );
+	}
+
+	/**
+	 * Returns the "productenOfDiensten" cached for the given zaaktype (URL or bare identifier).
+	 * The cache is populated as a side effect of handle() and refreshed daily by the
+	 * "populate form settings" cron, so this never triggers a live API request.
+	 *
+	 * @since NEXT
+	 */
+	public static function get_cached_products( string $supplier_name, string $zaaktype_identifier ): array
+	{
+		$map = get_transient( self::products_transient_key( $supplier_name ) );
+
+		if ( ! is_array( $map ) ) {
+			return array();
+		}
+
+		$key = FormUtils::normalize_zaaktype_identifier( $zaaktype_identifier );
+
+		return is_array( $map[ $key ] ?? null ) ? $map[ $key ] : array();
+	}
+
+	/**
 	 * Loops all Gravity Forms and updates any saved zaaktype URL that has been replaced by a newer version.
 	 * Only runs when zaaktypen are freshly fetched (cache miss), so the raw and filtered data are both in memory.
 	 *
@@ -48,6 +79,8 @@ class ZaaktypenAdapter extends Adapter
 	 */
 	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $raw, array $filtered ): void
 	{
+		$this->cache_producten_of_diensten( $filtered );
+
 		$saved_zaaktype_url_to_description  = $this->map_all_zaaktype_urls_to_descriptions( $raw );
 		$description_to_latest_zaaktype_url = $this->map_descriptions_to_latest_zaaktype_urls( $filtered );
 
@@ -128,6 +161,32 @@ class ZaaktypenAdapter extends Adapter
 		}
 
 		return $saved_zaaktype_url_to_description;
+	}
+
+	/**
+	 * Caches the "productenOfDiensten" per zaaktype, keyed by normalized identifier. The zaaktypen
+	 * list response already contains this field (unlike e.g. "statustypen", it isn't a separate
+	 * lazily-fetched resource), so this is built from data already in memory — no extra API calls.
+	 *
+	 * @since NEXT
+	 */
+	private function cache_producten_of_diensten( array $zaaktypen ): void
+	{
+		$products_by_identifier = array();
+
+		foreach ( $zaaktypen as $zaaktype ) {
+			$url = trim( (string) ( $zaaktype->url ?? '' ) );
+
+			if ( '' === $url || ! is_array( $zaaktype->productenOfDiensten ) ) {
+				continue;
+			}
+
+			$key = FormUtils::normalize_zaaktype_identifier( $url );
+
+			$products_by_identifier[ $key ] = array_values( array_filter( $zaaktype->productenOfDiensten, 'is_string' ) );
+		}
+
+		set_transient( self::products_transient_key( $this->supplier_name ), $products_by_identifier, self::TRANSIENT_LIFETIME_IN_SECONDS );
 	}
 
 	/**

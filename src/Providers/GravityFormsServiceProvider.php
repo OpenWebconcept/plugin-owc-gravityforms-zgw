@@ -24,6 +24,7 @@ use GFForms;
 use OWCGravityFormsZGW\Controllers\ActionSchedulerController;
 use OWCGravityFormsZGW\GravityForms\Controllers\NotificationController;
 use OWCGravityFormsZGW\GravityForms\Controllers\PaymentController;
+use OWCGravityFormsZGW\GravityForms\Controllers\ProductChoicesController;
 use OWCGravityFormsZGW\GravityForms\Controllers\ZaakMergeTagsController;
 use OWCGravityFormsZGW\GravityForms\FieldGroups;
 use OWCGravityFormsZGW\GravityForms\FieldSettings;
@@ -51,7 +52,9 @@ class GravityFormsServiceProvider extends ServiceProvider
 	{
 		// Form settings.
 		add_action( 'admin_init', ( new FormSettings() )->sync_zaaktypen_on_settings_page( ... ), 9 );
+		add_action( 'admin_enqueue_scripts', ( new FormSettings() )->enqueue_settings_scripts( ... ) );
 		add_filter( 'gform_form_settings_fields', ( new FormSettings() )->add_form_settings( ... ), 10, 2 );
+		add_action( 'wp_ajax_owcgfzgw_get_producten_of_diensten', ( new ProductChoicesController() )->handle( ... ) );
 
 		// Field tab settings.
 		add_action( 'gform_editor_js', ( new FieldSettings() )->add_select_script( ... ), 10, 0 );
