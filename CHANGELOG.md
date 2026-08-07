@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.15.3] - 2026-08-07
+
+-   Fix: registers sharing a supplier leaked each other's http options and credentials
+
 ## [v1.15.2] - 2026-07-30
 
 -   Chore: remove version attribute from composer.json
