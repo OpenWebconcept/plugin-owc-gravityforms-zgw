@@ -107,7 +107,7 @@ class FormSettings
 	 * Enqueues the script that live-refreshes the "product" select whenever the "zaaktype"
 	 * select changes, so a page reload is not required to pick the matching products.
 	 *
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	public function enqueue_settings_scripts(): void
 	{
@@ -272,7 +272,7 @@ class FormSettings
 	}
 
 	/**
-	 * @since NEXT Added the $form parameter, needed to resolve the currently selected zaaktype.
+	 * @since 1.16.0 Added the $form parameter, needed to resolve the currently selected zaaktype.
 	 */
 	protected function prepare_supplier_configuration_fields( array $fields, string $supplier_name, string $supplier_key, array $form ): array
 	{
@@ -408,7 +408,7 @@ class FormSettings
 	 * and fail with GF's "Invalid selection" error. Preferring the posted identifier (when
 	 * present) keeps the choices in sync with what the user actually just selected.
 	 *
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	private function resolve_zaaktype_identifier_for_product_choices( array $form, string $supplier_name, string $supplier_key ): string
 	{
@@ -430,7 +430,7 @@ class FormSettings
 	 * initial page render; a live AJAX refresh (see ProductChoicesController) updates these
 	 * choices client-side when the zaaktype changes.
 	 *
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	private function format_choices_producten( string $supplier_name, string $zaaktype_identifier ): array
 	{

@@ -133,7 +133,7 @@ class SettingsServiceProvider extends ServiceProvider
 	 * DecosJoin register), since ApiClientManager::buildClient() resolves clients by
 	 * that class identifier for all registers of a given supplier.
 	 *
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	private function overwrite_client_http_options_for_register( ApiClientManager $manager, string $client_name, string $client_supplier_class, string $supplier ): void
 	{

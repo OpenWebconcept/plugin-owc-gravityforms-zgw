@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.16.0] - 2206-08-14
+
+-   Added: product selection and use in Zaak creation
+
 ## [v1.15.3] - 2026-08-07
 
 -   Fix: registers sharing a supplier leaked each other's http options and credentials

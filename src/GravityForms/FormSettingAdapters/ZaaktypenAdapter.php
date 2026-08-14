@@ -44,7 +44,7 @@ class ZaaktypenAdapter extends Adapter
 	/**
 	 * Builds the transient key used to cache the "productenOfDiensten" per zaaktype of a supplier.
 	 *
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	public static function products_transient_key( string $supplier_name ): string
 	{
@@ -56,7 +56,7 @@ class ZaaktypenAdapter extends Adapter
 	 * The cache is populated as a side effect of handle() and refreshed daily by the
 	 * "populate form settings" cron, so this never triggers a live API request.
 	 *
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	public static function get_cached_products( string $supplier_name, string $zaaktype_identifier ): array
 	{
@@ -168,7 +168,7 @@ class ZaaktypenAdapter extends Adapter
 	 * list response already contains this field (unlike e.g. "statustypen", it isn't a separate
 	 * lazily-fetched resource), so this is built from data already in memory — no extra API calls.
 	 *
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	private function cache_producten_of_diensten( array $zaaktypen ): void
 	{

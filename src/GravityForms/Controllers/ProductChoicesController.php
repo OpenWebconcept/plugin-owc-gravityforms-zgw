@@ -12,7 +12,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.16.0
  */
 
 namespace OWCGravityFormsZGW\GravityForms\Controllers;
@@ -29,12 +29,12 @@ use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\ZaaktypenAdapter;
 /**
  * Product choices controller.
  *
- * @since NEXT
+ * @since 1.16.0
  */
 class ProductChoicesController
 {
 	/**
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	public function handle(): void
 	{
@@ -61,7 +61,7 @@ class ProductChoicesController
 	/**
 	 * Resolves the configured supplier client name from the posted (lowercase) supplier key.
 	 *
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	private function resolve_supplier_name( string $supplier_key ): string
 	{

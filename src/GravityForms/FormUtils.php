@@ -141,7 +141,7 @@ class FormUtils
 	 * Returns the "product of dienst" configured for the "zaaktype" on the form settings,
 	 * so it can be carried over onto the "zaak" being created.
 	 *
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	public static function product_form_setting( array $form, string $supplier_name ): string
 	{
@@ -155,7 +155,7 @@ class FormUtils
 	 * a bare identifier for the same zaaktype resolve to the same lookup key. Previous versions
 	 * of the plugin saved the bare identifier instead of the URL, so form settings can contain either.
 	 *
-	 * @since NEXT
+	 * @since 1.16.0
 	 */
 	public static function normalize_zaaktype_identifier( string $identifier ): string
 	{
