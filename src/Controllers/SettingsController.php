@@ -144,27 +144,36 @@ class SettingsController
 	 */
 	private function validate_plugin_options_settings( array $settings ): array
 	{
-		$settings['owc_zgw_transactions_report_recipient_email'] = $this->validate_email( (string) ( $settings['owc_zgw_transactions_report_recipient_email'] ?? '' ) );
+		$settings['owc_zgw_transactions_report_recipient_email'] = $this->validate_emails( (string) ( $settings['owc_zgw_transactions_report_recipient_email'] ?? '' ) );
 
 		return $settings;
 	}
 
 	/**
+	 * Validates a comma separated list of email addresses, dropping any invalid ones.
+	 *
 	 * @since 1.1.4
 	 */
-	private function validate_email( string $email ): string
+	private function validate_emails( string $emails ): string
 	{
-		if ( ! is_email( $email ) ) {
+		$emails = array_filter( array_map( 'trim', explode( ',', $emails ) ) );
+
+		$valid_emails   = array_filter( $emails, 'is_email' );
+		$invalid_emails = array_diff( $emails, $valid_emails );
+
+		if ( array() !== $invalid_emails ) {
 			add_settings_error(
 				'owc_gf_zgw_options_group',
 				'owc_gf_zgw_invalid_email',
-				__( 'Ongeldig e-mailadres voor het verzenden van het transactie rapport.', 'owc-gravityforms-zgw' ),
+				sprintf(
+					/* translators: %s: comma separated list of invalid email addresses. */
+					__( 'Ongeldig e-mailadres voor het verzenden van het transactie rapport: %s', 'owc-gravityforms-zgw' ),
+					implode( ', ', $invalid_emails )
+				),
 				'error'
 			);
-
-			return '';
 		}
 
-		return $email;
+		return implode( ', ', $valid_emails );
 	}
 }

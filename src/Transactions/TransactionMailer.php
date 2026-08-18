@@ -40,7 +40,7 @@ class TransactionMailer
 		};
 	}
 
-	public function send_report( $default_email, $to ): void
+	public function send_report( string $default_email, string $to ): void
 	{
 		$yesterday = date( 'Y-m-d H:i:s', strtotime( '-1 day' ) );
 		$now       = current_time( 'mysql' );
@@ -96,10 +96,12 @@ class TransactionMailer
 
 			$table .= '</tbody></table>';
 
-			if ( $to !== $default_email && is_email( $to ) ) {
+			$recipients = array_filter( array_map( 'trim', explode( ',', $to ) ), 'is_email' );
+
+			if ( $to !== $default_email && array() !== $recipients ) {
 				$subject = __( 'Zaaksysteem gefaalde transacties rapport', 'owc-gravityforms-zgw' );
 				$message = __( 'De volgende transacties zijn mislukt:', 'owc-gravityforms-zgw' ) . "<br><br>" . $table;
-				wp_mail( $to, $subject, $message, array( 'Content-Type: text/html;' ) );
+				wp_mail( $recipients, $subject, $message, array( 'Content-Type: text/html;' ) );
 			}
 		}
 

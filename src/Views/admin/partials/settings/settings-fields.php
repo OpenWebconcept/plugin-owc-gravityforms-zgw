@@ -31,7 +31,7 @@ $owc_zgw_client_request_timeout_option_suppliers = is_array( $owc_zgw_client_req
 <?php endif; ?>
 
 <?php if ( 'owc_zgw_transactions_report_recipient_email' === $settings_field_id ) : ?>
-	<input type="email" name="owc_gf_zgw_options[owc_zgw_transactions_report_recipient_email]" value="<?php echo esc_attr( $owc_zgw_transactions_report_recipient_email ); ?>">
+	<input type="text" name="owc_gf_zgw_options[owc_zgw_transactions_report_recipient_email]" value="<?php echo esc_attr( $owc_zgw_transactions_report_recipient_email ); ?>" placeholder="naam@voorbeeld.nl, naam2@voorbeeld.nl" style="width: 30em">
 <?php endif; ?>
 
 <?php if ( 'owc_zgw_delay_after_zaak_creation_seconds' === $settings_field_id ) : ?>

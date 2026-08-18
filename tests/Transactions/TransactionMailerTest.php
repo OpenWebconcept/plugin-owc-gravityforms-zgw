@@ -19,7 +19,9 @@ beforeEach(
 		WP_Mock::userFunction(
 			'is_email',
 			array(
-				'return' => true,
+				'return' => function ( $email ) {
+					return (bool) filter_var( $email, FILTER_VALIDATE_EMAIL );
+				},
 			)
 		);
 
@@ -129,9 +131,98 @@ it(
 		$mailer->send_report( 'default@example.com', 'recipient@example.com' );
 
 		expect( $this->sent_mail )->not->toBeNull()
-		->and( $this->sent_mail['to'] )->toBe( 'recipient@example.com' )
+		->and( $this->sent_mail['to'] )->toBe( array( 'recipient@example.com' ) )
 		->and( $this->sent_mail['subject'] )->toContain( 'Zaaksysteem gefaalde transacties rapport' )
 		->and( $this->sent_mail['message'] )->toContain( 'transaction_failed' )
 		->and( $this->sent_mail['message'] )->not->toContain( 'transaction_success' );
+	}
+);
+
+it(
+	'sends a report email to multiple recipients when given a comma separated list',
+	function () {
+		$factory = function ( $args ) {
+			return new class($args) {
+				public $posts = array();
+				public function __construct( $args ) {
+					$statuses    = (array) $args['post_status'];
+					$all_posts   = array(
+						(object) array(
+							'ID'          => 2,
+							'post_type'   => 'owc_zgw_transaction',
+							'post_status' => 'transaction_failed',
+						),
+					);
+					$this->posts = array_filter( $all_posts, fn( $p ) => in_array( $p->post_status, $statuses, true ) );
+				}
+				public function have_posts() {
+					return ! empty( $this->posts ); }
+			};
+		};
+
+		$mailer = new TransactionMailer( $factory );
+		$mailer->send_report( 'default@example.com', 'recipient1@example.com, recipient2@example.com' );
+
+		expect( $this->sent_mail )->not->toBeNull()
+		->and( $this->sent_mail['to'] )->toBe( array( 'recipient1@example.com', 'recipient2@example.com' ) );
+	}
+);
+
+it(
+	'filters out invalid email addresses from a comma separated list',
+	function () {
+		$factory = function ( $args ) {
+			return new class($args) {
+				public $posts = array();
+				public function __construct( $args ) {
+					$statuses    = (array) $args['post_status'];
+					$all_posts   = array(
+						(object) array(
+							'ID'          => 2,
+							'post_type'   => 'owc_zgw_transaction',
+							'post_status' => 'transaction_failed',
+						),
+					);
+					$this->posts = array_filter( $all_posts, fn( $p ) => in_array( $p->post_status, $statuses, true ) );
+				}
+				public function have_posts() {
+					return ! empty( $this->posts ); }
+			};
+		};
+
+		$mailer = new TransactionMailer( $factory );
+		$mailer->send_report( 'default@example.com', 'recipient1@example.com, not-an-email' );
+
+		expect( $this->sent_mail )->not->toBeNull()
+		->and( $this->sent_mail['to'] )->toBe( array( 'recipient1@example.com' ) );
+	}
+);
+
+it(
+	'does NOT send a report email when the recipient list has no valid emails',
+	function () {
+		$factory = function ( $args ) {
+			return new class($args) {
+				public $posts = array();
+				public function __construct( $args ) {
+					$statuses    = (array) $args['post_status'];
+					$all_posts   = array(
+						(object) array(
+							'ID'          => 2,
+							'post_type'   => 'owc_zgw_transaction',
+							'post_status' => 'transaction_failed',
+						),
+					);
+					$this->posts = array_filter( $all_posts, fn( $p ) => in_array( $p->post_status, $statuses, true ) );
+				}
+				public function have_posts() {
+					return ! empty( $this->posts ); }
+			};
+		};
+
+		$mailer = new TransactionMailer( $factory );
+		$mailer->send_report( 'default@example.com', 'not-an-email' );
+
+		expect( $this->sent_mail )->toBeNull();
 	}
 );

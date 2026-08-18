@@ -73,8 +73,10 @@ msgstr ""
 msgid "De cache van de zaaktypen en informatieobjecttypen is geleegd. Ze worden opnieuw opgehaald bij het volgende gebruik of bij de volgende geplande taak."
 msgstr ""
 
-#: src/Controllers/SettingsController.php:161
-msgid "Ongeldig e-mailadres voor het verzenden van het transactie rapport."
+#. translators: %s: comma separated list of invalid email addresses.
+#: src/Controllers/SettingsController.php:170
+#, php-format
+msgid "Ongeldig e-mailadres voor het verzenden van het transactie rapport: %s"
 msgstr ""
 
 #: src/GravityForms/Controllers/PaymentController.php:110
