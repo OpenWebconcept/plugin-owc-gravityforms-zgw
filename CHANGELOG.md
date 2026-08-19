@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.17.0] - 2206-08-19
+
+-   Chore: update owc/zgw-api package
+-   Change: multiple email addresses transaction report
+
 ## [v1.16.0] - 2206-08-14
 
 -   Added: product selection and use in Zaak creation
