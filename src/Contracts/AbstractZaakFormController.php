@@ -129,17 +129,7 @@ abstract class AbstractZaakFormController
 			)
 		);
 
-		// Update transaction message.
-		update_post_meta( (int) $transaction_post_id, 'transaction_message', $message );
-
-		// Add a note to the entry with the failure message.
-		GFFormsModel::add_note(
-			$this->entry['id'],
-			0,
-			__( 'Systeem', 'owc-gravityforms-zgw' ),
-			__( 'Er waren problemen bij het succesvol indienen van deze zaak, bekijk de transacties voor meer informatie.', 'owc-gravityforms-zgw' ),
-			$message
-		);
+		$this->handle_entry_notification( (int) $transaction_post_id, $message );
 
 		// Log error if logger is available.
 		if ( isset( $this->logger ) ) {
@@ -147,6 +137,32 @@ abstract class AbstractZaakFormController
 				sprintf( 'Transactie error: %s', $message )
 			);
 		}
+	}
+
+	/**
+	 * Handle entry notification by updating the transaction post and adding a note to the GravityForms entry.
+	 * Saved note ids are queued for later cleanup after a successful retry.
+	 *
+	 * @since NEXT
+	 */
+	private function handle_entry_notification( int $transaction_post_id, string $message ): void
+	{
+		// Update transaction message.
+		update_post_meta( $transaction_post_id, 'transaction_message', $message );
+
+		// Add a note to the entry with the failure message and queue its id for later cleanup.
+		$note_id = GFFormsModel::add_note(
+			$this->entry['id'],
+			0,
+			__( 'Systeem', 'owc-gravityforms-zgw' ),
+			__( 'Er waren problemen bij het succesvol indienen van deze zaak, bekijk de transacties voor meer informatie.', 'owc-gravityforms-zgw' ),
+			$message
+		);
+
+		$note_ids   = (array) get_post_meta( $transaction_post_id, 'transaction_note_ids', true );
+		$note_ids[] = $note_id;
+
+		update_post_meta( $transaction_post_id, 'transaction_note_ids', $note_ids );
 	}
 
 	/**
