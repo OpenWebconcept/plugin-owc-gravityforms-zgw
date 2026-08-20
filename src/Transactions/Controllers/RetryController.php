@@ -69,6 +69,16 @@ class RetryController
 			);
 		}
 
+		$note_ids = (array) get_post_meta( $transaction_post_id, 'transaction_note_ids', true );
+
+		foreach ( $note_ids as $note_id ) {
+			GFAPI::delete_note( (int) $note_id );
+		}
+
+		if ( array() !== $note_ids ) {
+			delete_post_meta( (int) $transaction_post_id, 'transaction_note_ids' );
+		}
+
 		return wp_send_json_success(
 			array(
 				'message' => __( 'Opnieuw uitvoeren gelukt.', 'owc-gravityforms-zgw' ),
