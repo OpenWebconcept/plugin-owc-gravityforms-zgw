@@ -143,7 +143,7 @@ abstract class AbstractZaakFormController
 	 * Handle entry notification by updating the transaction post and adding a note to the GravityForms entry.
 	 * Saved note ids are queued for later cleanup after a successful retry.
 	 *
-	 * @since NEXT
+	 * @since 1.17.1
 	 */
 	private function handle_entry_notification( int $transaction_post_id, string $message ): void
 	{
