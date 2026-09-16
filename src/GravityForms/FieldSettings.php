@@ -27,6 +27,7 @@ use OWC\ZGW\Entities\Informatieobjecttype;
 use OWC\ZGW\Entities\Zaaktype;
 use OWC\ZGW\Support\Collection;
 use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\GravityForms\FormSettingsPDF;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use function OWC\ZGW\apiClient;
 
@@ -38,6 +39,7 @@ use function OWC\ZGW\apiClient;
 class FieldSettings
 {
 	protected const TRANSIENT_LIFETIME_IN_SECONDS = 64800; // 18 hours.
+	protected const APPEARANCE_POSITION_AFTER_CSS_CLASS = 300;
 
 	/**
 	 * Adds select elements to the field settings tabs in the editor to map form fields to ZGW properties.
@@ -77,6 +79,34 @@ class FieldSettings
 				'objecttypes' => $this->prepare_object_types_options( $this->get_information_object_types( $zaak_type, (string) ( $zaak_type->identificatie ?? '' ) ) ),
 			)
 		);
+	}
+
+	/**
+	 * Adds a button below the "Custom CSS Class" input on the appearance tab that toggles
+	 * the "exclude" CSS class, which Gravity PDF uses to leave a field out of the PDF.
+	 * Only rendered when Gravity PDF is active and the form has an active PDF configuration.
+	 */
+	public function add_pdf_exclude_setting( int $position, int $form_id ): void
+	{
+		if ( self::APPEARANCE_POSITION_AFTER_CSS_CLASS !== $position || ! class_exists( 'GPDFAPI' ) ) {
+			return;
+		}
+
+		$form = GFAPI::get_form( $form_id );
+
+		if ( ! is_array( $form ) || ! FormSettingsPDF::form_has_active_pdf( $form ) ) {
+			return;
+		}
+
+		owc_gravityforms_zgw_render_view( 'partials/gf-field-zgw-pdf-exclude-option' );
+	}
+
+	/**
+	 * Renders the script that drives the "exclude from PDF" toggle.
+	 */
+	public function add_pdf_exclude_script(): void
+	{
+		owc_gravityforms_zgw_render_view( 'partials/gf-field-zgw-pdf-exclude-script' );
 	}
 
 	/**
