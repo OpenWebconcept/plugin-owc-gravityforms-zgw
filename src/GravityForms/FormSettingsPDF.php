@@ -69,15 +69,29 @@ class FormSettingsPDF
 
 	public function pdf_form_setting_is_active(): bool
 	{
-		$settings = $this->get_form_settings_pdf();
+		return self::form_has_active_pdf( $this->form );
+	}
 
-		if ( ! is_array( $settings ) || array() === $settings ) {
+	/**
+	 * Whether a form has at least one active Gravity PDF configuration.
+	 *
+	 * Static so it can be used where no entry is available, for example in the form editor.
+	 *
+	 * @since 1.18.0
+	 */
+	public static function form_has_active_pdf( array $form ): bool
+	{
+		if ( ! is_array( $form['gfpdf_form_settings'] ?? false ) ) {
 			return false;
 		}
 
-		$settings = reset( $settings );
+		foreach ( $form['gfpdf_form_settings'] as $form_settings_pdf ) {
+			if ( ! empty( $form_settings_pdf['active'] ) ) {
+				return true;
+			}
+		}
 
-		return $settings['active'] ?? false;
+		return false;
 	}
 
 	/**

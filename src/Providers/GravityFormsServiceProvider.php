@@ -58,6 +58,8 @@ class GravityFormsServiceProvider extends ServiceProvider
 
 		// Field tab settings.
 		add_action( 'gform_editor_js', ( new FieldSettings() )->add_select_script( ... ), 10, 0 );
+		add_action( 'gform_editor_js', ( new FieldSettings() )->add_pdf_exclude_script( ... ), 10, 0 );
+		add_action( 'gform_field_appearance_settings', ( new FieldSettings() )->add_pdf_exclude_setting( ... ), 10, 2 );
 		add_filter( 'gform_field_groups_form_editor', ( new FieldGroups() )->field_groups_form_editor( ... ), 10, 1 );
 		add_filter( 'gform_field_settings_tabs', ( new FieldGroups() )->add_tabs( ... ), 10, 1 );
 		add_action( 'gform_field_settings_tab_content_owc_gf_zgw', ( new FieldGroups() )->add_tab_content( ... ), 10, 1 );
