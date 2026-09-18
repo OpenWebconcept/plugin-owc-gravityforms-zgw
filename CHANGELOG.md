@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.17.2] - 2026-09-18
+
+-   Fix: delayed notifications
+
 ## [v1.17.1] - 2026-08-24
 
 -   Change: clean-up entry notifications after success
