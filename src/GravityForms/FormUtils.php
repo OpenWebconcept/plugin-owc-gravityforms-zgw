@@ -61,6 +61,9 @@ class FormUtils
 
 	/**
 	 * Check if the form is configured for ZGW.
+	 *
+	 * Forms containing a Nested Forms field are explicitly excluded: field mapping, uploads and
+	 * notification delaying all assume a flat form/entry, which a nested (child) form breaks.
 	 */
 	public static function is_form_zgw( array $form ): bool
 	{
@@ -70,7 +73,27 @@ class FormUtils
 			return false;
 		}
 
+		if ( self::form_has_nested_form_field( $form ) ) {
+			return false;
+		}
+
 		return true;
+	}
+
+	/**
+	 * Check if the form contains a Nested Forms (gp-nested-forms) field.
+	 *
+	 * @since NEXT
+	 */
+	private static function form_has_nested_form_field( array $form ): bool
+	{
+		foreach ( $form['fields'] ?? array() as $field ) {
+			if ( 'form' === ( $field->type ?? '' ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
