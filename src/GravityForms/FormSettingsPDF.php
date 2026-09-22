@@ -77,7 +77,7 @@ class FormSettingsPDF
 	 *
 	 * Static so it can be used where no entry is available, for example in the form editor.
 	 *
-	 * @since NEXT
+	 * @since 1.17.3
 	 */
 	public static function form_has_active_pdf( array $form ): bool
 	{

@@ -86,7 +86,7 @@ class FieldSettings
 	 * the "exclude" CSS class, which Gravity PDF uses to leave a field out of the PDF.
 	 * Only rendered when Gravity PDF is active and the form has an active PDF configuration.
      *
-     * @since NEXT
+     * @since 1.17.3
 	 */
 	public function add_pdf_exclude_setting( int $position, int $form_id ): void
 	{
@@ -106,7 +106,7 @@ class FieldSettings
 	/**
 	 * Renders the script that drives the "exclude from PDF" toggle.
      *
-     * @since NEXT
+     * @since 1.17.3
 	 */
 	public function add_pdf_exclude_script(): void
 	{
