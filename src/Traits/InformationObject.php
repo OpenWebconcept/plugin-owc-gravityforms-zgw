@@ -57,7 +57,13 @@ trait InformationObject
 
 		$body = wp_remote_retrieve_body( $response );
 
-		return '' !== $body ? base64_encode( $body ) : '';
+		if ( '' === $body ) {
+			ContainerResolver::make()->get( 'logger.zgw' )->error( 'Empty response body while retrieving content from URL: ' . $url );
+
+			return '';
+		}
+
+		return base64_encode( $body );
 	}
 
 	public function get_content_length( string $url ): string
