@@ -97,7 +97,7 @@ abstract class AbstractCreateSubmissionPDFAction
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$raw_content = file_get_contents( $pdf_path );
 
-		if ( false === $raw_content ) {
+		if ( false === $raw_content || '' === $raw_content ) {
 			return array();
 		}
 
