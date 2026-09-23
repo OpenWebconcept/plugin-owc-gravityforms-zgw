@@ -35,6 +35,7 @@ trait InformationObject
 			$url,
 			array(
 				'sslverify' => owc_gravityforms_zgw_env_is_prod(),
+				'timeout'   => ContainerResolver::make()->get( 'zgw.site_options' )->client_request_timeout_option(),
 			)
 		);
 
@@ -115,6 +116,7 @@ trait InformationObject
 			$url,
 			array(
 				'sslverify' => owc_gravityforms_zgw_env_is_prod(),
+				'timeout'   => ContainerResolver::make()->get( 'zgw.site_options' )->client_request_timeout_option(),
 			)
 		);
 
