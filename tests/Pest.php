@@ -3,6 +3,11 @@
 
 use OWCGravityFormsZGW\Tests\TestCase;
 
+// Plugin files exit when ABSPATH is missing, define it before test files declare classes that extend them.
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', '' );
+}
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -37,4 +42,29 @@ function get_option( $key, $default = false )
 	}
 
 	return $default;
+}
+
+/**
+ * Registers a fake 'logger.zgw' in the plugin container so logged errors can be asserted.
+ */
+function fake_zgw_logger(): object
+{
+	require_once dirname( __DIR__ ) . '/vendor-prefixed/autoload.php';
+
+	$logger = new class() {
+		public array $errors = array();
+
+		public function error( string $message, array $context = array() ): void
+		{
+			$this->errors[] = $message;
+		}
+	};
+
+	$container = new OWCGravityFormsZGW\Vendor_Prefixed\DI\Container();
+	$container->set( 'logger.zgw', $logger );
+
+	$property = new ReflectionProperty( OWCGravityFormsZGW\Bootstrap::class, 'container' );
+	$property->setValue( null, $container );
+
+	return $logger;
 }

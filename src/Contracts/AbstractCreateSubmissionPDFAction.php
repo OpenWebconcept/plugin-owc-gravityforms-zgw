@@ -91,6 +91,8 @@ abstract class AbstractCreateSubmissionPDFAction
 		}
 
 		if ( ! is_readable( $pdf_path ) ) {
+			ContainerResolver::make()->get( 'logger.zgw' )->error( 'Submission PDF is not readable: ' . $pdf_path );
+
 			return array();
 		}
 
@@ -98,6 +100,8 @@ abstract class AbstractCreateSubmissionPDFAction
 		$raw_content = file_get_contents( $pdf_path );
 
 		if ( false === $raw_content || '' === $raw_content ) {
+			ContainerResolver::make()->get( 'logger.zgw' )->error( 'Submission PDF is empty or could not be read: ' . $pdf_path );
+
 			return array();
 		}
 

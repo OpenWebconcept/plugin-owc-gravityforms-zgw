@@ -38,7 +38,7 @@ use function OWC\ZGW\apiClient;
  */
 class FieldSettings
 {
-	protected const TRANSIENT_LIFETIME_IN_SECONDS = 64800; // 18 hours.
+	protected const TRANSIENT_LIFETIME_IN_SECONDS       = 64800; // 18 hours.
 	protected const APPEARANCE_POSITION_AFTER_CSS_CLASS = 300;
 
 	/**
@@ -85,8 +85,8 @@ class FieldSettings
 	 * Adds a button below the "Custom CSS Class" input on the appearance tab that toggles
 	 * the "exclude" CSS class, which Gravity PDF uses to leave a field out of the PDF.
 	 * Only rendered when Gravity PDF is active and the form has an active PDF configuration.
-     *
-     * @since 1.17.3
+	 *
+	 * @since 1.17.3
 	 */
 	public function add_pdf_exclude_setting( int $position, int $form_id ): void
 	{
@@ -105,8 +105,8 @@ class FieldSettings
 
 	/**
 	 * Renders the script that drives the "exclude from PDF" toggle.
-     *
-     * @since 1.17.3
+	 *
+	 * @since 1.17.3
 	 */
 	public function add_pdf_exclude_script(): void
 	{
