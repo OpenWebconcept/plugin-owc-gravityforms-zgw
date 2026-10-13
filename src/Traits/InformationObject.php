@@ -31,7 +31,7 @@ trait InformationObject
 {
 	public function encode_base64_from_url( string $url ): string
 	{
-		$response = wp_remote_get(
+		$response = wp_safe_remote_get(
 			$url,
 			array(
 				'sslverify' => owc_gravityforms_zgw_env_is_prod(),
@@ -117,7 +117,7 @@ trait InformationObject
 			return array();
 		}
 
-		$response = wp_remote_head(
+		$response = wp_safe_remote_head(
 			$url,
 			array(
 				'sslverify' => owc_gravityforms_zgw_env_is_prod(),

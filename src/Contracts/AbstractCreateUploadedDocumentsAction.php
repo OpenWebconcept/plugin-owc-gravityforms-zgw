@@ -71,6 +71,11 @@ abstract class AbstractCreateUploadedDocumentsAction
 				continue;
 			}
 
+			// Only file upload fields contain server-side generated URLs, other field values are user controlled (SSRF).
+			if ( 'fileupload' !== $field->get_input_type() ) {
+				continue;
+			}
+
 			$field_value = rgar( $this->entry, (string) $field->id );
 
 			if ( empty( $field_value ) ) {

@@ -35,7 +35,7 @@ trait CheckURL
 			return false;
 		}
 
-		$response = wp_remote_get(
+		$response = wp_safe_remote_get(
 			$url,
 			array(
 				'sslverify' => owc_gravityforms_zgw_env_is_prod(),
