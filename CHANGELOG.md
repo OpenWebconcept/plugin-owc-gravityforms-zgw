@@ -1,5 +1,10 @@
 # Changelog
 
+## [NEXT] -
+
+-   Fix: prevent submitters from overriding the session BSN/KVK on the rol
+-   Fix: prevent SSRF when retrieving files mapped to informatieobject
+
 ## [v1.17.4] - 2026-09-24
 
 -   Fix: log unreadable or empty submission PDF and add upload tests
