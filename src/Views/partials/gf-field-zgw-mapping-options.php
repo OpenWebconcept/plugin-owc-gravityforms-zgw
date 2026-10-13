@@ -90,6 +90,7 @@ $properties = $properties ?? array();
 			<option value="subVerblijfBuitenland.subAdresBuitenland_3"><?php esc_html_e( 'subAdresBuitenland_3', 'owc-gravityforms-zgw' ); ?></option>
 		</optgroup>
 	</select>
+	<small><?php esc_html_e( 'De opties inpBsn, anpIdentificatie en inpA_nummer worden genegeerd wanneer de indiener is ingelogd met DigiD of eHerkenning, of wanneer er een BSN of KVK is ingesteld in de formulierinstellingen.', 'owc-gravityforms-zgw' ); ?></small>
 </li>
 
 <li class="field_setting zgw_contact_person_role_mapping_setting">
@@ -123,7 +124,7 @@ $properties = $properties ?? array();
 		<option value="huisnummertoevoeging"><?php esc_html_e( 'Huisnummertoevoeging', 'owc-gravityforms-zgw' ); ?></option>
 		<option value="postcode"><?php esc_html_e( 'Postcode', 'owc-gravityforms-zgw' ); ?></option>
 	</select>
-		<table class="description" style="margin-top:8px;">
+	<table class="description" style="margin-top:8px;">
 		<tbody>
 			<tr style="vertical-align:top;">
 				<td style="padding-right:10px;"><strong>*</strong></td>
