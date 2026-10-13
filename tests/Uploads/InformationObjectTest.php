@@ -47,7 +47,7 @@ it(
 	'encodes the response body to base64',
 	function () {
 		WP_Mock::userFunction(
-			'wp_remote_get',
+			'wp_safe_remote_get',
 			array(
 				'return' => array(
 					'response' => array( 'code' => 200 ),
@@ -67,7 +67,7 @@ it(
 	'returns an empty string and logs an error when the response body is empty',
 	function () {
 		WP_Mock::userFunction(
-			'wp_remote_get',
+			'wp_safe_remote_get',
 			array(
 				'return' => array(
 					'response' => array( 'code' => 200 ),
@@ -87,7 +87,7 @@ it(
 	'returns an empty string and logs an error on a non-2xx response',
 	function () {
 		WP_Mock::userFunction(
-			'wp_remote_get',
+			'wp_safe_remote_get',
 			array(
 				'return' => array(
 					'response' => array( 'code' => 404 ),
@@ -106,7 +106,7 @@ it(
 it(
 	'returns an empty string and logs an error when the request fails',
 	function () {
-		WP_Mock::userFunction( 'wp_remote_get', array( 'return' => new FakeWPErrorInformationObject() ) );
+		WP_Mock::userFunction( 'wp_safe_remote_get', array( 'return' => new FakeWPErrorInformationObject() ) );
 
 		$result = ( new InformationObjectTraitUser() )->encode_base64_from_url( 'https://example.com/file.pdf' );
 
@@ -119,7 +119,7 @@ it(
 	'does not prepare informatieobject args when the file content is empty',
 	function () {
 		WP_Mock::userFunction(
-			'wp_remote_get',
+			'wp_safe_remote_get',
 			array(
 				'return' => array(
 					'response' => array( 'code' => 200 ),
@@ -127,11 +127,25 @@ it(
 				),
 			)
 		);
-		WP_Mock::userFunction( 'wp_remote_head', array( 'times' => 0 ) );
+		WP_Mock::userFunction( 'wp_safe_remote_head', array( 'times' => 0 ) );
 
 		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
 
 		expect( $action->prepare( 'https://example.com/file.pdf', 'https://example.com/informatieobjecttypen/1' ) )->toBe( array() );
+	}
+);
+
+it(
+	'ignores informatieobject mappings on fields that are not file uploads',
+	function () {
+		WP_Mock::userFunction( 'rgar', array( 'times' => 0 ) );
+
+		$field = new FakeGFFieldInformationObject( 'text' );
+
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+		$action->set_form( array( 'fields' => array( $field ) ) );
+
+		expect( $action->mapped_args() )->toBe( array( 'informatieobject' => array() ) );
 	}
 );
 
@@ -150,6 +164,32 @@ class UploadedDocumentsActionTestDouble extends AbstractCreateUploadedDocumentsA
 	public function prepare( string $object_url, string $information_object_type ): array
 	{
 		return $this->prepare_information_object_args( $object_url, $information_object_type );
+	}
+
+	public function set_form( array $form ): void
+	{
+		$this->form = $form;
+	}
+
+	public function mapped_args(): array
+	{
+		return $this->get_mapped_required_information_object_creation_args();
+	}
+}
+
+class FakeGFFieldInformationObject
+{
+	public $id                              = 1;
+	public $mappedFieldValueZGW             = 'informatieobject';
+	public $mappedFieldDocumentTypeValueZGW = 'https://example.com/informatieobjecttypen/1';
+
+	public function __construct( private string $input_type )
+	{
+	}
+
+	public function get_input_type(): string
+	{
+		return $this->input_type;
 	}
 }
 
