@@ -78,6 +78,15 @@ abstract class AbstractCreateZaakAction
 		'subAdresBuitenland_3'     => 'string',
 	);
 
+	/**
+	 * Mapping keys that identify a person, these are ignored when a BSN or KVK is present in the session.
+	 */
+	private const INVOLVED_IDENTIFICATION_IDENTIFIER_KEYS = array(
+		'inpBsn',
+		'anpIdentificatie',
+		'inpA_nummer',
+	);
+
 	private const ADDRESS_OBJECT_MAPPING_KEYS_TO_TYPE = array(
 		'wplWoonplaatsNaam'     => 'string',
 		'gorOpenbareRuimteNaam' => 'string',
@@ -453,14 +462,26 @@ abstract class AbstractCreateZaakAction
 	{
 		$mapped_args = array();
 
+		// A BSN or KVK from the session (or form setting) is leading, submitters must not be able to overwrite it with a mapped field.
+		$has_identification = $this->is_valid_identification( $args['betrokkeneIdentificatie']['inpBsn'] ?? null ) || $this->is_valid_identification( $args['betrokkeneIdentificatie']['kvkNummer'] ?? null );
+
 		foreach ( $this->form['fields'] as $field ) {
 			if ( ! isset( $field->mappedFieldValueInvolvedIdentificationZGW ) || ! is_string( $field->mappedFieldValueInvolvedIdentificationZGW ) || '' === $field->mappedFieldValueInvolvedIdentificationZGW ) {
+				continue;
+			}
+
+			// Don't allow overwriting or supplementing the session identification with identifiers provided by the submitter.
+			if ( $has_identification && in_array( $field->mappedFieldValueInvolvedIdentificationZGW, self::INVOLVED_IDENTIFICATION_IDENTIFIER_KEYS, true ) ) {
 				continue;
 			}
 
 			$field_value = rgar( $this->entry, (string) $field->id );
 
 			if ( '' === $field_value ) {
+				continue;
+			}
+
+			if ( 'inpBsn' === $field->mappedFieldValueInvolvedIdentificationZGW && ! $this->is_valid_identification( $field_value ) ) {
 				continue;
 			}
 
@@ -489,6 +510,16 @@ abstract class AbstractCreateZaakAction
 		}
 
 		return $args;
+	}
+
+	/**
+	 * A BSN or KVK number is only considered valid when it is a non-empty string containing digits only.
+	 *
+	 * @since NEXT
+	 */
+	private function is_valid_identification( mixed $identification ): bool
+	{
+		return is_string( $identification ) && ctype_digit( $identification );
 	}
 
 	/**
