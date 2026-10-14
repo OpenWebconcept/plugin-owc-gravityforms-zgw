@@ -1,6 +1,6 @@
 # Changelog
 
-## [NEXT] -
+## [v1.17.5] - 2026-10-14
 
 -   Fix: prevent submitters from overriding the session BSN/KVK on the rol
 -   Fix: prevent SSRF when retrieving files mapped to informatieobject

@@ -515,7 +515,7 @@ abstract class AbstractCreateZaakAction
 	/**
 	 * A BSN or KVK number is only considered valid when it is a non-empty string containing digits only.
 	 *
-	 * @since NEXT
+	 * @since 1.17.5
 	 */
 	private function is_valid_identification( mixed $identification ): bool
 	{
