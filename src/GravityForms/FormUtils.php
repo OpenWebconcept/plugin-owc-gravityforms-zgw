@@ -50,13 +50,19 @@ class FormUtils
 	}
 
 	/**
-	 * Check if the entry has a pending or processing payment.
+	 * Check if the entry has a payment that has not succeeded (yet).
+	 *
+	 * Not only pending payments: when the gateway errors while the payment is started,
+	 * Pronamic, for example, marks the entry as “Failed” before gform_after_submission runs.
 	 *
 	 * @since 1.9.0
+	 * @since 1.17.6 Renamed from entry_has_pending_payment(), treats every status except "Paid" as unpaid.
 	 */
-	public static function entry_has_pending_payment( array $entry ): bool
+	public static function entry_is_unpaid( array $entry ): bool
 	{
-		return in_array( $entry['payment_status'] ?? '', array( 'Processing', 'Pending' ), true );
+		$payment_status = (string) ( $entry['payment_status'] ?? '' );
+
+		return '' !== $payment_status && 'Paid' !== $payment_status;
 	}
 
 	/**
