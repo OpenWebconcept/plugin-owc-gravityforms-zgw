@@ -57,7 +57,7 @@ class TransactionController
 			return;
 		}
 
-		if ( FormUtils::entry_has_pending_payment( $entry ) ) {
+		if ( FormUtils::entry_awaits_payment( $entry ) ) {
 			return;
 		}
 
@@ -99,7 +99,7 @@ class TransactionController
 			return;
 		}
 
-		if ( ! FormUtils::entry_has_pending_payment( $entry ) ) {
+		if ( ! FormUtils::entry_awaits_payment( $entry ) ) {
 			return;
 		}
 
