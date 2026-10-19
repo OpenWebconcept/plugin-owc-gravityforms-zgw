@@ -50,7 +50,7 @@ class ActionSchedulerController
 			return;
 		}
 
-		if ( FormUtils::entry_has_pending_payment( $entry ) ) {
+		if ( FormUtils::entry_is_unpaid( $entry ) ) {
 			return;
 		}
 
