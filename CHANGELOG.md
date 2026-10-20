@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.17.6] - 2026-10-20
+
+-   Fix: do not create a zaak when starting the payment fails
+
 ## [v1.17.5] - 2026-10-14
 
 -   Fix: prevent submitters from overriding the session BSN/KVK on the rol
