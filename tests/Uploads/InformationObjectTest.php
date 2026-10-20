@@ -149,6 +149,92 @@ it(
 	}
 );
 
+it(
+	'names a single upload after its document type',
+	function () {
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+
+		$result = $action->document_type_file_names(
+			array(
+				array( 'type' => 'https://example.com/informatieobjecttypen/1' ),
+			)
+		);
+
+		expect( array_column( $result, 'file_name' ) )->toBe( array( 'Bijlage' ) );
+	}
+);
+
+it(
+	'numbers uploads that share a document type across the whole form',
+	function () {
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+
+		// Uploads from two different fields, both linked to "Bijlage", and one linked to "Foto".
+		$result = $action->document_type_file_names(
+			array(
+				array( 'type' => 'https://example.com/informatieobjecttypen/1' ),
+				array( 'type' => 'https://example.com/informatieobjecttypen/2' ),
+				array( 'type' => 'https://example.com/informatieobjecttypen/1' ),
+				array( 'type' => 'https://example.com/informatieobjecttypen/1' ),
+			)
+		);
+
+		expect( array_column( $result, 'file_name' ) )->toBe( array( 'Bijlage_1', 'Foto', 'Bijlage_2', 'Bijlage_3' ) );
+	}
+);
+
+it(
+	'keeps the default file name when the document type name cannot be retrieved',
+	function () {
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+
+		$result = $action->document_type_file_names(
+			array(
+				array( 'type' => 'https://example.com/informatieobjecttypen/unknown' ),
+			)
+		);
+
+		expect( $result )->toBe( array( array( 'type' => 'https://example.com/informatieobjecttypen/unknown' ) ) );
+		expect( $action->file_name( 'https://example.com/uploads/original.pdf', '' ) )->toMatch( '/^[a-f0-9]+_original$/' );
+	}
+);
+
+it(
+	'retrieves the document type name from the cached document types',
+	function () {
+		WP_Mock::userFunction(
+			'get_transient',
+			array(
+				'args'   => array( 'supplier-form-settings-information-object-type' ),
+				'return' => array(
+					array(
+						'value'        => 'https://example.com/informatieobjecttypen/1',
+						'omschrijving' => 'Bijlage',
+					),
+				),
+			)
+		);
+
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+		$action->set_supplier_name( 'Supplier' );
+
+		expect( $action->cached_document_type_name( 'https://example.com/informatieobjecttypen/1' ) )->toBe( 'Bijlage' );
+		expect( $action->cached_document_type_name( 'https://example.com/informatieobjecttypen/2' ) )->toBe( '' );
+	}
+);
+
+it(
+	'returns an empty cached document type name when the cache is empty',
+	function () {
+		WP_Mock::userFunction( 'get_transient', array( 'return' => false ) );
+
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+		$action->set_supplier_name( 'Supplier' );
+
+		expect( $action->cached_document_type_name( 'https://example.com/informatieobjecttypen/1' ) )->toBe( '' );
+	}
+);
+
 class InformationObjectTraitUser
 {
 	use InformationObject;
@@ -156,6 +242,8 @@ class InformationObjectTraitUser
 
 class UploadedDocumentsActionTestDouble extends AbstractCreateUploadedDocumentsAction
 {
+	public bool $use_document_type_file_names = false;
+
 	public function add_uploaded_documents(): ?bool
 	{
 		return null;
@@ -169,6 +257,41 @@ class UploadedDocumentsActionTestDouble extends AbstractCreateUploadedDocumentsA
 	public function set_form( array $form ): void
 	{
 		$this->form = $form;
+	}
+
+	public function file_name( string $object_url, string $custom_file_name ): string
+	{
+		return $this->create_file_name( $object_url, $custom_file_name );
+	}
+
+	public function set_supplier_name( string $supplier_name ): void
+	{
+		$this->supplier_name = $supplier_name;
+	}
+
+	public function cached_document_type_name( string $document_type_url ): string
+	{
+		return $this->get_cached_document_type_name( $document_type_url );
+	}
+
+	public function document_type_file_names( array $objects ): array
+	{
+		return $this->add_document_type_file_names( $objects );
+	}
+
+	protected function use_document_type_file_names(): bool
+	{
+		return $this->use_document_type_file_names;
+	}
+
+	protected function get_document_type_name( string $document_type_url ): string
+	{
+		$names = array(
+			'https://example.com/informatieobjecttypen/1' => 'Bijlage',
+			'https://example.com/informatieobjecttypen/2' => 'Foto',
+		);
+
+		return $names[ $document_type_url ] ?? '';
 	}
 
 	public function mapped_args(): array

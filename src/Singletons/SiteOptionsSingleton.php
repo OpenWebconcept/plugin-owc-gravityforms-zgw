@@ -102,4 +102,12 @@ class SiteOptionsSingleton
 	{
 		return $this->options['owc_zgw_client_request_timeout_option_suppliers'] ?? array();
 	}
+
+	/**
+	 * @since NEXT
+	 */
+	public function document_type_file_names(): bool
+	{
+		return '1' === (string) ( $this->options['owc_zgw_document_type_file_names'] ?? '0' );
+	}
 }
