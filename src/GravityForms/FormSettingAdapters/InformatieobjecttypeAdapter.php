@@ -68,9 +68,10 @@ class InformatieobjecttypeAdapter extends Adapter
 					}
 
 					return array(
-						'name'  => $url,
-						'label' => "{$description} ({$designation})",
-						'value' => $url,
+						'name'         => $url,
+						'label'        => "{$description} ({$designation})",
+						'value'        => $url,
+						'omschrijving' => $description, // Used to name uploads after their document type.
 					);
 				},
 				'No information object types found.'
