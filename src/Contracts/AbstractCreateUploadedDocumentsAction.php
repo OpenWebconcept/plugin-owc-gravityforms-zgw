@@ -19,12 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Exception;
 use GF_Field;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Zaakinformatieobject;
 use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\InformatieobjecttypeAdapter;
 use OWCGravityFormsZGW\Traits\InformationObject;
 use OWCGravityFormsZGW\Traits\MergeTagTranslator;
 use function OWC\ZGW\apiClient;
@@ -42,16 +44,18 @@ abstract class AbstractCreateUploadedDocumentsAction
 	protected array $entry;
 	protected array $form;
 	protected string $supplier_key;
+	protected string $supplier_name;
 	protected Zaak $zaak;
 	protected Client $client;
 
 	public function __construct( array $entry, array $form, array $supplier_config, Zaak $zaak )
 	{
-		$this->entry        = $entry;
-		$this->form         = $form;
-		$this->supplier_key = $supplier_config['client_type'] ?? '';
-		$this->zaak         = $zaak;
-		$this->client       = apiClient( $supplier_config['name'] ?? '' );
+		$this->entry         = $entry;
+		$this->form          = $form;
+		$this->supplier_key  = $supplier_config['client_type'] ?? '';
+		$this->supplier_name = $supplier_config['name'] ?? '';
+		$this->zaak          = $zaak;
+		$this->client        = apiClient( $this->supplier_name );
 	}
 
 	abstract public function add_uploaded_documents(): ?bool;
@@ -83,6 +87,10 @@ abstract class AbstractCreateUploadedDocumentsAction
 			}
 
 			$args = $this->map_information_object_arg( $args, $field, $field_value );
+		}
+
+		if ( $this->use_document_type_file_names() ) {
+			$args['informatieobject'] = $this->add_document_type_file_names( $args['informatieobject'] );
 		}
 
 		return $args;
@@ -125,6 +133,101 @@ abstract class AbstractCreateUploadedDocumentsAction
 	}
 
 	/**
+	 * Whether uploads should be named after their document type, configured on the plugin settings page.
+	 *
+	 * @since NEXT
+	 */
+	protected function use_document_type_file_names(): bool
+	{
+		return ContainerResolver::make()->get( 'zgw.site_options' )->document_type_file_names();
+	}
+
+	/**
+	 * Names each upload after its document type.
+	 * When multiple uploads in the form share a document type, a sequence number is added, e.g. documenttype_1 and documenttype_2.
+	 *
+	 * @since NEXT
+	 */
+	protected function add_document_type_file_names( array $objects ): array
+	{
+		$names   = array();
+		$grouped = array();
+
+		foreach ( $objects as $index => $object ) {
+			$type = (string) ( $object['type'] ?? '' );
+
+			if ( ! array_key_exists( $type, $names ) ) {
+				$names[ $type ] = $this->get_document_type_name( $type );
+			}
+
+			if ( '' === $names[ $type ] ) {
+				continue; // Falls back to the default file name.
+			}
+
+			$grouped[ $names[ $type ] ][] = $index;
+		}
+
+		foreach ( $grouped as $name => $indexes ) {
+			foreach ( array_values( $indexes ) as $number => $index ) {
+				$objects[ $index ]['file_name'] = 1 < count( $indexes ) ? sprintf( '%s_%d', $name, $number + 1 ) : (string) $name;
+			}
+		}
+
+		return $objects;
+	}
+
+	/**
+	 * Retrieves the description ("omschrijving") of the document type ("informatieobjecttype").
+	 * Uses the cached document types of the supplier first, the API is only requested when the cache misses.
+	 *
+	 * @since NEXT
+	 */
+	protected function get_document_type_name( string $document_type_url ): string
+	{
+		$cached_name = $this->get_cached_document_type_name( $document_type_url );
+
+		if ( '' !== $cached_name ) {
+			return $cached_name;
+		}
+
+		$identifier = basename( (string) wp_parse_url( $document_type_url, PHP_URL_PATH ) );
+
+		if ( '' === $identifier ) {
+			return '';
+		}
+
+		try {
+			$document_type = $this->client->informatieobjecttypen()->get( $identifier );
+		} catch ( Exception $e ) {
+			ContainerResolver::make()->get( 'logger.zgw' )->error( 'Failed to retrieve document type: ' . $document_type_url, array( 'error' => $e->getMessage() ) );
+
+			return '';
+		}
+
+		return trim( (string) ( $document_type->omschrijving ?? '' ) );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function get_cached_document_type_name( string $document_type_url ): string
+	{
+		$types = get_transient( InformatieobjecttypeAdapter::transient_key( $this->supplier_name ) );
+
+		if ( ! is_array( $types ) ) {
+			return '';
+		}
+
+		foreach ( $types as $type ) {
+			if ( ( $type['value'] ?? '' ) === $document_type_url ) {
+				return trim( (string) ( $type['omschrijving'] ?? '' ) );
+			}
+		}
+
+		return '';
+	}
+
+	/**
 	 * Converts a JSON-encoded array of URLs into an array of information object structures,
 	 * each with a document type and URL.
 	 */
@@ -148,7 +251,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		);
 	}
 
-	protected function prepare_information_object_args( string $object_url, string $information_object_type, string $object_description = '' ): array
+	protected function prepare_information_object_args( string $object_url, string $information_object_type, string $object_description = '', string $custom_file_name = '' ): array
 	{
 		if ( 1 > strlen( $information_object_type ) ) {
 			return array();
@@ -160,7 +263,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 			return array(); // Retrieving the file failed, prevents creating an informatieobject without content.
 		}
 
-		$file_name = $this->create_file_name( $object_url );
+		$file_name = $this->create_file_name( $object_url, $custom_file_name );
 		$file_size = $this->get_content_length( $object_url );
 
 		$args                                = array();
@@ -181,8 +284,12 @@ abstract class AbstractCreateUploadedDocumentsAction
 		return $args;
 	}
 
-	protected function create_file_name( string $object_url ): string
+	protected function create_file_name( string $object_url, string $custom_file_name = '' ): string
 	{
+		if ( '' !== $custom_file_name ) {
+			return $custom_file_name;
+		}
+
 		$path_info = pathinfo( $object_url );
 		$file_name = $path_info['filename'];
 
