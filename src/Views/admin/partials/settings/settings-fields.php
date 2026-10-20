@@ -18,6 +18,7 @@ $owc_zgw_delay_after_zaak_creation_seconds       = $owc_zgw_delay_after_zaak_cre
 $owc_zgw_delay_after_zaak_creation_suppliers     = is_array( $owc_zgw_delay_after_zaak_creation_suppliers ?? null ) ? $owc_zgw_delay_after_zaak_creation_suppliers : array();
 $owc_zgw_client_request_timeout_option           = (string) ( $owc_zgw_client_request_timeout_option ?? '15' );
 $owc_zgw_client_request_timeout_option_suppliers = is_array( $owc_zgw_client_request_timeout_option_suppliers ?? null ) ? $owc_zgw_client_request_timeout_option_suppliers : array();
+$owc_zgw_document_type_file_names                = (bool) ( $owc_zgw_document_type_file_names ?? false );
 ?>
 
 <?php if ( 'owc_gf_zgw_transaction_user_roles' === $settings_field_id ) : ?>
@@ -60,4 +61,9 @@ $owc_zgw_client_request_timeout_option_suppliers = is_array( $owc_zgw_client_req
 			</option>
 		<?php endforeach; ?>
 	</select>
+<?php endif; ?>
+
+<?php if ( 'owc_zgw_document_type_file_names' === $settings_field_id ) : ?>
+	<input type="checkbox" id="owc_zgw_document_type_file_names" name="owc_gf_zgw_options[owc_zgw_document_type_file_names]" value="1" <?php checked( $owc_zgw_document_type_file_names ); ?>>
+	<label for="owc_zgw_document_type_file_names"><?php esc_html_e( 'Gebruik de naam van het documenttype als bestandsnaam', 'owc-gravityforms-zgw' ); ?></label>
 <?php endif; ?>

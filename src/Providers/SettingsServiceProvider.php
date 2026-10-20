@@ -300,6 +300,28 @@ class SettingsServiceProvider extends ServiceProvider
 		);
 
 		/**
+		 * @since NEXT
+		 */
+		add_settings_section(
+			'owc_gf_zgw_section_document_type_file_names',
+			__( 'Bestandsnamen van uploads', 'owc-gravityforms-zgw' ),
+			$this->controller->section_description_document_type_file_names( ... ),
+			'owc-gf-zgw'
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		add_settings_field(
+			'owc_zgw_document_type_file_names',
+			__( 'Documenttype als bestandsnaam', 'owc-gravityforms-zgw' ),
+			$this->controller->section_fields_render( ... ),
+			'owc-gf-zgw',
+			'owc_gf_zgw_section_document_type_file_names',
+			array( 'settings_field_id' => 'owc_zgw_document_type_file_names' )
+		);
+
+		/**
 		 * @since 1.14.0
 		 */
 		add_settings_section(

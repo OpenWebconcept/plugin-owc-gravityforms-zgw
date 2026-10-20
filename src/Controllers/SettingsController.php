@@ -77,6 +77,14 @@ class SettingsController
 	}
 
 	/**
+	 * @since NEXT
+	 */
+	public function section_description_document_type_file_names(): void
+	{
+		owc_gravityforms_zgw_render_view( 'admin/partials/settings/description-document-type-file-names' );
+	}
+
+	/**
 	 * @since 1.14.0
 	 */
 	public function section_description_form_settings_cache(): void
@@ -103,6 +111,7 @@ class SettingsController
 				'owc_zgw_delay_after_zaak_creation_suppliers' => ContainerResolver::make()->get( 'zgw.site_options' )->delay_after_zaak_creation_suppliers(),
 				'owc_zgw_client_request_timeout_option' => ContainerResolver::make()->get( 'zgw.site_options' )->client_request_timeout_option(),
 				'owc_zgw_client_request_timeout_option_suppliers' => ContainerResolver::make()->get( 'zgw.site_options' )->client_request_timeout_option_suppliers(),
+				'owc_zgw_document_type_file_names'      => ContainerResolver::make()->get( 'zgw.site_options' )->document_type_file_names(),
 			)
 		);
 	}

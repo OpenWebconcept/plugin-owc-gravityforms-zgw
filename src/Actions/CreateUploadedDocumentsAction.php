@@ -44,7 +44,8 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 			$args = $this->prepare_information_object_args(
 				$object['url'],
 				$object['type'],
-				$object['description']
+				$object['description'],
+				$object['file_name'] ?? ''
 			);
 
 			$connection_result = $this->connect_zaak_to_information_object(
