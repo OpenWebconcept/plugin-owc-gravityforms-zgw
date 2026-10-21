@@ -149,6 +149,55 @@ it(
 	}
 );
 
+it(
+	'percent-encodes non-ASCII characters such as a soft hyphen in the URL',
+	function () {
+		$url = "https://example.com/app/uploads/gravity_forms/2026/10/Scherm\u{00AD}afbeelding 11.51.05.png";
+
+		expect( ( new InformationObjectTraitUser() )->encode_url( $url ) )
+			->toBe( 'https://example.com/app/uploads/gravity_forms/2026/10/Scherm%C2%ADafbeelding%2011.51.05.png' );
+	}
+);
+
+it(
+	'leaves an ASCII URL untouched',
+	function () {
+		$url = 'https://example.com/file.pdf?a=1&b=%20';
+
+		expect( ( new InformationObjectTraitUser() )->encode_url( $url ) )->toBe( $url );
+	}
+);
+
+it(
+	'requests the encoded URL when preparing informatieobject args',
+	function () {
+		WP_Mock::userFunction(
+			'wp_safe_remote_get',
+			array(
+				'times'  => 1,
+				'args'   => array( 'https://example.com/Scherm%C2%ADafbeelding.png', WP_Mock\Functions::type( 'array' ) ),
+				'return' => array(
+					'response' => array( 'code' => 404 ),
+					'body'     => '',
+				),
+			)
+		);
+
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+
+		expect( $action->prepare( "https://example.com/Scherm\u{00AD}afbeelding.png", 'https://example.com/informatieobjecttypen/1' ) )->toBe( array() );
+	}
+);
+
+it(
+	'removes soft hyphens from the file name',
+	function () {
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+
+		expect( $action->file_name( "https://example.com/Scherm\u{00AD}afbeelding.png" ) )->toEndWith( '_Schermafbeelding' );
+	}
+);
+
 class InformationObjectTraitUser
 {
 	use InformationObject;
@@ -164,6 +213,11 @@ class UploadedDocumentsActionTestDouble extends AbstractCreateUploadedDocumentsA
 	public function prepare( string $object_url, string $information_object_type ): array
 	{
 		return $this->prepare_information_object_args( $object_url, $information_object_type );
+	}
+
+	public function file_name( string $object_url ): string
+	{
+		return $this->create_file_name( $object_url );
 	}
 
 	public function set_form( array $form ): void
