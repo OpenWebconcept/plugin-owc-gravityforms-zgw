@@ -154,13 +154,15 @@ abstract class AbstractCreateUploadedDocumentsAction
 			return array();
 		}
 
+		$file_name  = $this->create_file_name( $object_url );
+		$object_url = $this->encode_url( $object_url );
+
 		$file_content = $this->encode_base64_from_url( $object_url );
 
 		if ( '' === $file_content ) {
 			return array(); // Retrieving the file failed, prevents creating an informatieobject without content.
 		}
 
-		$file_name = $this->create_file_name( $object_url );
 		$file_size = $this->get_content_length( $object_url );
 
 		$args                                = array();
@@ -184,7 +186,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	protected function create_file_name( string $object_url ): string
 	{
 		$path_info = pathinfo( $object_url );
-		$file_name = $path_info['filename'];
+		$file_name = str_replace( "\u{00AD}", '', rawurldecode( $path_info['filename'] ) ); // Remove invisible soft hyphens.
 
 		return sprintf( '%s_%s', uniqid(), $file_name );
 	}
