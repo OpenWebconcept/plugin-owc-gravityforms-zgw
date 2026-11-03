@@ -29,6 +29,23 @@ use Traversable;
  */
 trait InformationObject
 {
+	/**
+	 * Percent-encodes characters outside the printable ASCII range, for example the soft hyphen (U+00AD)
+	 * macOS adds to Dutch screenshot file names ("Schermafbeelding"). Requesting the raw URL results in a 404.
+	 *
+	 * @since NEXT
+	 */
+	public function encode_url( string $url ): string
+	{
+		return (string) preg_replace_callback(
+			'/[^\x21-\x7E]/',
+			function ( array $matches ): string {
+				return rawurlencode( $matches[0] );
+			},
+			$url
+		);
+	}
+
 	public function encode_base64_from_url( string $url ): string
 	{
 		$response = wp_safe_remote_get(
