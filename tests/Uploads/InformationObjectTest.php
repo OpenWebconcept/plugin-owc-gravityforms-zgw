@@ -328,6 +328,73 @@ it(
 	}
 );
 
+it(
+	'percent-encodes non-ASCII characters such as a soft hyphen in the URL',
+	function () {
+		$url = "https://example.com/app/uploads/gravity_forms/2026/10/Scherm\u{00AD}afbeelding 11.51.05.png";
+
+		expect( ( new InformationObjectTraitUser() )->encode_url( $url ) )
+			->toBe( 'https://example.com/app/uploads/gravity_forms/2026/10/Scherm%C2%ADafbeelding%2011.51.05.png' );
+	}
+);
+
+it(
+	'leaves an ASCII URL untouched',
+	function () {
+		$url = 'https://example.com/file.pdf?a=1&b=%20';
+
+		expect( ( new InformationObjectTraitUser() )->encode_url( $url ) )->toBe( $url );
+	}
+);
+
+it(
+	'requests the encoded URL when preparing informatieobject args',
+	function () {
+		WP_Mock::userFunction(
+			'wp_safe_remote_get',
+			array(
+				'times'  => 1,
+				'args'   => array( 'https://example.com/Scherm%C2%ADafbeelding.png', WP_Mock\Functions::type( 'array' ) ),
+				'return' => array(
+					'response' => array( 'code' => 404 ),
+					'body'     => '',
+				),
+			)
+		);
+
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+
+		expect( $action->prepare( "https://example.com/Scherm\u{00AD}afbeelding.png", 'https://example.com/informatieobjecttypen/1' ) )->toBe( array() );
+	}
+);
+
+it(
+	'removes soft hyphens from the file name',
+	function () {
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+
+		expect( $action->file_name( "https://example.com/Scherm\u{00AD}afbeelding.png", '' ) )->toEndWith( '_Schermafbeelding' );
+	}
+);
+
+it(
+	'decodes percent-encoded characters in the file name',
+	function () {
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+
+		expect( $action->file_name( 'https://example.com/Scherm%C2%ADafbeelding%2011.51.05.png', '' ) )->toEndWith( '_Schermafbeelding 11.51.05' );
+	}
+);
+
+it(
+	'decodes percent-encoded characters and removes soft hyphens from the original file name used as description',
+	function () {
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+
+		expect( $action->default_description( "https://example.com/Scherm\u{00AD}afbeelding%2011.51.05.png", 'Bijlage', 'Bijlage' ) )->toBe( 'Schermafbeelding 11.51.05.png' );
+	}
+);
+
 class InformationObjectTraitUser
 {
 	use InformationObject;
@@ -360,6 +427,11 @@ class UploadedDocumentsActionTestDouble extends AbstractCreateUploadedDocumentsA
 	public function file_name( string $object_url, string $custom_file_name ): string
 	{
 		return $this->create_file_name( $object_url, $custom_file_name );
+	}
+
+	public function default_description( string $object_url, string $file_name, string $custom_file_name ): string
+	{
+		return $this->create_default_description( $object_url, $file_name, $custom_file_name );
 	}
 
 	public function set_supplier_name( string $supplier_name ): void

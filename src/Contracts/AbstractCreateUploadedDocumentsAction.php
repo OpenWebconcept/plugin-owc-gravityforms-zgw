@@ -264,13 +264,17 @@ abstract class AbstractCreateUploadedDocumentsAction
 			return array();
 		}
 
+		// Names are derived from the original URL, requests use the encoded URL.
+		$file_name           = $this->create_file_name( $object_url, $custom_file_name );
+		$default_description = $this->create_default_description( $object_url, $file_name, $custom_file_name );
+		$object_url          = $this->encode_url( $object_url );
+
 		$file_content = $this->encode_base64_from_url( $object_url );
 
 		if ( '' === $file_content ) {
 			return array(); // Retrieving the file failed, prevents creating an informatieobject without content.
 		}
 
-		$file_name = $this->create_file_name( $object_url, $custom_file_name );
 		$file_size = $this->get_content_length( $object_url );
 
 		$args                                = array();
@@ -278,7 +282,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 		$args['formaat']                     = $this->get_content_type( $object_url );
 		$args['bestandsnaam']                = sprintf( '%s.%s', sanitize_title( $file_name ), $this->get_extension( $object_url ) );
 		$args['bestandsomvang']              = $file_size ? (int) $file_size : strlen( $file_content );
-		$args['beschrijving']                = 0 < strlen( $object_description ) ? $this->translate_merge_tags( $this->entry, $this->form, $object_description ) : $this->create_default_description( $object_url, $file_name, $custom_file_name );
+		$args['beschrijving']                = 0 < strlen( $object_description ) ? $this->translate_merge_tags( $this->entry, $this->form, $object_description ) : $default_description;
 		$args['inhoud']                      = $file_content;
 		$args['vertrouwelijkheidaanduiding'] = 'vertrouwelijk';
 		$args['auteur']                      = 'OWC';
@@ -297,10 +301,20 @@ abstract class AbstractCreateUploadedDocumentsAction
 			return $custom_file_name;
 		}
 
-		$path_info = pathinfo( $object_url );
-		$file_name = $path_info['filename'];
+		$file_name = $this->clean_file_name( pathinfo( $object_url, PATHINFO_FILENAME ) );
 
 		return sprintf( '%s_%s', uniqid(), $file_name );
+	}
+
+	/**
+	 * Decodes percent-encoded characters (e.g. %20) and removes invisible soft hyphens (U+00AD),
+	 * which macOS adds to Dutch screenshot file names ("Schermafbeelding").
+	 *
+	 * @since NEXT
+	 */
+	protected function clean_file_name( string $file_name ): string
+	{
+		return str_replace( "\u{00AD}", '', rawurldecode( $file_name ) );
 	}
 
 	/**
@@ -315,7 +329,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 			return $file_name;
 		}
 
-		return pathinfo( $object_url, PATHINFO_BASENAME );
+		return $this->clean_file_name( pathinfo( $object_url, PATHINFO_BASENAME ) );
 	}
 
 	protected function create_information_object( array $args ): ?Enkelvoudiginformatieobject

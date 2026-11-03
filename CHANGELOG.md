@@ -1,5 +1,10 @@
 # Changelog
 
+## [NEXT] - 2026-
+
+-   Added: name uploads after their document type
+-   Fix: encode non-ASCII characters in uploaded file URLs
+
 ## [v1.17.6] - 2026-10-20
 
 -   Fix: do not create a zaak when starting the payment fails
