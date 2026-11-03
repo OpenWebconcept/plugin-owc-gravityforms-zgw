@@ -135,7 +135,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	/**
 	 * Whether uploads should be named after their document type, configured on the plugin settings page.
 	 *
-	 * @since NEXT
+	 * @since 1.18.0
 	 */
 	protected function use_document_type_file_names(): bool
 	{
@@ -146,7 +146,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	 * Names each upload after its document type.
 	 * When multiple uploads in the form share a document type, a sequence number is added, e.g. Bijlage_1 and Bijlage_2.
 	 *
-	 * @since NEXT
+	 * @since 1.18.0
 	 */
 	protected function add_document_type_file_names( array $objects ): array
 	{
@@ -180,7 +180,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	 * Retrieves the description ("omschrijving") of the document type ("informatieobjecttype").
 	 * Uses the cached document types of the supplier first, the API is only requested when the cache misses.
 	 *
-	 * @since NEXT
+	 * @since 1.18.0
 	 */
 	protected function get_document_type_name( string $document_type_url ): string
 	{
@@ -208,7 +208,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.18.0
 	 */
 	protected function get_cached_document_type_name( string $document_type_url ): string
 	{
@@ -227,7 +227,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 				return trim( (string) $type['omschrijving'] );
 			}
 
-			// Entries cached before NEXT have no "omschrijving", their label is formatted as "{omschrijving} ({aanduiding})".
+			// Entries cached before 1.18.0 have no "omschrijving", their label is formatted as "{omschrijving} ({aanduiding})".
 			return trim( (string) preg_replace( '/\s*\([^()]*\)$/', '', (string) ( $type['label'] ?? '' ) ) );
 		}
 
@@ -310,7 +310,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	 * Decodes percent-encoded characters (e.g. %20) and removes invisible soft hyphens (U+00AD),
 	 * which macOS adds to Dutch screenshot file names ("Schermafbeelding").
 	 *
-	 * @since NEXT
+	 * @since 1.18.0
 	 */
 	protected function clean_file_name( string $file_name ): string
 	{
@@ -321,7 +321,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	 * When the upload is named after its document type, the original file name is used as description
 	 * so the zaak still shows which file was uploaded.
 	 *
-	 * @since NEXT
+	 * @since 1.18.0
 	 */
 	protected function create_default_description( string $object_url, string $file_name, string $custom_file_name = '' ): string
 	{

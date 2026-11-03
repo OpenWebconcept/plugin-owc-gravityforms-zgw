@@ -104,7 +104,7 @@ class SiteOptionsSingleton
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.18.0
 	 */
 	public function document_type_file_names(): bool
 	{

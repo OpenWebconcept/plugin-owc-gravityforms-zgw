@@ -77,7 +77,7 @@ class SettingsController
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.18.0
 	 */
 	public function section_description_document_type_file_names(): void
 	{

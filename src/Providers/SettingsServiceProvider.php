@@ -300,7 +300,7 @@ class SettingsServiceProvider extends ServiceProvider
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 1.18.0
 		 */
 		add_settings_section(
 			'owc_gf_zgw_section_document_type_file_names',
@@ -310,7 +310,7 @@ class SettingsServiceProvider extends ServiceProvider
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 1.18.0
 		 */
 		add_settings_field(
 			'owc_zgw_document_type_file_names',

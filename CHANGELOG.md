@@ -1,6 +1,6 @@
 # Changelog
 
-## [NEXT] - 2026-
+## [v1.18.0] - 2026-11-03
 
 -   Added: name uploads after their document type
 -   Fix: encode non-ASCII characters in uploaded file URLs

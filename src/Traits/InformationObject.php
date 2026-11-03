@@ -33,7 +33,7 @@ trait InformationObject
 	 * Percent-encodes characters outside the printable ASCII range, for example the soft hyphen (U+00AD)
 	 * macOS adds to Dutch screenshot file names ("Schermafbeelding"). Requesting the raw URL results in a 404.
 	 *
-	 * @since NEXT
+	 * @since 1.18.0
 	 */
 	public function encode_url( string $url ): string
 	{
