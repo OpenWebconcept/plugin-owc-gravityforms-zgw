@@ -23,6 +23,7 @@ use Exception;
 use GFAPI;
 use OWC\ZGW\Entities\Zaaktype;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
+use OWCGravityFormsZGW\GravityForms\ZaakeigenschappenMigrator;
 
 /**
  * Adapter for zaaktypen.
@@ -73,22 +74,24 @@ class ZaaktypenAdapter extends Adapter
 
 	/**
 	 * Loops all Gravity Forms and updates any saved zaaktype URL that has been replaced by a newer version.
-	 * Only runs when zaaktypen are freshly fetched (cache miss), so the raw and filtered data are both in memory.
+	 * Only runs when zaaktypen are freshly fetched (cache miss), so all versions and the latest versions are both in memory.
 	 *
 	 * @since 1.10.0
+	 * @since NEXT Also validates the "zaakeigenschappen" field mappings against the latest zaaktype version.
 	 */
-	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $raw, array $filtered ): void
+	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $all_zaaktype_versions, array $latest_zaaktype_versions ): void
 	{
-		$this->cache_producten_of_diensten( $filtered );
+		$this->cache_producten_of_diensten( $latest_zaaktype_versions );
 
-		$saved_zaaktype_url_to_description  = $this->map_all_zaaktype_urls_to_descriptions( $raw );
-		$description_to_latest_zaaktype_url = $this->map_descriptions_to_latest_zaaktype_urls( $filtered );
+		$saved_zaaktype_url_to_description  = $this->map_all_zaaktype_urls_to_descriptions( $all_zaaktype_versions );
+		$description_to_latest_zaaktype_url = $this->map_descriptions_to_latest_zaaktype_urls( $latest_zaaktype_versions );
 
 		$prefix         = OWC_GRAVITYFORMS_ZGW_SETTINGS_PREFIX;
 		$supplier_key   = strtolower( $this->supplier_name );
 		$setting_key    = "{$prefix}-form-setting-{$supplier_key}-identifier";
 		$manual_key     = "{$prefix}-form-setting-supplier-manually";
 		$supplier_field = "{$prefix}-form-setting-supplier";
+		$migrator       = new ZaakeigenschappenMigrator();
 
 		foreach ( GFAPI::get_forms() as $form ) {
 			if ( '1' === ( $form[ $manual_key ] ?? '0' ) ) {
@@ -104,17 +107,23 @@ class ZaaktypenAdapter extends Adapter
 				continue; // Skip forms that don't have a saved URL, as there's nothing to update.
 			}
 
+			// Without a description or a newer URL, the saved URL is kept: it may still be the latest version.
 			$omschrijving = $saved_zaaktype_url_to_description[ $saved_url ] ?? '';
-			if ( '' === $omschrijving ) {
-				continue; // Skip if we can't find a description for the saved URL, as we won't be able to find the new URL without the description.
+			$winning_url  = '' !== $omschrijving ? ( $description_to_latest_zaaktype_url[ $omschrijving ] ?? '' ) : '';
+			$current_url  = '' !== $winning_url ? $winning_url : $saved_url;
+
+			/**
+			 * Some suppliers (e.g. Decos JOIN) keep the zaaktype URL the same across versions while the
+			 * "eigenschappen" do get new URLs, so the mappings are validated on every fetch.
+			 */
+			$mapping_signature = ZaakeigenschappenMigrator::mapping_signature( $form );
+			$form              = $migrator->migrate( $form, $this->supplier_name, $current_url, $saved_url );
+
+			if ( $current_url === $saved_url && ZaakeigenschappenMigrator::mapping_signature( $form ) === $mapping_signature ) {
+				continue; // Nothing changed, prevent a needless update.
 			}
 
-			$winning_url = $description_to_latest_zaaktype_url[ $omschrijving ] ?? '';
-			if ( '' === $winning_url || $winning_url === $saved_url ) {
-				continue; // Skip if we can't find a new URL for the description or if the new URL is the same as the saved URL, as there's no update needed.
-			}
-
-			$form[ $setting_key ] = $winning_url;
+			$form[ $setting_key ] = $current_url;
 			GFAPI::update_form( $form );
 		}
 	}
@@ -125,20 +134,20 @@ class ZaaktypenAdapter extends Adapter
 	 *
 	 * @since 1.10.0
 	 */
-	protected function map_all_zaaktype_urls_to_descriptions( array $raw ): array
+	protected function map_all_zaaktype_urls_to_descriptions( array $zaaktypen ): array
 	{
-		$prepared_description_to_latest_zaaktype_url = array();
+		$url_to_description = array();
 
-		foreach ( $raw as $zaaktype ) {
+		foreach ( $zaaktypen as $zaaktype ) {
 			$omschrijving = trim( (string) ( $zaaktype->omschrijving ?? '' ) );
 			$url          = trim( (string) ( $zaaktype->url ?? '' ) );
 
 			if ( '' !== $omschrijving && '' !== $url ) {
-				$prepared_description_to_latest_zaaktype_url[ $url ] = $omschrijving;
+				$url_to_description[ $url ] = $omschrijving;
 			}
 		}
 
-		return $prepared_description_to_latest_zaaktype_url;
+		return $url_to_description;
 	}
 
 	/**
@@ -147,20 +156,20 @@ class ZaaktypenAdapter extends Adapter
 	 *
 	 * @since 1.10.0
 	 */
-	protected function map_descriptions_to_latest_zaaktype_urls( array $raw ): array
+	protected function map_descriptions_to_latest_zaaktype_urls( array $zaaktypen ): array
 	{
-		$saved_zaaktype_url_to_description = array();
+		$description_to_url = array();
 
-		foreach ( $raw as $zaaktype ) {
+		foreach ( $zaaktypen as $zaaktype ) {
 			$url          = trim( (string) ( $zaaktype->url ?? '' ) );
 			$omschrijving = trim( (string) ( $zaaktype->omschrijving ?? '' ) );
 
 			if ( '' !== $url && '' !== $omschrijving ) {
-				$saved_zaaktype_url_to_description[ $omschrijving ] = $url;
+				$description_to_url[ $omschrijving ] = $url;
 			}
 		}
 
-		return $saved_zaaktype_url_to_description;
+		return $description_to_url;
 	}
 
 	/**

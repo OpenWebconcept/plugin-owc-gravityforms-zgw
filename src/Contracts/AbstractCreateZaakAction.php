@@ -34,6 +34,7 @@ use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\Enums\BetrokkeneType;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\GravityForms\Traits\EntryNote;
+use OWCGravityFormsZGW\GravityForms\ZaakeigenschappenMigrator;
 use OWCGravityFormsZGW\LoggerZGW;
 use OWCGravityFormsZGW\Services\EncryptionService;
 use OWCGravityFormsZGW\Traits\CastValue;
@@ -628,6 +629,9 @@ abstract class AbstractCreateZaakAction
 
 	public function create_zaak_properties( Zaak $zaak ): void
 	{
+		// Mappings may still point to a previous version of the zaaktype when it has been published after the last zaaktypen fetch.
+		$this->form = ( new ZaakeigenschappenMigrator() )->migrate_and_persist( $this->form );
+
 		$zaak_properties = $this->map_zaak_properties_args();
 
 		foreach ( $zaak_properties as $zaak_property ) {

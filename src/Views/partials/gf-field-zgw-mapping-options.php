@@ -21,7 +21,8 @@ $properties = $properties ?? array();
 		<?php esc_html_e( 'Mapping', 'owc-gravityforms-zgw' ); ?>
 	</label>
 
-	<select id="mappedFieldZGW" onchange="SetFieldProperty('mappedFieldValueZGW', this.value);">
+	<?php // The name of a "zaakeigenschap" is stored as well, to migrate the mapping when the "zaaktype" gets a new version. ?>
+	<select id="mappedFieldZGW" onchange="SetFieldProperty('mappedFieldValueZGW', this.value); SetFieldProperty('mappedFieldNameZGW', this.value.startsWith('https://') ? this.options[this.selectedIndex].text.trim() : '');">
 		<option value=""><?php esc_html_e( 'Selecteer een optie', 'owc-gravityforms-zgw' ); ?></option>
 		<option value="bronorganisatie"><?php esc_html_e( 'Bronorganisatie', 'owc-gravityforms-zgw' ); ?></option>
 		<option value="zaaktype"><?php esc_html_e( 'Zaaktype', 'owc-gravityforms-zgw' ); ?></option>

@@ -76,9 +76,9 @@ abstract class Adapter
 		$types = $this->fetch_types( $empty_message, $endpoint );
 
 		if ( 'zaaktypen' === $endpoint ) {
-			$raw   = $types;
-			$types = $this->filter_zaaktypen_by_version_date( $types );
-			$this->replace_old_zaaktypen_after_fetch_in_form_settings( $raw, $types );
+			$latest_zaaktype_versions = $this->filter_zaaktypen_by_version_date( $types );
+			$this->replace_old_zaaktypen_after_fetch_in_form_settings( $types, $latest_zaaktype_versions );
+			$types = $latest_zaaktype_versions;
 		}
 
 		$types = $this->prepare_types( $types, $prepare_callback );
@@ -147,7 +147,7 @@ abstract class Adapter
 	 *
 	 * @since 1.10.0
 	 */
-	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $raw, array $filtered ): void {}
+	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $all_zaaktype_versions, array $latest_zaaktype_versions ): void {}
 
 	/**
 	 * Filters an array of zaaktypen to ensure unique 'omschrijvingen' (description) and keeping the one with the latest 'versiedatum' (version date).
