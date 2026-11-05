@@ -29,6 +29,7 @@ use OWCGravityFormsZGW\GravityForms\Controllers\ZaakMergeTagsController;
 use OWCGravityFormsZGW\GravityForms\FieldGroups;
 use OWCGravityFormsZGW\GravityForms\FieldSettings;
 use OWCGravityFormsZGW\GravityForms\FormSettings;
+use OWCGravityFormsZGW\GravityForms\ZaakeigenschappenMigrator;
 use OWCGravityFormsZGW\GravityForms\ZGWAddon;
 use OWCGravityFormsZGW\Transactions\Controllers\TransactionController;
 
@@ -54,6 +55,7 @@ class GravityFormsServiceProvider extends ServiceProvider
 		add_action( 'admin_init', ( new FormSettings() )->sync_zaaktypen_on_settings_page( ... ), 9 );
 		add_action( 'admin_enqueue_scripts', ( new FormSettings() )->enqueue_settings_scripts( ... ) );
 		add_filter( 'gform_form_settings_fields', ( new FormSettings() )->add_form_settings( ... ), 10, 2 );
+		add_filter( 'gform_pre_form_settings_save', ( new ZaakeigenschappenMigrator() )->migrate_on_form_settings_save( ... ), 10, 1 );
 		add_action( 'wp_ajax_owcgfzgw_get_producten_of_diensten', ( new ProductChoicesController() )->handle( ... ) );
 
 		// Field tab settings.
