@@ -23,6 +23,7 @@ use Exception;
 use GFAPI;
 use OWC\ZGW\Entities\Zaaktype;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
+use OWCGravityFormsZGW\GravityForms\ZaakeigenschappenMigrator;
 
 /**
  * Adapter for zaaktypen.
@@ -76,6 +77,7 @@ class ZaaktypenAdapter extends Adapter
 	 * Only runs when zaaktypen are freshly fetched (cache miss), so the raw and filtered data are both in memory.
 	 *
 	 * @since 1.10.0
+	 * @since 1.19.0 Also migrates the "zaakeigenschappen" field mappings to the new zaaktype version.
 	 */
 	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $raw, array $filtered ): void
 	{
@@ -89,6 +91,7 @@ class ZaaktypenAdapter extends Adapter
 		$setting_key    = "{$prefix}-form-setting-{$supplier_key}-identifier";
 		$manual_key     = "{$prefix}-form-setting-supplier-manually";
 		$supplier_field = "{$prefix}-form-setting-supplier";
+		$migrator       = new ZaakeigenschappenMigrator();
 
 		foreach ( GFAPI::get_forms() as $form ) {
 			if ( '1' === ( $form[ $manual_key ] ?? '0' ) ) {
@@ -114,6 +117,7 @@ class ZaaktypenAdapter extends Adapter
 				continue; // Skip if we can't find a new URL for the description or if the new URL is the same as the saved URL, as there's no update needed.
 			}
 
+			$form                 = $migrator->migrate( $form, $this->supplier_name, $saved_url, $winning_url );
 			$form[ $setting_key ] = $winning_url;
 			GFAPI::update_form( $form );
 		}
