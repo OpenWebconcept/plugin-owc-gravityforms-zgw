@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   SINCE
+ * @since   1.1.0
  */
 
 namespace OWCGravityFormsZGW\Contracts;
@@ -28,7 +28,7 @@ use function OWC\ZGW\apiClient;
 /**
  * Abstract delete "zaak" action.
  *
- * @since SINCE
+ * @since 1.1.0
  */
 abstract class AbstractDeleteZaakAction
 {

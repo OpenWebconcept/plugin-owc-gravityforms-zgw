@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use GFAddOn;
 use GFForms;
 use OWCGravityFormsZGW\Controllers\ActionSchedulerController;
+use OWCGravityFormsZGW\GravityForms\Controllers\IdentificationValidationController;
 use OWCGravityFormsZGW\GravityForms\Controllers\NotificationController;
 use OWCGravityFormsZGW\GravityForms\Controllers\PaymentController;
 use OWCGravityFormsZGW\GravityForms\Controllers\ProductChoicesController;
@@ -69,6 +70,11 @@ class GravityFormsServiceProvider extends ServiceProvider
 		add_filter( 'gform_notification', ( new NotificationController() )->track_sent_notification( ... ), 10, 3 );
 		add_filter( 'gform_replace_merge_tags', ( new ZaakMergeTagsController() )->replace_zaak_merge_tags( ... ), 10, 7 );
 		add_filter( 'gform_custom_merge_tags', ( new ZaakMergeTagsController() )->add_zaak_merge_tags( ... ), 10, 2 );
+
+		// Validation hooks.
+		$identification_validation = new IdentificationValidationController();
+		add_filter( 'gform_validation', $identification_validation->validate( ... ), 10, 1 );
+		add_filter( 'gform_validation_message', $identification_validation->validation_message( ... ), 10, 2 );
 
 		// After submission hooks.
 		add_action( 'gform_after_submission', ( new TransactionController() )->capture_identification_for_pending_payment( ... ), 10, 2 );

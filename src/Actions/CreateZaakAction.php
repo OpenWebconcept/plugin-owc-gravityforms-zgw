@@ -31,6 +31,9 @@ class CreateZaakAction extends AbstractCreateZaakAction
 {
 	public function create(): Zaak
 	{
+		// Fail before creating the "zaak", otherwise a "zaak" without initiator remains when the "rol" cannot be added.
+		$this->assert_identification_for_zaak_rol();
+
 		$args = $this->get_mapped_required_zaak_creation_args();
 		$zaak = $this->client->zaken()->create( new Zaak( $args, $this->client ) );
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased] - 2026-
+
+-   Fix: require a BSN or KVK before submitting a form and creating a zaak
+
 ## [v1.18.0] - 2026-11-03
 
 -   Added: name uploads after their document type
