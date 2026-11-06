@@ -102,6 +102,13 @@ abstract class AbstractCreateZaakAction
 	protected Client $client;
 	protected LoggerZGW $logger;
 
+	/**
+	 * Memoized BSN/KVK used for the "rol", resolved once per action.
+	 *
+	 * @var array{bsn: ?string, kvk: ?string}|null
+	 */
+	private ?array $identification_for_zaak_rol = null;
+
 	public function __construct( array $entry, array $form, array $supplier_config )
 	{
 		$this->entry         = $entry;
@@ -279,12 +286,10 @@ abstract class AbstractCreateZaakAction
 			throw new Exception( 'No role types found for this "zaaktype"', 400 );
 		}
 
-		$current_bsn = $this->get_bsn_for_zaak_rol();
-		$current_kvk = $this->get_kvk_for_zaak_rol();
+		$this->assert_identification_for_zaak_rol();
 
-		if ( ( ! is_string( $current_bsn ) || '' === $current_bsn ) && ( ! is_string( $current_kvk ) || '' === $current_kvk ) ) {
-			throw new Exception( 'This session appears to have no BSN or KVK', 400 );
-		}
+		$current_bsn = $this->get_identification_for_zaak_rol()['bsn'];
+		$current_kvk = $this->get_identification_for_zaak_rol()['kvk'];
 
 		foreach ( $rol_types as $rol_type ) {
 			if ( 'initiator' !== strtolower( $rol_type['omschrijvingGeneriek'] ) ) {
@@ -313,6 +318,40 @@ abstract class AbstractCreateZaakAction
 		}
 
 		return $rol ?? null;
+	}
+
+	/**
+	 * Ensure a BSN or KVK is available for the "rol" of the "zaak".
+	 *
+	 * Called before the "zaak" is created as well, so a missing identification
+	 * does not result in a "zaak" without an initiator.
+	 *
+	 * @throws Exception When neither a BSN nor a KVK is available.
+	 * @since NEXT
+	 */
+	protected function assert_identification_for_zaak_rol(): void
+	{
+		$identification = $this->get_identification_for_zaak_rol();
+
+		if ( ( ! is_string( $identification['bsn'] ) || '' === $identification['bsn'] ) && ( ! is_string( $identification['kvk'] ) || '' === $identification['kvk'] ) ) {
+			throw new Exception( 'This session appears to have no BSN or KVK', 400 );
+		}
+	}
+
+	/**
+	 * @return array{bsn: ?string, kvk: ?string}
+	 * @since NEXT
+	 */
+	private function get_identification_for_zaak_rol(): array
+	{
+		if ( null === $this->identification_for_zaak_rol ) {
+			$this->identification_for_zaak_rol = array(
+				'bsn' => $this->get_bsn_for_zaak_rol(),
+				'kvk' => $this->get_kvk_for_zaak_rol(),
+			);
+		}
+
+		return $this->identification_for_zaak_rol;
 	}
 
 	/**
@@ -404,7 +443,7 @@ abstract class AbstractCreateZaakAction
 
 			return $decrypted_identification;
 		} catch ( Exception $e ) {
-			$this->logger->error( sprintf( 'Failed to decrypt identification for entry "%s": %s (%s)', $this->entry['id'], $e->getMessage(), $encrypted_identification ) );
+			$this->logger->error( sprintf( 'Failed to decrypt identification for entry "%s": %s', $this->entry['id'], $e->getMessage() ) );
 
 			return null;
 		}
