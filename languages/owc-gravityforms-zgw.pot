@@ -2,14 +2,14 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | GravityForms ZGW 1.17.5\n"
+"Project-Id-Version: OWC | GravityForms ZGW 1.18.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-gravityforms-zgw\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-14T12:46:03+00:00\n"
+"POT-Creation-Date: 2026-11-10T11:58:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-gravityforms-zgw\n"
@@ -35,18 +35,18 @@ msgid "https://www.yard.nl"
 msgstr ""
 
 #. translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
-#: src/Contracts/AbstractCreateZaakAction.php:673
+#: src/Contracts/AbstractCreateZaakAction.php:712
 #, php-format
 msgid "Zaak \"%1$s\" aangemaakt onder zaak nummer \"%2$s\"."
 msgstr ""
 
 #. translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
-#: src/Contracts/AbstractCreateZaakAction.php:673
+#: src/Contracts/AbstractCreateZaakAction.php:712
 msgid "UUID onbekend"
 msgstr ""
 
 #. translators: %1$s is the UUID of the created zaak, %2$s is the identificatie of the created zaak.
-#: src/Contracts/AbstractCreateZaakAction.php:673
+#: src/Contracts/AbstractCreateZaakAction.php:712
 msgid "ID onbekend"
 msgstr ""
 
@@ -71,9 +71,13 @@ msgid "De cache van de zaaktypen en informatieobjecttypen is geleegd. Ze worden 
 msgstr ""
 
 #. translators: %s: comma separated list of invalid email addresses.
-#: src/Controllers/SettingsController.php:170
+#: src/Controllers/SettingsController.php:179
 #, php-format
 msgid "Ongeldig e-mailadres voor het verzenden van het transactie rapport: %s"
+msgstr ""
+
+#: src/GravityForms/Controllers/IdentificationValidationController.php:80
+msgid "Je bent niet (meer) ingelogd. Log opnieuw in met DigiD of eHerkenning om het formulier te versturen."
 msgstr ""
 
 #: src/GravityForms/Controllers/PaymentController.php:110
@@ -287,6 +291,14 @@ msgid "Pas aangepaste timeout toe op leverancier(s)"
 msgstr ""
 
 #: src/Providers/SettingsServiceProvider.php:307
+msgid "Bestandsnamen van uploads"
+msgstr ""
+
+#: src/Providers/SettingsServiceProvider.php:317
+msgid "Documenttype als bestandsnaam"
+msgstr ""
+
+#: src/Providers/SettingsServiceProvider.php:329
 #: src/Views/admin/settings-page-cache-only.php:18
 msgid "Zaaktypen en informatieobjecttypen cache"
 msgstr ""
@@ -488,6 +500,10 @@ msgstr ""
 msgid "Selecteer één of meerdere leverancier(s) waarbij een vertraging na de zaakcreatie gewenst is en stel de gewenste vertraging in."
 msgstr ""
 
+#: src/Views/admin/partials/settings/description-document-type-file-names.php:15
+msgid "Geef elke upload de naam van het gekoppelde documenttype. Bevat een formulier meerdere uploads met hetzelfde documenttype, dan wordt er een volgnummer toegevoegd, bijvoorbeeld Bijlage_1 en Bijlage_2. De originele bestandsnaam wordt als beschrijving opgeslagen, tenzij het uploadveld een eigen beschrijving heeft. Kan de naam van het documenttype niet worden opgehaald, dan wordt de originele bestandsnaam gebruikt."
+msgstr ""
+
 #: src/Views/admin/partials/settings/description-form-settings-cache.php:17
 msgid "De zaaktypen en informatieobjecttypen die worden getoond in de \"Zaaksysteem\" instellingen van een formulier worden 18 uur gecached en dagelijks om 04:00 automatisch ververst. Gebruik onderstaande knop om de cache handmatig te legen."
 msgstr ""
@@ -502,6 +518,10 @@ msgstr ""
 
 #: src/Views/admin/partials/settings/description-transactions-report.php:15
 msgid "Stel het e-mailadres in waarnaar het transactierapport wordt gestuurd."
+msgstr ""
+
+#: src/Views/admin/partials/settings/settings-fields.php:68
+msgid "Gebruik de naam van het documenttype als bestandsnaam"
 msgstr ""
 
 #: src/Views/admin/settings-page.php:19

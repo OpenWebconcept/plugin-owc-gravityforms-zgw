@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased] - 2026-
+## [v1.18.1] - 2026-11-10
 
 -   Fix: require a BSN or KVK before submitting a form and creating a zaak
 

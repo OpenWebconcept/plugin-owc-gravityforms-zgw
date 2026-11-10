@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_GravityForms_ZGW
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   1.18.1
  */
 
 namespace OWCGravityFormsZGW\GravityForms\Controllers;
@@ -33,7 +33,7 @@ use OWCGravityFormsZGW\GravityForms\FormUtils;
  * values posted by the browser. Validating the identification here, independent of the
  * fields on the form, prevents a submission (and a "zaak") without an initiator.
  *
- * @since NEXT
+ * @since 1.18.1
  */
 class IdentificationValidationController
 {

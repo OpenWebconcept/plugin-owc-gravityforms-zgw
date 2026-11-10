@@ -327,7 +327,7 @@ abstract class AbstractCreateZaakAction
 	 * does not result in a "zaak" without an initiator.
 	 *
 	 * @throws Exception When neither a BSN nor a KVK is available.
-	 * @since NEXT
+	 * @since 1.18.1
 	 */
 	protected function assert_identification_for_zaak_rol(): void
 	{
@@ -340,7 +340,7 @@ abstract class AbstractCreateZaakAction
 
 	/**
 	 * @return array{bsn: ?string, kvk: ?string}
-	 * @since NEXT
+	 * @since 1.18.1
 	 */
 	private function get_identification_for_zaak_rol(): array
 	{
