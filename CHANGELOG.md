@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.19.0] - 2026-11-11
+
+-   Added: migrate zaakeigenschappen mappings to the new zaaktype version
+
 ## [v1.18.1] - 2026-11-10
 
 -   Fix: require a BSN or KVK before submitting a form and creating a zaak

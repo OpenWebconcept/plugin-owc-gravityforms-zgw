@@ -36,7 +36,7 @@ use function OWC\ZGW\apiClient;
  * Instead it validates every mapping against the "eigenschappen" of the current "zaaktype" and
  * remaps the ones that are no longer part of it onto the "eigenschap" with the same name ("naam").
  *
- * @since NEXT
+ * @since 1.19.0
  */
 class ZaakeigenschappenMigrator
 {
