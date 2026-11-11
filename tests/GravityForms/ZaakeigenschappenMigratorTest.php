@@ -91,3 +91,18 @@ it(
 		expect( ZaakeigenschappenMigrator::mapping_signature( $migrated ) )->not->toBe( ZaakeigenschappenMigrator::mapping_signature( $form ) );
 	}
 );
+
+it(
+	'does not mutate the given form when fields are objects',
+	function () {
+		$field = new ArrayObject( array( 'mappedFieldValueZGW' => OLD_LEEFTIJD ) );
+		$form  = array( 'fields' => array( $field ) );
+
+		$migrated = ZaakeigenschappenMigrator::remap_fields( $form, array( NEW_LEEFTIJD => 'leeftijd' ), fn () => 'leeftijd' );
+
+		expect( $field['mappedFieldValueZGW'] )->toBe( OLD_LEEFTIJD );
+		expect( $migrated['fields'][0]['mappedFieldValueZGW'] )->toBe( NEW_LEEFTIJD );
+		expect( ZaakeigenschappenMigrator::mapping_signature( $migrated ) )
+			->not->toBe( ZaakeigenschappenMigrator::mapping_signature( $form ) );
+	}
+);
