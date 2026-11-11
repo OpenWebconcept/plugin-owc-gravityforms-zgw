@@ -246,7 +246,8 @@ class ZaakeigenschappenMigrator
 			// Valid when the mapped URL belongs to the current zaaktype version. Otherwise, remap it onto the
 			// "eigenschap" with the same name, taken from the field or resolved by the callback.
 			if ( isset( $current_url_to_name[ $mapped_url ] ) ) {
-				$name = $current_url_to_name[ $mapped_url ];
+				$name    = $current_url_to_name[ $mapped_url ];
+				$new_url = $mapped_url;
 			} else {
 				$name = trim( (string) ( $field[ self::FIELD_NAME_PROPERTY ] ?? '' ) );
 				$name = '' !== $name ? $name : trim( (string) $resolve_name( $mapped_url ) );
@@ -255,13 +256,21 @@ class ZaakeigenschappenMigrator
 					continue;
 				}
 
-				// Works for both GF_Field objects (ArrayAccess) and plain arrays.
-				$form['fields'][ $index ][ self::FIELD_PROPERTY ] = (string) $current_name_to_url[ $name ];
+				$new_url = (string) $current_name_to_url[ $name ];
 			}
 
-			if ( ( $field[ self::FIELD_NAME_PROPERTY ] ?? '' ) !== $name ) {
-				$form['fields'][ $index ][ self::FIELD_NAME_PROPERTY ] = $name;
+			if ( $new_url === $mapped_url && ( $field[ self::FIELD_NAME_PROPERTY ] ?? '' ) === $name ) {
+				continue; // Nothing to change, keep the same field instance.
 			}
+
+			// GF_Field objects are shared with the caller; cloning prevents mutating the given form,
+			// so comparing mapping signatures before and after a migration stays reliable.
+			$updated = is_object( $field ) ? clone $field : $field;
+
+			$updated[ self::FIELD_PROPERTY ]      = $new_url;
+			$updated[ self::FIELD_NAME_PROPERTY ] = $name;
+
+			$form['fields'][ $index ] = $updated;
 		}
 
 		return $form;
