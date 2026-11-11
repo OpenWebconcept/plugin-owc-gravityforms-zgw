@@ -77,7 +77,7 @@ class ZaaktypenAdapter extends Adapter
 	 * Only runs when zaaktypen are freshly fetched (cache miss), so all versions and the latest versions are both in memory.
 	 *
 	 * @since 1.10.0
-	 * @since NEXT Also validates the "zaakeigenschappen" field mappings against the latest zaaktype version.
+	 * @since 1.19.0 Also validates the "zaakeigenschappen" field mappings against the latest zaaktype version.
 	 */
 	protected function replace_old_zaaktypen_after_fetch_in_form_settings( array $all_zaaktype_versions, array $latest_zaaktype_versions ): void
 	{
