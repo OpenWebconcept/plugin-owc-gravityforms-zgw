@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use OWC\ZGW\Entities\Zaakinformatieobject;
 use OWCGravityFormsZGW\Contracts\AbstractCreateUploadedDocumentsAction;
+use Throwable;
 
 /**
  * Create uploaded documents action.
@@ -37,26 +38,44 @@ class CreateUploadedDocumentsAction extends AbstractCreateUploadedDocumentsActio
 			return null; // No files mapped → not an error
 		}
 
-		$count   = count( $mapped_args['informatieobject'] );
-		$success = 0;
-
+		// Stops at the first failing upload, a retry recreates the whole zaak including all uploads.
 		foreach ( $mapped_args['informatieobject'] as $object ) {
-			$args = $this->prepare_information_object_args(
-				$object['url'],
-				$object['type'],
-				$object['description'],
-				$object['file_name'] ?? ''
-			);
+			if ( '' === (string) ( $object['type'] ?? '' ) ) {
+				$this->set_upload_error( $object['url'], 'No document type (informatieobjecttype) is configured.' );
 
-			$connection_result = $this->connect_zaak_to_information_object(
-				$this->create_information_object( $args )
-			);
+				return false;
+			}
 
-			if ( $connection_result instanceof Zaakinformatieobject ) {
-				++$success;
+			try {
+				$args = $this->prepare_information_object_args(
+					$object['url'],
+					$object['type'],
+					$object['description'],
+					$object['file_name'] ?? ''
+				);
+
+				if ( array() === $args ) {
+					$this->set_upload_error( $object['url'], 'File could not be retrieved.' );
+
+					return false;
+				}
+
+				$connection_result = $this->connect_zaak_to_information_object(
+					$this->create_information_object( $args )
+				);
+			} catch ( Throwable $e ) {
+				$this->set_upload_error( $object['url'], $e->getMessage() );
+
+				throw $e; // Rethrown so callers can still handle the original (API) exception.
+			}
+
+			if ( ! $connection_result instanceof Zaakinformatieobject ) {
+				$this->set_upload_error( $object['url'], 'Upload could not be connected to the zaak.' );
+
+				return false;
 			}
 		}
 
-		return $count === $success; // true = all succeeded, false = partial failure.
+		return true;
 	}
 }

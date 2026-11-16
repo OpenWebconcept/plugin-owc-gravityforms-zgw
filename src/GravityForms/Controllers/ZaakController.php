@@ -169,35 +169,32 @@ class ZaakController extends AbstractZaakFormController
 	 */
 	protected function handle_uploads( Zaak $zaak, array $supplier_config ): void
 	{
-		$caught_exception = null;
-
-		// Handle user submitted file uploads.
+		// Each failure stops processing, a retry recreates the whole zaak including all uploads.
 		try {
 			$this->uploads_controller->set_form_data( $this->entry, $this->form );
 			$this->uploads_controller->handle( $zaak, $supplier_config );
 		} catch ( Throwable $e ) {
 			$this->logger->error( 'File uploads failed: ' . $e->getMessage() );
-			$caught_exception = $e;
+
+			throw new ZaakUploadException( $e->getMessage(), 400, $e );
 		}
 
-		// Handle adding the generated PDF upload, only when the zaak has a ID.
-		if ( ! is_string( $zaak->getValue( 'identificatie' ) ) ) {
-			$this->logger->warning( 'PDF generation skipped: zaak ID is not yet available.' );
-		} else {
-			try {
-				$this->upload_pdf_controller->set_form_data( $this->entry, $this->form );
-				$this->upload_pdf_controller->handle( $zaak, $supplier_config );
-			} catch ( Throwable $e ) {
-				$this->logger->error( 'PDF generation failed: ' . $e->getMessage() );
-				$caught_exception = $e;
-			}
+		// The submission PDF can only be added when the zaak has an ID.
+		if ( '' === ( (string) $zaak->getValue( 'identificatie', '' ) ) ) {
+			$message = 'Submission PDF could not be added: zaak ID is not available.';
+
+			$this->logger->error( $message );
+
+			throw new ZaakUploadException( $message, 400 );
 		}
 
-		if ( $caught_exception ) {
-			throw new ZaakUploadException(
-				$caught_exception->getMessage(),
-				400
-			);
+		try {
+			$this->upload_pdf_controller->set_form_data( $this->entry, $this->form );
+			$this->upload_pdf_controller->handle( $zaak, $supplier_config );
+		} catch ( Throwable $e ) {
+			$this->logger->error( 'PDF generation failed: ' . $e->getMessage() );
+
+			throw new ZaakUploadException( $e->getMessage(), 400, $e );
 		}
 	}
 }

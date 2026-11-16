@@ -24,6 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use OWC\ZGW\Entities\Zaak;
 use OWCGravityFormsZGW\Actions\CreateUploadedDocumentsAction;
+use OWCGravityFormsZGW\Contracts\AbstractCreateUploadedDocumentsAction;
 use OWCGravityFormsZGW\Contracts\AbstractZaakFormController;
 use OWCGravityFormsZGW\Exceptions\ZaakUploadException;
 use Throwable;
@@ -63,21 +64,19 @@ class ZaakUploadsController extends AbstractZaakFormController
 	 */
 	protected function handle_zaak_uploads( Zaak $zaak, array $supplier_config ): void
 	{
+		$action = null;
+
 		try {
-			$action = new CreateUploadedDocumentsAction(
-				$this->entry,
-				$this->form,
-				$supplier_config,
-				$zaak
-			);
+			$action = $this->create_uploaded_documents_action( $zaak, $supplier_config );
 
 			$result = $action->add_uploaded_documents();
 
 			if ( $result === false ) {
 				throw new ZaakUploadException(
 					sprintf(
-						'Not all uploads were successfully added to zaak %s.',
-						$zaak->getValue( 'identificatie', 'unknown' )
+						'An upload could not be added to zaak %s. %s',
+						$zaak->getValue( 'identificatie', 'unknown' ),
+						$action->get_upload_error()
 					),
 					400
 				);
@@ -87,6 +86,12 @@ class ZaakUploadsController extends AbstractZaakFormController
 			// $result === true → all uploads succeeded
 		} catch ( Throwable $e ) {
 			$reason_message = $this->extract_api_error_message( $e );
+			$failed_file    = $action ? $action->get_upload_error_file() : '';
+
+			// Exceptions thrown by this method already contain the file name.
+			if ( '' !== $failed_file && ! $e instanceof ZaakUploadException ) {
+				$reason_message = sprintf( '%s: %s', $failed_file, $reason_message );
+			}
 
 			throw new ZaakUploadException(
 				$reason_message,
@@ -94,5 +99,13 @@ class ZaakUploadsController extends AbstractZaakFormController
 				$e
 			);
 		}
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function create_uploaded_documents_action( Zaak $zaak, array $supplier_config ): AbstractCreateUploadedDocumentsAction
+	{
+		return new CreateUploadedDocumentsAction( $this->entry, $this->form, $supplier_config, $zaak );
 	}
 }

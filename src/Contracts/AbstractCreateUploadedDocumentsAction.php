@@ -25,6 +25,7 @@ use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Zaakinformatieobject;
 use OWCGravityFormsZGW\ContainerResolver;
+use OWCGravityFormsZGW\Exceptions\ZaakUploadException;
 use OWCGravityFormsZGW\GravityForms\FormSettingAdapters\InformatieobjecttypeAdapter;
 use OWCGravityFormsZGW\Traits\InformationObject;
 use OWCGravityFormsZGW\Traits\MergeTagTranslator;
@@ -48,6 +49,16 @@ abstract class AbstractCreateUploadedDocumentsAction
 	protected Zaak $zaak;
 	protected Client $client;
 
+	/**
+	 * Error of the upload that could not be added to the zaak.
+	 */
+	protected string $upload_error = '';
+
+	/**
+	 * File name of the upload that could not be added to the zaak.
+	 */
+	protected string $upload_error_file = '';
+
 	public function __construct( array $entry, array $form, array $supplier_config, Zaak $zaak )
 	{
 		$this->entry         = $entry;
@@ -59,6 +70,33 @@ abstract class AbstractCreateUploadedDocumentsAction
 	}
 
 	abstract public function add_uploaded_documents(): ?bool;
+
+	/**
+	 * @since NEXT
+	 */
+	public function get_upload_error(): string
+	{
+		return $this->upload_error;
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	public function get_upload_error_file(): string
+	{
+		return $this->upload_error_file;
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function set_upload_error( string $object_url, string $message ): void
+	{
+		$this->upload_error_file = pathinfo( $object_url, PATHINFO_BASENAME );
+		$this->upload_error      = sprintf( '%s: %s', $this->upload_error_file, $message );
+
+		ContainerResolver::make()->get( 'logger.zgw' )->error( 'Failed to add upload to zaak: ' . $this->upload_error );
+	}
 
 	/**
 	 * Adds form field values from fields linked to the "informatieobject" mapping key
@@ -237,13 +275,19 @@ abstract class AbstractCreateUploadedDocumentsAction
 	/**
 	 * Converts a JSON-encoded array of URLs into an array of information object structures,
 	 * each with a document type and URL.
+	 *
+	 * @throws ZaakUploadException When the value is not a valid JSON array of URLs, the uploads would be lost otherwise.
 	 */
 	protected function parse_information_object_json( string $field_value, GF_Field $field ): array
 	{
-		$field_values = json_decode( $field_value );
+		$field_values   = json_decode( $field_value );
+		$invalid_values = is_array( $field_values ) ? array_filter( $field_values, fn( $value ) => ! is_string( $value ) || '' === $value ) : array();
 
-		if ( empty( $field_values ) || ! is_array( $field_values ) ) {
-			return array();
+		if ( ! is_array( $field_values ) || array() !== $invalid_values ) {
+			throw new ZaakUploadException(
+				sprintf( 'Uploads of field %s could not be read, the value is not a valid list of files.', $field->id ),
+				400
+			);
 		}
 
 		return array_map(
@@ -264,26 +308,25 @@ abstract class AbstractCreateUploadedDocumentsAction
 			return array();
 		}
 
-		// Names are derived from the original URL, requests use the encoded URL.
+		// Names are derived from the original URL, remote requests use the encoded URL.
 		$file_name           = $this->create_file_name( $object_url, $custom_file_name );
 		$default_description = $this->create_default_description( $object_url, $file_name, $custom_file_name );
-		$object_url          = $this->encode_url( $object_url );
 
-		$file_content = $this->encode_base64_from_url( $object_url );
+		$file = $this->retrieve_file( $object_url );
 
-		if ( '' === $file_content ) {
+		if ( array() === $file ) {
 			return array(); // Retrieving the file failed, prevents creating an informatieobject without content.
 		}
 
-		$file_size = $this->get_content_length( $object_url );
+		$extension = '' !== $file['extension'] ? $file['extension'] : $this->get_extension_from_content_type( $file['type'] );
 
 		$args                                = array();
 		$args['titel']                       = $file_name;
-		$args['formaat']                     = $this->get_content_type( $object_url );
-		$args['bestandsnaam']                = sprintf( '%s.%s', sanitize_title( $file_name ), $this->get_extension( $object_url ) );
-		$args['bestandsomvang']              = $file_size ? (int) $file_size : strlen( $file_content );
+		$args['formaat']                     = $file['type'];
+		$args['bestandsnaam']                = sprintf( '%s.%s', sanitize_title( $file_name ), $extension );
+		$args['bestandsomvang']              = strlen( $file['content'] );
 		$args['beschrijving']                = 0 < strlen( $object_description ) ? $this->translate_merge_tags( $this->entry, $this->form, $object_description ) : $default_description;
-		$args['inhoud']                      = $file_content;
+		$args['inhoud']                      = base64_encode( $file['content'] );
 		$args['vertrouwelijkheidaanduiding'] = 'vertrouwelijk';
 		$args['auteur']                      = 'OWC';
 		$args['status']                      = 'gearchiveerd';

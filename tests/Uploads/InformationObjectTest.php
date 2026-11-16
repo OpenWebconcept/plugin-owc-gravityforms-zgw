@@ -34,6 +34,14 @@ beforeEach(
 				},
 			)
 		);
+		WP_Mock::userFunction(
+			'wp_remote_retrieve_header',
+			array(
+				'return' => function ( $response, $header ) {
+					return $response['headers'][ $header ] ?? '';
+				},
+			)
+		);
 	}
 );
 
@@ -44,22 +52,90 @@ afterEach(
 );
 
 it(
-	'encodes the response body to base64',
+	'retrieves the content and content type with a single request',
+	function () {
+		WP_Mock::userFunction(
+			'wp_safe_remote_get',
+			array(
+				'times'  => 1,
+				'return' => array(
+					'response' => array( 'code' => 200 ),
+					'headers'  => array( 'content-type' => 'application/pdf' ),
+					'body'     => 'file-content',
+				),
+			)
+		);
+		WP_Mock::userFunction( 'wp_safe_remote_head', array( 'times' => 0 ) );
+
+		$result = ( new InformationObjectTraitUser() )->retrieve_file( 'https://example.com/file.pdf' );
+
+		expect( $result )->toBe(
+			array(
+				'content'   => 'file-content',
+				'type'      => 'application/pdf',
+				'extension' => '',
+			)
+		);
+		expect( $this->logger->errors )->toBe( array() );
+	}
+);
+
+it(
+	'uses the first content type when the response contains multiple content-type headers',
 	function () {
 		WP_Mock::userFunction(
 			'wp_safe_remote_get',
 			array(
 				'return' => array(
 					'response' => array( 'code' => 200 ),
+					'headers'  => array( 'content-type' => array( 'application/pdf', 'text/html' ) ),
 					'body'     => 'file-content',
 				),
 			)
 		);
 
-		$result = ( new InformationObjectTraitUser() )->encode_base64_from_url( 'https://example.com/file.pdf' );
+		$result = ( new InformationObjectTraitUser() )->retrieve_file( 'https://example.com/file.pdf' );
 
-		expect( $result )->toBe( base64_encode( 'file-content' ) );
-		expect( $this->logger->errors )->toBe( array() );
+		expect( $result['type'] )->toBe( 'application/pdf' );
+	}
+);
+
+it(
+	'maps a content type to an extension',
+	function ( string $content_type, string $extension ) {
+		expect( ( new InformationObjectTraitUser() )->get_extension_from_content_type( $content_type ) )->toBe( $extension );
+	}
+)->with(
+	array(
+		'plain'        => array( 'application/pdf', 'pdf' ),
+		'with charset' => array( 'Text/Plain; charset=UTF-8', 'txt' ),
+		'odt'          => array( 'application/vnd.oasis.opendocument.text', 'odt' ),
+		'ods'          => array( 'application/vnd.oasis.opendocument.spreadsheet', 'ods' ),
+		'odp'          => array( 'application/vnd.oasis.opendocument.presentation', 'odp' ),
+		'unknown'      => array( 'application/octet-stream', '' ),
+	)
+);
+
+it(
+	'keeps the deprecated get_extension() accepting a URL',
+	function () {
+		WP_Mock::userFunction(
+			'wp_safe_remote_head',
+			array(
+				'times'  => 1,
+				'return' => array( 'headers' => array( 'Content-Type' => 'application/pdf' ) ),
+			)
+		);
+		WP_Mock::userFunction(
+			'wp_remote_retrieve_headers',
+			array(
+				'return' => function ( $response ) {
+					return $response['headers'];
+				},
+			)
+		);
+
+		expect( ( new InformationObjectTraitUser() )->get_extension( 'https://example.com/file.pdf' ) )->toBe( 'pdf' );
 	}
 );
 
@@ -76,9 +152,9 @@ it(
 			)
 		);
 
-		$result = ( new InformationObjectTraitUser() )->encode_base64_from_url( 'https://example.com/file.pdf' );
+		$result = ( new InformationObjectTraitUser() )->retrieve_file( 'https://example.com/file.pdf' );
 
-		expect( $result )->toBe( '' );
+		expect( $result )->toBe( array() );
 		expect( $this->logger->errors )->toBe( array( 'Empty response body while retrieving content from URL: https://example.com/file.pdf' ) );
 	}
 );
@@ -96,9 +172,9 @@ it(
 			)
 		);
 
-		$result = ( new InformationObjectTraitUser() )->encode_base64_from_url( 'https://example.com/file.pdf' );
+		$result = ( new InformationObjectTraitUser() )->retrieve_file( 'https://example.com/file.pdf' );
 
-		expect( $result )->toBe( '' );
+		expect( $result )->toBe( array() );
 		expect( $this->logger->errors )->toBe( array( 'Unexpected response code while retrieving content from URL: https://example.com/file.pdf' ) );
 	}
 );
@@ -108,9 +184,9 @@ it(
 	function () {
 		WP_Mock::userFunction( 'wp_safe_remote_get', array( 'return' => new FakeWPErrorInformationObject() ) );
 
-		$result = ( new InformationObjectTraitUser() )->encode_base64_from_url( 'https://example.com/file.pdf' );
+		$result = ( new InformationObjectTraitUser() )->retrieve_file( 'https://example.com/file.pdf' );
 
-		expect( $result )->toBe( '' );
+		expect( $result )->toBe( array() );
 		expect( $this->logger->errors )->toBe( array( 'Failed to retrieve content from URL: https://example.com/file.pdf' ) );
 	}
 );
@@ -280,17 +356,8 @@ it(
 			array(
 				'return' => array(
 					'response' => array( 'code' => 200 ),
+					'headers'  => array( 'content-type' => 'application/pdf' ),
 					'body'     => 'file-content',
-				),
-			)
-		);
-		WP_Mock::userFunction( 'wp_safe_remote_head', array( 'return' => array() ) );
-		WP_Mock::userFunction(
-			'wp_remote_retrieve_headers',
-			array(
-				'return' => array(
-					'content-type'   => 'application/pdf',
-					'content-length' => '12',
 				),
 			)
 		);
@@ -325,6 +392,87 @@ it(
 		expect( $args['titel'] )->toBe( 'Bijlage_2' );
 		expect( $args['bestandsnaam'] )->toBe( 'bijlage_2.pdf' );
 		expect( $args['beschrijving'] )->toBe( 'loonstrook-nov.pdf' );
+		expect( $args['formaat'] )->toBe( 'application/pdf' );
+		expect( $args['bestandsomvang'] )->toBe( 12 );
+		expect( $args['inhoud'] )->toBe( base64_encode( 'file-content' ) );
+	}
+);
+
+it(
+	'uses the extension of a local file and falls back to the content type for remote files',
+	function ( string $extension, string $expected_file_name ) {
+		OWCGravityFormsZGW\Bootstrap::get_container()->set( 'zgw.rsin', '123456782' );
+
+		WP_Mock::userFunction(
+			'sanitize_title',
+			array(
+				'return' => function ( $title ) {
+					return strtolower( $title );
+				},
+			)
+		);
+
+		$action       = ( new ReflectionClass( LocalFileUploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+		$action->file = array(
+			'content'   => 'file-content',
+			'type'      => 'image/webp',
+			'extension' => $extension,
+		);
+
+		$args = $action->prepare( 'https://example.com/uploads/overzicht.webp', 'https://example.com/informatieobjecttypen/1', '', 'Overzicht' );
+
+		expect( $args['bestandsnaam'] )->toBe( $expected_file_name );
+	}
+)->with(
+	array(
+		'local file'  => array( 'webp', 'overzicht.webp' ),
+		'remote file' => array( '', 'overzicht.' ), // The content type is not in the mime map.
+	)
+);
+
+it(
+	'fails instead of silently skipping uploads when the multi-file value is not valid JSON',
+	function ( string $field_value ) {
+		WP_Mock::userFunction(
+			'rgar',
+			array(
+				'return' => function ( $array, $key ) {
+					return $array[ $key ] ?? '';
+				},
+			)
+		);
+
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+		$action->set_entry( array( '3' => $field_value ) );
+		$action->set_form( array( 'fields' => array( new FakeGFFieldInformationObject( 'fileupload', 3 ) ) ) );
+
+		expect( fn() => $action->mapped_args() )->toThrow( OWCGravityFormsZGW\Exceptions\ZaakUploadException::class, 'Uploads of field 3 could not be read, the value is not a valid list of files.' );
+	}
+)->with(
+	array(
+		'invalid JSON'     => '["https://example.com/1.pdf",]',
+		'non-string entry' => '["https://example.com/1.pdf",{"url":"x"}]',
+		'empty entry'      => '["https://example.com/1.pdf",""]',
+	)
+);
+
+it(
+	'maps every file of a multi-file upload',
+	function () {
+		WP_Mock::userFunction(
+			'rgar',
+			array(
+				'return' => function ( $array, $key ) {
+					return $array[ $key ] ?? '';
+				},
+			)
+		);
+
+		$action = ( new ReflectionClass( UploadedDocumentsActionTestDouble::class ) )->newInstanceWithoutConstructor();
+		$action->set_entry( array( '3' => '["https://example.com/1.pdf","https://example.com/2.pdf"]' ) );
+		$action->set_form( array( 'fields' => array( new FakeGFFieldInformationObject( 'fileupload', 3 ) ) ) );
+
+		expect( array_column( $action->mapped_args()['informatieobject'], 'url' ) )->toBe( array( 'https://example.com/1.pdf', 'https://example.com/2.pdf' ) );
 	}
 );
 
@@ -496,5 +644,15 @@ class FakeWPErrorInformationObject
 	public function get_error_message(): string
 	{
 		return 'cURL error 28: Operation timed out';
+	}
+}
+
+class LocalFileUploadedDocumentsActionTestDouble extends UploadedDocumentsActionTestDouble
+{
+	public array $file = array();
+
+	public function retrieve_file( string $url ): array
+	{
+		return $this->file;
 	}
 }

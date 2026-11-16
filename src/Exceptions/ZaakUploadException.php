@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Throwable;
+
 /**
  * Exception thrown when a Zaak upload process fails.
  *
@@ -26,8 +28,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ZaakUploadException extends ZaakException
 {
-	public function __construct( string $message = 'Failed to process Zaak uploads.', int $statusCode = 400 )
+	/**
+	 * @since 1.0.0
+	 * @since NEXT Added the $previous parameter.
+	 */
+	public function __construct( string $message = 'Failed to process Zaak uploads.', int $statusCode = 400, ?Throwable $previous = null )
 	{
-		parent::__construct( $message, $statusCode );
+		parent::__construct( $message, $statusCode, $previous );
 	}
 }
