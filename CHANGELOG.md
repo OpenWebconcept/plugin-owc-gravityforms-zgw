@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.19.1] - 2026-11-17
+
+-   Fix: make zaak uploads more reliable and fail on missing documents
+
 ## [v1.19.0] - 2026-11-11
 
 -   Added: migrate zaakeigenschappen mappings to the new zaaktype version

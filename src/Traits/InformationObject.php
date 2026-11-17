@@ -51,7 +51,7 @@ trait InformationObject
 	 * Reads the file from disk when it is stored locally, which avoids HTTP requests to the site itself.
 	 * Falls back to a single HTTP request otherwise.
 	 *
-	 * @since NEXT
+	 * @since 1.19.1
 	 *
 	 * @return array{content: string, type: string, extension: string} Empty array when the file could not be retrieved.
 	 *                                                                 The extension is only known for locally stored files.
@@ -68,7 +68,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.19.1
 	 *
 	 * @return array{content: string, type: string, extension: string} Empty array when the file is not stored locally.
 	 */
@@ -98,7 +98,7 @@ trait InformationObject
 	 * Converts the URL of a Gravity Forms upload to its path on disk.
 	 * Only paths inside the Gravity Forms upload root are returned.
 	 *
-	 * @since NEXT
+	 * @since 1.19.1
 	 */
 	protected function get_local_file_path( string $url ): string
 	{
@@ -126,7 +126,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.19.1
 	 */
 	protected function is_inside_upload_root( string $path ): bool
 	{
@@ -145,7 +145,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.19.1
 	 */
 	protected function get_local_file_content_type( string $path ): string
 	{
@@ -159,7 +159,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.19.1
 	 *
 	 * @return array{content: string, type: string, extension: string} Empty array when the request failed.
 	 */
@@ -207,7 +207,7 @@ trait InformationObject
 	/**
 	 * The header is returned as an array when the response contains multiple content-type headers.
 	 *
-	 * @since NEXT
+	 * @since 1.19.1
 	 */
 	protected function get_response_content_type( array $response ): string
 	{
@@ -221,7 +221,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.19.1
 	 */
 	public function get_extension_from_content_type( string $content_type ): string
 	{
@@ -248,7 +248,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @deprecated NEXT Use retrieve_file() instead, which retrieves the content and content type in a single read.
+	 * @deprecated 1.19.1 Use retrieve_file() instead, which retrieves the content and content type in a single read.
 	 */
 	public function encode_base64_from_url( string $url ): string
 	{
@@ -258,7 +258,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @deprecated NEXT Use the length of the content returned by retrieve_file() instead.
+	 * @deprecated 1.19.1 Use the length of the content returned by retrieve_file() instead.
 	 */
 	public function get_content_length( string $url ): string
 	{
@@ -272,7 +272,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @deprecated NEXT Use get_extension_from_content_type() with the type returned by retrieve_file() instead.
+	 * @deprecated 1.19.1 Use get_extension_from_content_type() with the type returned by retrieve_file() instead.
 	 */
 	public function get_extension( string $url ): string
 	{
@@ -280,7 +280,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @deprecated NEXT Use the type returned by retrieve_file() instead.
+	 * @deprecated 1.19.1 Use the type returned by retrieve_file() instead.
 	 */
 	public function get_content_type( string $url ): string
 	{
@@ -294,7 +294,7 @@ trait InformationObject
 	}
 
 	/**
-	 * @deprecated NEXT
+	 * @deprecated 1.19.1
 	 */
 	protected function get_headers( string $url ): array
 	{

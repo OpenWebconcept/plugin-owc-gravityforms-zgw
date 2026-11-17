@@ -102,7 +102,7 @@ class ZaakUploadsController extends AbstractZaakFormController
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.19.1
 	 */
 	protected function create_uploaded_documents_action( Zaak $zaak, array $supplier_config ): AbstractCreateUploadedDocumentsAction
 	{

@@ -72,7 +72,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	abstract public function add_uploaded_documents(): ?bool;
 
 	/**
-	 * @since NEXT
+	 * @since 1.19.1
 	 */
 	public function get_upload_error(): string
 	{
@@ -80,7 +80,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.19.1
 	 */
 	public function get_upload_error_file(): string
 	{
@@ -88,7 +88,7 @@ abstract class AbstractCreateUploadedDocumentsAction
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 1.19.1
 	 */
 	protected function set_upload_error( string $object_url, string $message ): void
 	{
