@@ -14,6 +14,9 @@ beforeEach(
 		WP_Mock::userFunction( 'esc_html__', array( 'return' => fn ( $text ) => $text ) );
 
 		IdentificationValidationControllerTestDouble::$posted = array();
+		IdentificationValidationControllerTestDouble::$bsn    = '';
+		IdentificationValidationControllerTestDouble::$kvk    = '';
+		IdentificationValidationControllerTestDouble::$eidas  = false;
 	}
 );
 
@@ -117,8 +120,49 @@ it(
 	}
 );
 
+it(
+	'allows the submission when the session provides a BSN',
+	function () {
+		IdentificationValidationControllerTestDouble::$bsn = '111222333';
+
+		$controller = new IdentificationValidationControllerTestDouble( true );
+
+		$result = $controller->validate( IdentificationValidationControllerTestDouble::result() );
+
+		expect( $result['is_valid'] )->toBeTrue();
+	}
+);
+
+it(
+	'allows the submission when an eIDAS session provides a BSN',
+	function () {
+		IdentificationValidationControllerTestDouble::$bsn   = '111222333';
+		IdentificationValidationControllerTestDouble::$eidas = true;
+
+		$controller = new IdentificationValidationControllerTestDouble( true );
+
+		$result = $controller->validate( IdentificationValidationControllerTestDouble::result() );
+
+		expect( $result['is_valid'] )->toBeTrue();
+	}
+);
+
+it(
+	'blocks the submission with a specific message when the eIDAS session has no BSN',
+	function () {
+		IdentificationValidationControllerTestDouble::$eidas = true;
+
+		$controller = new IdentificationValidationControllerTestDouble( true );
+
+		$result = $controller->validate( IdentificationValidationControllerTestDouble::result() );
+
+		expect( $result['is_valid'] )->toBeFalse();
+		expect( $controller->validation_message( 'generic', $result['form'] ) )->toContain( 'ingelogd met eIDAS' );
+	}
+);
+
 /**
- * The DigiD/eHerkenning session classes are not loaded in tests, so only the overwrite settings provide identification.
+ * The DigiD/eHerkenning/eIDAS session classes are not loaded in tests, the session identification is stubbed.
  */
 class IdentificationValidationControllerTestDouble extends IdentificationValidationController
 {
@@ -128,6 +172,12 @@ class IdentificationValidationControllerTestDouble extends IdentificationValidat
 	 * @var array<string, string>
 	 */
 	public static array $posted = array();
+
+	public static string $bsn = '';
+
+	public static string $kvk = '';
+
+	public static bool $eidas = false;
 
 	public function __construct( private bool $is_zgw ) {}
 
@@ -142,5 +192,20 @@ class IdentificationValidationControllerTestDouble extends IdentificationValidat
 	protected function is_form_zgw( array $form ): bool
 	{
 		return $this->is_zgw;
+	}
+
+	protected function session_bsn(): string
+	{
+		return self::$bsn;
+	}
+
+	protected function session_kvk(): string
+	{
+		return self::$kvk;
+	}
+
+	protected function has_eidas_session_without_bsn(): bool
+	{
+		return self::$eidas && '' === self::$bsn;
 	}
 }
