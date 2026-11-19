@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Exception;
 use OWCGravityFormsZGW\Auth\DigiD;
 use OWCGravityFormsZGW\Auth\eHerkenning;
+use OWCGravityFormsZGW\Auth\eIDAS;
 use OWCGravityFormsZGW\ContainerResolver;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 use OWCGravityFormsZGW\Services\EncryptionService;
@@ -88,7 +89,7 @@ class TransactionController
 	 *
 	 * When payment is required upfront, transaction creation is intentionally deferred until
 	 * payment completes. The payment completion webhook runs outside the user's PHP session,
-	 * so DigiD/eHerkenning session data is unavailable at that point. Capturing the identification
+	 * so DigiD/eHerkenning/eIDAS session data is unavailable at that point. Capturing the identification
 	 * here, while the session is still active, ensures add_metadata() can fall back to it.
 	 *
 	 * @since 1.11.1
@@ -104,7 +105,7 @@ class TransactionController
 		}
 
 		try {
-			$bsn = FormUtils::overwrite_bsn_form_setting( $form ) ?: DigiD::make()->bsn();
+			$bsn = FormUtils::overwrite_bsn_form_setting( $form ) ?: DigiD::make()->bsn() ?: eIDAS::make()->bsn();
 			$kvk = FormUtils::overwrite_kvk_form_setting( $form ) ?: eHerkenning::make()->kvk();
 
 			if ( $bsn ) {
@@ -128,7 +129,7 @@ class TransactionController
 		);
 
 		try {
-			$bsn = FormUtils::overwrite_bsn_form_setting( $form ) ?: DigiD::make()->bsn();
+			$bsn = FormUtils::overwrite_bsn_form_setting( $form ) ?: DigiD::make()->bsn() ?: eIDAS::make()->bsn();
 			$kvk = FormUtils::overwrite_kvk_form_setting( $form ) ?: eHerkenning::make()->kvk();
 
 			$sensitive = array(

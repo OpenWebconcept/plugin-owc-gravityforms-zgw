@@ -21,13 +21,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use OWCGravityFormsZGW\Auth\DigiD;
 use OWCGravityFormsZGW\Auth\eHerkenning;
+use OWCGravityFormsZGW\Auth\eIDAS;
 use OWCGravityFormsZGW\GravityForms\FormUtils;
 
 /**
  * Blocks the final submission of a ZGW form when no BSN or KVK is available.
  *
  * Creating the "rol" of a "zaak" requires a BSN or KVK. This identification is read from
- * the DigiD/eHerkenning session when the form is submitted, the "zaak" itself is created
+ * the DigiD/eHerkenning/eIDAS session when the form is submitted, the "zaak" itself is created
  * later in a background process. Login fields usually guard the session, but are skipped
  * during validation when they are hidden, for example by conditional logic depending on
  * values posted by the browser. Validating the identification here, independent of the
@@ -43,6 +44,13 @@ class IdentificationValidationController
 	 * @var int[]
 	 */
 	private array $failed_form_ids = array();
+
+	/**
+	 * IDs of the forms that failed validation because the eIDAS session does not provide a BSN.
+	 *
+	 * @var int[]
+	 */
+	private array $failed_eidas_form_ids = array();
 
 	/**
 	 * Hooked to 'gform_validation'.
@@ -61,6 +69,10 @@ class IdentificationValidationController
 
 		$this->failed_form_ids[] = (int) ( $form['id'] ?? 0 );
 
+		if ( $this->has_eidas_session_without_bsn() ) {
+			$this->failed_eidas_form_ids[] = (int) ( $form['id'] ?? 0 );
+		}
+
 		$validation_result['is_valid'] = false;
 
 		return $validation_result;
@@ -75,9 +87,16 @@ class IdentificationValidationController
 			return $message;
 		}
 
+		if ( in_array( (int) ( $form['id'] ?? 0 ), $this->failed_eidas_form_ids, true ) ) {
+			return sprintf(
+				'<h2 class="gform_submission_error hide_summary">%s</h2>',
+				esc_html__( 'Je bent ingelogd met eIDAS, maar er is geen burgerservicenummer (BSN) van je bekend. Daarom kun je dit formulier niet versturen.', 'owc-gravityforms-zgw' )
+			);
+		}
+
 		return sprintf(
 			'<h2 class="gform_submission_error hide_summary">%s</h2>',
-			esc_html__( 'Je bent niet (meer) ingelogd. Log opnieuw in met DigiD of eHerkenning om het formulier te versturen.', 'owc-gravityforms-zgw' )
+			esc_html__( 'Je bent niet (meer) ingelogd. Log opnieuw in met DigiD, eHerkenning of eIDAS om het formulier te versturen.', 'owc-gravityforms-zgw' )
 		);
 	}
 
@@ -97,7 +116,37 @@ class IdentificationValidationController
 			return true;
 		}
 
-		return '' !== DigiD::make()->bsn() || '' !== eHerkenning::make()->kvk();
+		return '' !== $this->session_bsn() || '' !== $this->session_kvk();
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function session_bsn(): string
+	{
+		$bsn = DigiD::make()->bsn();
+
+		return '' !== $bsn ? $bsn : eIDAS::make()->bsn();
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function session_kvk(): string
+	{
+		return eHerkenning::make()->kvk();
+	}
+
+	/**
+	 * Users logged in with eIDAS from other EU countries often have no BSN, a "zaak" can't be created for them.
+	 *
+	 * @since NEXT
+	 */
+	protected function has_eidas_session_without_bsn(): bool
+	{
+		$eidas = eIDAS::make();
+
+		return $eidas->is_logged_in() && '' === $eidas->bsn();
 	}
 
 	/**
